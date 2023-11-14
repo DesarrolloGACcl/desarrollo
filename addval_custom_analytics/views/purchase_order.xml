@@ -1,0 +1,34 @@
+<odoo>
+    <data>
+      <record id="purchase_order_custom_analytics" model="ir.ui.view">
+        <field name="name">purchase.order.custom.analytics</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="model">purchase.order</field>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='products']//field[@name='analytic_distribution']" position="replace">
+                <field name="analytic_distribution" widget="analytic_distribution"
+                    string="Proyecto"
+                    groups="analytic.group_analytic_accounting"
+                    optional="show"
+                    options="{'product_field': 'product_id', 'business_domain': 'sale_order'}"
+                />
+                
+                <field name="analytic_distribution_area" widget="analytic_distribution_area"
+                    string="Área"
+                    groups="analytic.group_analytic_accounting"
+                    optional="show"
+                    options="{'product_field': 'product_id', 'business_domain': 'sale_order'}"
+                />  
+
+                <field name="analytic_distribution_activity" widget="analytic_distribution_activity"
+                    string="Tarea"
+                    groups="analytic.group_analytic_accounting"
+                    optional="show"
+                    options="{'product_field': 'product_id', 'business_domain': 'sale_order'}"
+                />
+            </xpath>
+  
+        </field>
+      </record>
+    </data>
+  </odoo>

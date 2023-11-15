@@ -2,6 +2,7 @@
 
 from . import account_move
 from . import account_move_line
+from . import account_tax
 from . import analytic_mixin
 from . import project_task
 from . import purchase_order_line

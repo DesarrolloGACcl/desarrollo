@@ -309,26 +309,26 @@ class AccountMoveLine(models.Model):
         )
 
 
-    def _sale_determine_order(self):
+    # def _sale_determine_order(self):
    
-        mapping = super()._sale_determine_order()
+    #     mapping = super()._sale_determine_order()
 
-        for move_line in self:
-            if move_line.analytic_distribution_area:
-                distribution_json = move_line.analytic_distribution_area
-                sale_order = self.env['sale.order'].search([('analytic_account_id', 'in', list(int(account_id) for account_id in distribution_json.keys())),
-                                                            ('state', '=', 'sale')], order='create_date ASC', limit=1)
-                if sale_order:
-                    mapping[move_line.id] = sale_order
-                else:
-                    sale_order = self.env['sale.order'].search([('analytic_account_id', 'in', list(int(account_id) for account_id in distribution_json.keys()))], order='create_date ASC', limit=1)
-                    mapping[move_line.id] = sale_order            
-            if move_line.analytic_distribution_activity:
-                distribution_json = move_line.analytic_distribution_activity
-                sale_order = self.env['sale.order'].search([('analytic_account_id', 'in', list(int(account_id) for account_id in distribution_json.keys())),
-                                                            ('state', '=', 'sale')], order='create_date ASC', limit=1)
-                if sale_order:
-                    mapping[move_line.id] = sale_order
-                else:
-                    sale_order = self.env['sale.order'].search([('analytic_account_id', 'in', list(int(account_id) for account_id in distribution_json.keys()))], order='create_date ASC', limit=1)
-                    mapping[move_line.id] = sale_order
+    #     for move_line in self:
+    #         if move_line.analytic_distribution_area:
+    #             distribution_json = move_line.analytic_distribution_area
+    #             sale_order = self.env['sale.order'].search([('analytic_account_id', 'in', list(int(account_id) for account_id in distribution_json.keys())),
+    #                                                         ('state', '=', 'sale')], order='create_date ASC', limit=1)
+    #             if sale_order:
+    #                 mapping[move_line.id] = sale_order
+    #             else:
+    #                 sale_order = self.env['sale.order'].search([('analytic_account_id', 'in', list(int(account_id) for account_id in distribution_json.keys()))], order='create_date ASC', limit=1)
+    #                 mapping[move_line.id] = sale_order            
+    #         if move_line.analytic_distribution_activity:
+    #             distribution_json = move_line.analytic_distribution_activity
+    #             sale_order = self.env['sale.order'].search([('analytic_account_id', 'in', list(int(account_id) for account_id in distribution_json.keys())),
+    #                                                         ('state', '=', 'sale')], order='create_date ASC', limit=1)
+    #             if sale_order:
+    #                 mapping[move_line.id] = sale_order
+    #             else:
+    #                 sale_order = self.env['sale.order'].search([('analytic_account_id', 'in', list(int(account_id) for account_id in distribution_json.keys()))], order='create_date ASC', limit=1)
+    #                 mapping[move_line.id] = sale_order

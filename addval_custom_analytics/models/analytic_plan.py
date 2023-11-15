@@ -9,6 +9,7 @@ class AccountAnalyticPlan(models.Model):
 
     @api.model
     def get_relevant_plans(self, **kwargs):
+        _logger.warning('Proyecto')
         _logger.warning('SELF DATA: %s', self)
         _logger.warning('KWARGS: %s', kwargs)
         company_id = kwargs.get('company_id', self.env.company.id)
@@ -19,6 +20,7 @@ class AccountAnalyticPlan(models.Model):
             '|', ('company_id', '=', company_id), ('company_id', '=', False),
             ('id', '=', company.project_analytic_plan_id.id)
         ])
+        _logger.warning('all_plans: %s', all_plans)
         root_plans = self.browse({
             int(plan.parent_path.split('/')[0])
             for plan in all_plans
@@ -41,6 +43,7 @@ class AccountAnalyticPlan(models.Model):
     
     @api.model
     def get_area_relevant_plans(self, **kwargs):
+        _logger.warning('Área')
         _logger.warning('SELF DATA: %s', self)
         _logger.warning('KWARGS: %s', kwargs)
         company_id = kwargs.get('company_id', self.env.company.id)
@@ -51,6 +54,7 @@ class AccountAnalyticPlan(models.Model):
             '|', ('company_id', '=', company_id), ('company_id', '=', False),
             ('id', '=', company.area_analytic_plan_id.id)
         ])
+        _logger.warning('all_plans: %s', all_plans)
         root_plans = self.browse({
             int(plan.parent_path.split('/')[0])
             for plan in all_plans
@@ -72,7 +76,8 @@ class AccountAnalyticPlan(models.Model):
         ], key=lambda d: (d['applicability'], d['id']))
     
     @api.model
-    def get_activity_relevant_plans(self, **kwargs):
+    def get_activity_relevant_plans(self, **kwargs):       
+        _logger.warning('Tarea')
         _logger.warning('SELF DATA: %s', self)
         _logger.warning('KWARGS: %s', kwargs)
         company_id = kwargs.get('company_id', self.env.company.id)
@@ -83,6 +88,7 @@ class AccountAnalyticPlan(models.Model):
             '|', ('company_id', '=', company_id), ('company_id', '=', False),
             ('id', '=', company.activity_analytic_plan_id.id)
         ])
+        _logger.warning('all_plans: %s', all_plans)
         root_plans = self.browse({
             int(plan.parent_path.split('/')[0])
             for plan in all_plans

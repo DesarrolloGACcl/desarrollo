@@ -34,17 +34,6 @@ class SaleOrderLine(models.Model):
                 })
                 line.analytic_distribution_activity = activity_distribution or line.analytic_distribution_activity
 
-
-    def _get_protected_fields(self):
-        """ Give the fields that should not be modified on a locked SO.
-
-        :returns: list of field names
-        :rtype: list
-        """
-        return [
-            'product_id', 'name', 'price_unit', 'product_uom', 'product_uom_qty',
-            'tax_id', 'analytic_distribution', 'analytic_distribution_area', 'analytic_distribution_activity'
-        ]
     
     def _prepare_invoice_line(self, **optional_values):
         self.ensure_one()

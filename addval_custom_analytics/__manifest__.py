@@ -19,7 +19,8 @@
         'account',
         'sale',
         'account_accountant',
-        'web_domain_field'
+        'web_domain_field',
+        'account_reports'
     ],
 
     'data': [

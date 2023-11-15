@@ -3,7 +3,7 @@ from psycopg2 import sql
 from odoo.addons.web.controllers.utils import clean_action
 
 class AccountReport(models.AbstractModel):
-    _inherit='account.analytic.report'
+    _inherit='account.report'
 
     @api.model
     def _prepare_lines_for_analytic_groupby(self):

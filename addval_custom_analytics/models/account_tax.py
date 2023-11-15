@@ -10,7 +10,7 @@ import math
 import re
 
 class AccountTax(models.Model):
-    _name = 'account.tax'
+    _inherit = 'account.tax'
 
     @api.model
     def _convert_to_tax_base_line_dict(

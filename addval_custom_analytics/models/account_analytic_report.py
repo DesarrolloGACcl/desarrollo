@@ -2,7 +2,7 @@ from odoo import models, fields, api, osv
 from psycopg2 import sql
 from odoo.addons.web.controllers.utils import clean_action
 
-class AccountReport(models.AbstracModel):
+class AccountReport(models.AbstractModel):
     _inherit='account.analytic.report'
 
     @api.model

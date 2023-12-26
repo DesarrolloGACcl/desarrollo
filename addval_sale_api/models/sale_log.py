@@ -7,7 +7,6 @@ class SaleLog(models.Model):
     _name = 'sale.log'
 
     name = fields.Char(string="Nombre log")
-    channel_sale = fields.Integer(string="Canal de venta", readonly=True)
     
     #Datos partner
     partner_rut = fields.Char(string="Rut cliente")

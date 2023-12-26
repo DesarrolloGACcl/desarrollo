@@ -29,7 +29,6 @@
         'views/account_move.xml',
         'views/sale_order.xml',
         'views/sale_log.xml',
-        'views/stock_picking.xml',
         'security/ir.model.access.csv',
     ],
     'installable': True,

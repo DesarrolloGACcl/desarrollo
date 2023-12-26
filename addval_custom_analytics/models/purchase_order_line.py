@@ -32,3 +32,12 @@ class PruchaseOrderLine(models.Model):
                     "company_id": line.company_id.id,
                 })
                 line.analytic_distribution_activity = activity_distribution or line.analytic_distribution_activity
+
+    def _prepare_account_move_line(self, move): 
+        self.ensure_one()
+        res = super()._prepare_account_move_line(move)
+        if self.analytic_distribution_area and not self.display_type:
+            res['analytic_distribution_area'] = self.analytic_distribution_area
+        if self.analytic_distribution_activity and not self.display_type:
+            res['analytic_distribution_activity'] = self.analytic_distribution_activity
+        return res

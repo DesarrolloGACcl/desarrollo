@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="sale.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='quotation_order_setting_container']" position="inside">
+                <h3>Configuraciones API</h3>
+                <div class="col-12 col-lg-6 o_setting_box">
+                    <div class="o_setting_right_pane">
+                        <div>
+                            <label
+                                string="Usuario API"
+                                for="api_user_id"/>
+                            <div class="text-muted">
+                                Usuario API
+                            </div>
+                            <div class="content-group mt16">
+                                <field
+                                    name="api_user_id"
+                                    colspan="4"
+                                    nolabel="1"
+                                    options="{'no_create': True, 'no_create_edit':True}"
+                                />
+                            </div>
+
+                            <label
+                                string="Cuenta cliente API"
+                                for="api_account_id"/>
+                            <div class="text-muted">
+                               Cuenta cliente API
+                            </div>
+                            <div class="content-group mt16">
+                                <field
+                                    name="api_account_id"
+                                    colspan="4"
+                                    nolabel="1"
+                                    options="{'no_create': True, 'no_create_edit':True}"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

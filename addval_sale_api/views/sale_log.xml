@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="sale_log_tree" model="ir.ui.view">
+            <field name="name">sale.log.tree</field>
+            <field name="model">sale.log</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name" string=""/>
+                    <field name="partner_id" string="Cliente"/>
+                    <field name="invoice_document_type" string="Tipo de documento"/>
+                    <field name="amount_total" string="Monto total"/>
+                    <field name="company_id" string="Compañía"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="sale_log_form" model="ir.ui.view">
+            <field name="name">sale.log.form</field>
+            <field name="model">sale.log</field>
+            <field name="arch" type="xml">
+                <form string="LOG DE VENTA">
+                    <header>
+                        <button name="re_procesing_order" type="object" data-hotkey="shift+g"
+                                string="Re-procesar pedido" class="oe_highlight"
+                                attrs="{'invisible': [('state', '=', 'done')]}"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
+                    </header>
+                    <sheet>     
+                        <h1><field name="name" string=""/></h1>                   
+                        <group>
+                            <group>
+                                <field name="partner_id" string="Cliente"/>
+                                <field name="invoice_document_type" string="Tipo de documento"/>
+                            </group>
+                            <group>                            
+                                <field name="company_name" string="Razón social"/>
+                                <field name="error_message" string="Razón error"/>
+                                <field name="amount_total" string="Monto total"/>
+                                <field name="company_id" string="Compañía"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Líneas" name="line_ids">
+                                <field name="line_ids"
+                                    widget="section_and_note_one2many"
+                                    mode="tree">
+                                    <form>
+                                        <group>
+                                            <field name="product_id"/>
+                                            <field name="name"/>
+                                            <field name="product_uom_qty"/>
+                                            <field name="unit_price"/>
+                                            <field name="has_iva"/>
+                                        </group>
+                                    </form>
+                                    <tree string="Sales Order Lines">
+                                        <field name="product_id"/>
+                                        <field name="name"/>
+                                        <field name="product_uom_qty"/>
+                                        <field name="unit_price"/>
+                                        <field name="has_iva"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook> 
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="sale_log_act_window" model="ir.actions.act_window">
+            <field name="name">Logs de venta</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.log</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}</field>
+            <field name="view_id" eval="False"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No hay registros creados
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="sale_log_sale_menu" name="Logs de venta" action="sale_log_act_window"
+            parent="sale.menu_sale_config" sequence="50"/>
+    </data>
+</odoo>

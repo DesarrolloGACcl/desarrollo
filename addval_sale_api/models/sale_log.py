@@ -39,6 +39,8 @@ class SaleLog(models.Model):
     partner_id = fields.Many2one('res.partner', string="Cliente", readonly=True)
     company_id = fields.Many2one('res.company', string="Compañía", readonly=True)
 
+    pre_invoice = fields.Char(string="Pre-factura", readonly=True)
+
     line_ids = fields.One2many('sale.log.line', 'sale_log_id', string='Líneas de pedido')
 
     def re_procesing_order(self):

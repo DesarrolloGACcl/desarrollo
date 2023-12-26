@@ -6,6 +6,8 @@ class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
     invoice_document_type = fields.Char(string="Tipo de documento", readonly=True)
+    pre_invoice = fields.Char(string="Pre-factura", readonly=True)
+
 
     @api.model
     def auto_invoice_sale_orders(self):

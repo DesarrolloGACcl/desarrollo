@@ -23,10 +23,10 @@ class SaleOrderApi(http.Controller):
 
         partner_rut = str(partner_dict['rut'])
 
-        # existing_sale = request.env['sale.order'].sudo().search([('pre_invoice', '=', kw.get("pre_invoice"))])
+        existing_sale = request.env['sale.order'].sudo().search([('pre_invoice', '=', kw.get("pre_invoice"))])
 
-        # if existing_sale:
-        #     raise ValidationError(_('Registro ya existe'))
+        if existing_sale:
+            raise ValidationError(_('Registro ya existe'))
 
         log = request.env['sale.log'].sudo().search([('pre_invoice', '=', kw.get("pre_invoice"))],limit=1)
         if log:

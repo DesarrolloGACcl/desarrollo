@@ -6,17 +6,8 @@
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name='type'>form</field>
         <field name='arch' type='xml'>
-            <field name="payment_term_id" position="after">
-                <field name="payment_method" string="Método de pago"/>
-                <field name="dues_qty" string="Cantidad de cuotas"/>
-                <field name="card_type" string="Tipo de tarjeta"/>
-                <field name="authorization_code" string="Código único transacción"/>
-            </field>
             <field name="partner_shipping_id" position="after">
-                <field name="channel_sale" string="Canal de venta"/>
                 <field name="invoice_document_type" string="Tipo de documento"/>
-                <field name="woocommerce_order" string="Orden en woocomerce"/>
-                <field name="delivery_transient_code" string="Código temporal de bluexpres"/>
             </field>
         </field>
     </record>

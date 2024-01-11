@@ -102,7 +102,7 @@ class SaleLog(models.Model):
         iva = self.env['account.tax'].sudo().search([('l10n_cl_sii_code', '=', 14), ('type_tax_use', '=', 'sale')], limit=1)
         
         for line in self.line_ids:
-            product = self.env['product.template'].sudo().search([('name', '=ilike', line['product'])], limit=1)
+            product = self.env['product.template'].sudo().search([('default_code', '=ilike', line['sku'])], limit=1)
             if not product:
                 raise ValidationError (_('No fue posible encontrar el producto'))
 

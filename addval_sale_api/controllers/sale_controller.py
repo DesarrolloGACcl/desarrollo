@@ -158,7 +158,7 @@ class SaleOrderApi(http.Controller):
 
         for line in order_lines:
 
-            product = request.env['product.template'].sudo().search([('name', '=ilike', line['product'])], limit=1)
+            product = request.env['product.template'].sudo().search([('default_code', '=ilike', line['sku'])], limit=1)
             if not product:
                 sale_order.unlink()
                 log.error_message = 'No fue posible encontrar el producto'

@@ -12,7 +12,6 @@
          - Crear facturas (cron)
          - Confirmar facturas (cron)
          - Generar envío de documentos al SII y cliente
-         - Generar proceso de movimiento de inventario
     """,
 
     "author": "Addval Connect",

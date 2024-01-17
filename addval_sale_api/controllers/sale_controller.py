@@ -25,8 +25,8 @@ class SaleOrderApi(http.Controller):
 
         existing_sale = request.env['sale.order'].sudo().search([('pre_invoice', '=', kw.get("pre_invoice"))])
 
-        if existing_sale:
-            raise ValidationError(_('Registro ya existe'))
+        # if existing_sale:
+        #     raise ValidationError(_('Registro ya existe'))
 
         log = request.env['sale.log'].sudo().search([('pre_invoice', '=', kw.get("pre_invoice"))],limit=1)
         if log:
@@ -179,7 +179,19 @@ class SaleOrderApi(http.Controller):
                 'name': line['description'],
                 'product_uom_qty': line['product_uom_qty'],
                 'price_unit': line['unit_price'],
-                'tax_id': tax_id
+                'tax_id': tax_id,
+                # 'analytic_distribution': {
+                #         cls.analytic_account_a.id : 80.0,
+                #         cls.analytic_account_b.id : 20.0,
+                #     },
+                # 'analytic_distribution_area': {
+                #         cls.analytic_account_a.id : 80.0,
+                #         cls.analytic_account_b.id : 20.0,
+                #     },
+                # 'analytic_distribution_activity': {
+                #         cls.analytic_account_a.id : 80.0,
+                #         cls.analytic_account_b.id : 20.0,
+                #     },
             })
         
         if sale_order and sale_order.order_line:

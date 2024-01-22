@@ -241,7 +241,7 @@ export class AnalyticDistributionArea extends Component {
             domain.push(['id', 'in', ids]);
         }
 
-        return domain;
+        return domain[0];
     }
 
     searchAnalyticDomain(searchTerm) {

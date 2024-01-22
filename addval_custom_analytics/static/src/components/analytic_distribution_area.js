@@ -205,7 +205,19 @@ export class AnalyticDistributionArea extends Component {
     }
 
     analyticAccountDomain(groupId=null) {
+        console.log('analyticAccountDomain')
         let domain = [['id', 'not in', this.existingAnalyticAccountIDs]];
+        
+        const analyticDistribution = this.props.record.data.analytic_distribution;
+        const claves = Object.keys(analyticDistribution).map(Number);
+
+        console.log(claves);
+        const accounts = this.fetchAnalyticAccounts([["parent_id", "in", claves]]);
+        console.log(accounts);
+        const idsDeResultados = accounts.map(account => accounts.id);
+        console.log(idsDeResultados);
+
+
         if (this.props.record.data.company_id){
             domain.push(
                 '|',
@@ -232,11 +244,15 @@ export class AnalyticDistributionArea extends Component {
 
     async loadOptionsSourceAnalytic(groupId, searchTerm) {
         const searchLimit = 6;
+        console.log('ACÁ')
+        console.log(groupId);
+        console.log(searchTerm);
 
         const records = await this.fetchAnalyticAccounts([
             ...this.analyticAccountDomain(groupId),
             ...this.searchAnalyticDomain(searchTerm)], searchLimit + 1);
 
+        // copiar esta logica luego
         let options = records.map((result) => ({
             value: result.id,
             label: result.display_name,

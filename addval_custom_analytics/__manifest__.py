@@ -20,7 +20,9 @@
         'sale',
         'account_accountant',
         'web_domain_field',
-        'account_reports'
+        'account_reports',
+        'account_budget',
+        'analytic'
     ],
 
     'data': [
@@ -30,6 +32,7 @@
         #'views/project_task.xml',
         'views/purchase_order.xml',
         'views/sale_order.xml',
+        'views/account_analytic_account.xml',
     ],
     'assets': {
         'web.assets_backend': [

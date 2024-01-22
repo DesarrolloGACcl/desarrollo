@@ -216,7 +216,7 @@ export class AnalyticDistributionArea extends Component {
             // This block will be executed once the promise is resolved
             console.log(value);
         });
-        console.log(accounts);
+        //console.log(accounts);
         //const idsDeResultados = accounts.map(account => accounts.id);
         //console.log(idsDeResultados);
 

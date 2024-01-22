@@ -18,8 +18,6 @@ class AccountAnalyticAccount(models.Model):
 
     child_ids = fields.One2many(comodel_name='account.analytic.account', inverse_name='parent_id', string="Cuentas hijas")
 
-    #parent_ids = fields.Many2many('account.analytic.account', 'analytic_account_same_rel', 'child_ids', 'parent_ids')
-
     def _compute_parent_account_domain(self):
         current_id = self.env.context.get('active_id')
         current_type = self.plan_id

@@ -214,6 +214,7 @@ export class AnalyticDistributionArea extends Component {
         console.log(claves);
         const accounts = this.fetchAnalyticAccounts([["parent_id", "in", claves]]);
         console.log(accounts);
+        console.log(accounts[0]);
         //const idsDeResultados = accounts.map(account => accounts.id);
         //console.log(idsDeResultados);
 

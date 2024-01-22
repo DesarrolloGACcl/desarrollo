@@ -218,6 +218,8 @@ export class AnalyticDistributionArea extends Component {
             const ids = value.map(function(item) {
                 return item.id;
             });
+
+            console.log(ids)
             
             if(accounts){
                 domain.push(['id', 'in', ids]);

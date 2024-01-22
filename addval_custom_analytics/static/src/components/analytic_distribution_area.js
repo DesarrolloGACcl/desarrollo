@@ -215,6 +215,9 @@ export class AnalyticDistributionArea extends Component {
         const accounts = this.fetchAnalyticAccounts([["parent_id", "in", claves]]).then(function(value) {
             // This block will be executed once the promise is resolved
             console.log(value);
+            if(accounts){
+                domain.push(['id', 'in', value]);
+            }
         });
         //console.log(accounts);
         //const idsDeResultados = accounts.map(account => accounts.id);
@@ -231,10 +234,6 @@ export class AnalyticDistributionArea extends Component {
 
         if (groupId) {
             domain.push(['root_plan_id', '=', groupId]);
-        }
-
-        if(accounts){
-            domain.push(['id', 'in', accounts[0]]);
         }
 
         return domain;

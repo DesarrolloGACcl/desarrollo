@@ -225,9 +225,11 @@ export class AnalyticDistributionArea extends Component {
             this.filterIds = ids
             
         });
-        //console.log(accounts);
+        
         //const idsDeResultados = accounts.map(account => accounts.id);
         //console.log(idsDeResultados);
+
+        console.log(this.filterIds);
 
         if(this.filterIds){
             domain.push(['id', 'in', this.filterIds]);

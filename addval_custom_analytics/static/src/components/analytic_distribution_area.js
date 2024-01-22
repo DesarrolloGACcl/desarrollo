@@ -204,7 +204,7 @@ export class AnalyticDistributionArea extends Component {
         };
     }
 
-    analyticAccountDomain(groupId=null) {
+    async analyticAccountDomain(groupId=null) {
         console.log('analyticAccountDomain')
         let domain = [['id', 'not in', this.existingAnalyticAccountIDs]];
         
@@ -212,7 +212,7 @@ export class AnalyticDistributionArea extends Component {
         const claves = Object.keys(analyticDistribution).map(Number);
 
         console.log(claves);
-        const accounts = this.fetchAnalyticAccounts([["parent_id", "in", claves]])
+        const accounts = await this.fetchAnalyticAccounts([["parent_id", "in", claves]])
         
         const ids = accounts.map(function(item) {
             return item.id;
@@ -220,9 +220,6 @@ export class AnalyticDistributionArea extends Component {
 
         console.log(ids)
         
-        if(ids){
-            domain.push(['id', 'in', ids]);
-        }
         //console.log(accounts);
         //const idsDeResultados = accounts.map(account => accounts.id);
         //console.log(idsDeResultados);
@@ -238,6 +235,10 @@ export class AnalyticDistributionArea extends Component {
 
         if (groupId) {
             domain.push(['root_plan_id', '=', groupId]);
+        }
+
+        if(ids){
+            domain.push(['id', 'in', ids]);
         }
 
         return domain;

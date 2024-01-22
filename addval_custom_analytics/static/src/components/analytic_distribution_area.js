@@ -204,7 +204,7 @@ export class AnalyticDistributionArea extends Component {
         };
     }
 
-    async analyticAccountDomain(groupId=null) {
+    analyticAccountDomain(groupId=null) {
         console.log('analyticAccountDomain')
         let domain = [['id', 'not in', this.existingAnalyticAccountIDs]];
         
@@ -212,7 +212,10 @@ export class AnalyticDistributionArea extends Component {
         const claves = Object.keys(analyticDistribution).map(Number);
 
         console.log(claves);
-        const accounts = await this.fetchAnalyticAccounts([["parent_id", "in", claves]]);
+        const accounts = this.fetchAnalyticAccounts([["parent_id", "in", claves]]).then(function(value) {
+            // This block will be executed once the promise is resolved
+            console.log(value);
+        });
         console.log(accounts);
         //const idsDeResultados = accounts.map(account => accounts.id);
         //console.log(idsDeResultados);

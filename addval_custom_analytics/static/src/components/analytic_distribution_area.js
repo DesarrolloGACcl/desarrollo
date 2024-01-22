@@ -214,8 +214,8 @@ export class AnalyticDistributionArea extends Component {
         console.log(claves);
         const accounts = this.fetchAnalyticAccounts([["parent_id", "in", claves]]);
         console.log(accounts);
-        const idsDeResultados = accounts.map(account => accounts.id);
-        console.log(idsDeResultados);
+        //const idsDeResultados = accounts.map(account => accounts.id);
+        //console.log(idsDeResultados);
 
 
         if (this.props.record.data.company_id){
@@ -229,6 +229,11 @@ export class AnalyticDistributionArea extends Component {
         if (groupId) {
             domain.push(['root_plan_id', '=', groupId]);
         }
+
+        if(accounts){
+            domain.push(['id', 'in', accounts]);
+        }
+
         return domain;
     }
 

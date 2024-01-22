@@ -231,7 +231,7 @@ export class AnalyticDistributionArea extends Component {
         }
 
         if(accounts){
-            domain.push(['id', 'in', accounts]);
+            domain.push(['id', 'in', accounts[0]]);
         }
 
         return domain;

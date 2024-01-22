@@ -56,7 +56,7 @@ class AccountAnalyticPlan(models.Model):
         ])
         _logger.warning('all_plans: %s', all_plans)
         _logger.warning("#### revisar acá")
-        _logger.info(self.env['account.analytic.account'].search([('id', '=', 149)]).parent_ids)
+        _logger.info(self.env['account.analytic.account'].search([('id', '=', 149)]).parent_id)
         root_plans = self.browse({
             int(plan.parent_path.split('/')[0])
             for plan in all_plans

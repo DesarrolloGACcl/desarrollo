@@ -192,7 +192,7 @@ export class AnalyticDistributionArea extends Component {
         console.log(claves);
 
         if (claves.length > 0) {
-            args.domain.push(["id", "in", claves]); 
+            args.domain.push(["parent_id", "in", claves]); 
         }
         if (domain.length === 1 && domain[0][0] === "id") {
             //batch these orm calls

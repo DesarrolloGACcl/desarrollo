@@ -74,7 +74,7 @@ export class AnalyticDistributionArea extends Component {
             fieldString: this.env._t("Analytic Distribution Template"),
         });
         this.allPlans = [];
-        this.filterIds = [];
+        //this.filterIds = [];
         this.lastAccount = this.props.account_field && this.props.record.data[this.props.account_field] || false;
         this.lastProduct = this.props.product_field && this.props.record.data[this.props.product_field] || false;
 
@@ -186,6 +186,14 @@ export class AnalyticDistributionArea extends Component {
         if (limit) {
             args['limit'] = limit;
         }
+        const analyticDistribution = this.props.record.data.analytic_distribution;
+        const claves = Object.keys(analyticDistribution).map(Number);
+
+        console.log(claves);
+
+        if (claves.length > 0) {
+            args.domain.push(["id", "in", claves]); 
+        }
         if (domain.length === 1 && domain[0][0] === "id") {
             //batch these orm calls
             return await this.props.record.model.orm.read("account.analytic.account", domain[0][2], args.fields, {});
@@ -208,32 +216,27 @@ export class AnalyticDistributionArea extends Component {
     analyticAccountDomain(groupId=null) {
         console.log('analyticAccountDomain')
         let domain = [['id', 'not in', this.existingAnalyticAccountIDs]];
-        
-        const analyticDistribution = this.props.record.data.analytic_distribution;
-        const claves = Object.keys(analyticDistribution).map(Number);
-
-        console.log(claves);
-        const accounts = this.fetchAnalyticAccounts([["parent_id", "in", claves]]).then(function(value) {
+        // const accounts = this.fetchAnalyticAccounts([["parent_id", "in", claves]]).then(function(value) {
             // This block will be executed once the promise is resolved
-            console.log(value);
-            const ids = value.map(function(item) {
-                return item.id;
-            });
+         //   console.log(value);
+           // const ids = value.map(function(item) {
+             //   return item.id;
+            //});
 
-            console.log(ids)
+            //console.log(ids)
 
-            this.filterIds = ids
+            //this.filterIds = ids
             
-        });
+        //});
         
         //const idsDeResultados = accounts.map(account => accounts.id);
         //console.log(idsDeResultados);
 
-        console.log(this.filterIds);
+        //console.log(this.filterIds);
 
-        if(this.filterIds){
-            domain.push(['id', 'in', this.filterIds]);
-        }
+        //if(this.filterIds){
+          //  domain.push(['id', 'in', this.filterIds]);
+        //}
 
         if (this.props.record.data.company_id){
             domain.push(

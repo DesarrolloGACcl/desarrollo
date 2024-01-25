@@ -14,9 +14,24 @@ class AccountAnalyticPlan(models.Model):
 class AccountAnalyticAccount(models.Model):
     _inherit = 'account.analytic.account'
 
+    identification_number = fields.Char('Código Tarea')
+
     parent_id = fields.Many2one(comodel_name='account.analytic.account', string='Cuenta padre')
 
     child_ids = fields.One2many(comodel_name='account.analytic.account', inverse_name='parent_id', string="Cuentas hijas")
+
+    def name_get(self):
+        res = []
+        for analytic in self:
+            name = analytic.name
+            if analytic.code:
+                name = f'[{analytic.code}] {name}'
+            if analytic.identification_number:
+                name = f'[{analytic.identification_number}] {name}'
+            if analytic.partner_id.commercial_partner_id.name:
+                name = f'{name} - {analytic.partner_id.commercial_partner_id.name}'
+            res.append((analytic.id, name))
+        return res
 
     def _compute_parent_account_domain(self):
         current_id = self.env.context.get('active_id')

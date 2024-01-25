@@ -6,6 +6,7 @@
             <field name="model">account.analytic.account</field>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='code']" position="after">
+                    <field name="identification_number"/>
                     <field name="parent_id"/>
                 </xpath>
                 <xpath expr="//notebook[1]" position="inside">

@@ -185,8 +185,8 @@ export class AnalyticDistributionActivity extends Component {
         if (limit) {
             args['limit'] = limit;
         }
-        const analyticDistributionArea = this.props.record.data.analytic_distribution_area;
-        const claves = Object.keys(analyticDistributionArea).map(Number);
+        const analyticDistribution = this.props.record.data.analytic_distribution;
+        const claves = Object.keys(analyticDistribution).map(Number);
 
         console.log(claves);
 

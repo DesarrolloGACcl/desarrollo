@@ -186,14 +186,14 @@ export class AnalyticDistributionArea extends Component {
         if (limit) {
             args['limit'] = limit;
         }
-        const analyticDistribution = this.props.record.data.analytic_distribution;
-        const claves = Object.keys(analyticDistribution).map(Number);
+        // const analyticDistribution = this.props.record.data.analytic_distribution;
+        // const claves = Object.keys(analyticDistribution).map(Number);
 
-        console.log(claves);
+        // console.log(claves);
 
-        if (claves.length > 0) {
-            args.domain.push(["parent_id", "in", claves]); 
-        }
+        // if (claves.length > 0) {
+        //     args.domain.push(["parent_id", "in", claves]); 
+        // }
         if (domain.length === 1 && domain[0][0] === "id") {
             //batch these orm calls
             return await this.props.record.model.orm.read("account.analytic.account", domain[0][2], args.fields, {});

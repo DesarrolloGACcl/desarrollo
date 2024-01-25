@@ -2,6 +2,11 @@ from odoo import models, fields, api, _
 from odoo.tools.float_utils import float_round, float_compare
 from odoo.exceptions import UserError, ValidationError
 
+
+import logging
+_logger = logging.getLogger(__name__)
+
+
 class AnalyticMixin(models.AbstractModel):
     _inherit = 'analytic.mixin'
 
@@ -83,18 +88,21 @@ class AnalyticMixin(models.AbstractModel):
         return [('id', operator_inselect, (query, [[str(account_id) for account_id in account_ids], company_plan_id]))]
     
     def _search_analytic_distribution_area(self, operator, value):
+        _logger.info("##################### search analytic ########################")
         if operator not in ['=', '!=', 'ilike', 'not ilike'] or not isinstance(value, (str, bool)):
             raise UserError(_('Operator nor supported'))
         operator_name_search = '=' if operator in ('=', '!=') else 'ilike'
         account_ids = list(self.env['account.analytic.account'].name_search(name=value, operator=operator_name_search))
-        user_company = self.env.user.company_id        
+        user_company = self.env.user.company_id
         company_plan_id =  user_company.area_analytic_plan_id.id
+        company_project_plan_id =  user_company.project_analytic_plan_id.id
         query = f"""
             SELECT id
             FROM {self._table}
             JOIN account_analytic_account ON {self._table}.analytic_account_id = account_analytic_account.id
             WHERE analytic_distribution ?| array[%s] AND account_analytic_acocunt.plan_id = %s
         """
+        _logger.info(self)
 
         operator_inselect = 'inselect' if operator in ('=', 'ilike') else 'not inselect'
         return [('id', operator_inselect, (query, [[str(account_id) for account_id in account_ids], company_plan_id]))]

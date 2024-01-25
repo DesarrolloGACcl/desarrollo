@@ -1,0 +1,42 @@
+<odoo>
+    <data>
+        <record id="analytic_account_custom_analytics" model="ir.ui.view">
+            <field name="name">analytic.account.custom.analytics</field>
+            <field name="inherit_id" ref="account_budget.view_account_analytic_account_form_inherit_budget"/>
+            <field name="model">account.analytic.account</field>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='code']" position="after">
+                    <field name="identification_number"/>
+                    <field name="parent_id"/>
+                </xpath>
+                <xpath expr="//notebook[1]" position="inside">
+                    <page name="childs" string="Cuentas">
+                        <field name="child_ids" widget="one2many" colspan="4" nolabel="1" mode="tree">
+                            <tree string="Cuentas" editable="top">
+                                <field name="name"/>
+                                <field name="code"/>
+                                <field name="partner_id"/>
+                                <field name="plan_id"/>
+                                <field name="company_id"/>
+                                <field name="credit"/>
+                                <field name="debit"/>
+                                <field name="balance"/>
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="analytic_account_plan_custom_analytics" model="ir.ui.view">
+            <field name="name">analytic.account.plan.custom.analytics</field>
+            <field name="inherit_id" ref="analytic.account_analytic_plan_form_view"/>
+            <field name="model">account.analytic.plan</field>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='parent_id']" position="after">
+                    <field name="code"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+  </odoo>

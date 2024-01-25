@@ -12,3 +12,4 @@ from . import sale_order_line
 from . import analytic_plan
 from . import account_analytic_distribution_model
 from . import account_analytic_report
+from . import account_analytic_account

@@ -78,6 +78,7 @@ class AccountMove(models.Model):
                             analytic_distribution=values.get('analytic_distribution'),
                             analytic_distribution_area=values.get('analytic_distribution_area'),
                             analytic_distribution_activity=values.get('analytic_distribution_activity'),
+                            analytic_distribution_task=values.get('analytic_distribution_task'),
                             price_subtotal=values['price_subtotal'],
                             is_refund=move.move_type in ('out_refund', 'in_refund'),
                             handle_price_include=False,
@@ -198,6 +199,7 @@ class AccountMove(models.Model):
                             'analytic_distribution': base_line['analytic_distribution'],
                             'analytic_distribution_area': base_line['analytic_distribution_area'],
                             'analytic_distribution_activity': base_line['analytic_distribution_activity'],
+                            'analytic_distribution_task': base_line['analytic_distribution_task'],
                         }
                         base_detail = resulting_delta_base_details.setdefault(frozendict(grouping_dict), {
                             'balance': 0.0,
@@ -251,6 +253,7 @@ class AccountMove(models.Model):
                         'analytic_distribution': tax_detail['analytic_distribution'],
                         'analytic_distribution_area': tax_detail['analytic_distribution_area'],
                         'analytic_distribution_activity': tax_detail['analytic_distribution_activity'],
+                        'analytic_distribution_task': tax_detail['analytic_distribution_task'],
                         'tax_repartition_line_id': tax_rep.id,
                         'tax_ids': tax_detail['tax_ids'],
                         'tax_tag_ids': tax_detail['tax_tag_ids'],

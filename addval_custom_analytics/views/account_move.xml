@@ -21,12 +21,19 @@
             business_domain_compute="parent.move_type in ['out_invoice', 'out_refund', 'out_receipt'] and 'invoice' or parent.move_type in ['in_invoice', 'in_refund', 'in_receipt'] and 'bill' or 'general'"/>
           
           <field name="analytic_distribution_activity" widget="analytic_distribution_activity"
+            string="Actividad"
+            groups="analytic.group_analytic_accounting"
+            optional="show"
+            options="{'product_field': 'product_id', 'account_field': 'account_id'}"
+            business_domain_compute="parent.move_type in ['out_invoice', 'out_refund', 'out_receipt'] and 'invoice' or parent.move_type in ['in_invoice', 'in_refund', 'in_receipt'] and 'bill' or 'general'"/>
+          <field name="analytic_distribution_task" widget="analytic_distribution_task"
             string="Tarea"
             groups="analytic.group_analytic_accounting"
             optional="show"
             options="{'product_field': 'product_id', 'account_field': 'account_id'}"
             business_domain_compute="parent.move_type in ['out_invoice', 'out_refund', 'out_receipt'] and 'invoice' or parent.move_type in ['in_invoice', 'in_refund', 'in_receipt'] and 'bill' or 'general'"/>
-        </xpath>
+
+          </xpath>
 
         <xpath expr="//page[@id='aml_tab']//field[@name='analytic_distribution']" position="replace">
           <field name="analytic_distribution" widget="analytic_distribution"
@@ -44,6 +51,13 @@
             business_domain_compute="parent.move_type in ['out_invoice', 'out_refund', 'out_receipt'] and 'invoice' or parent.move_type in ['in_invoice', 'in_refund', 'in_receipt'] and 'bill' or 'general'"/>
           
           <field name="analytic_distribution_activity" widget="analytic_distribution_activity"
+            string="Actividad"
+            groups="analytic.group_analytic_accounting"
+            optional="show"
+            options="{'product_field': 'product_id', 'account_field': 'account_id'}"
+            business_domain_compute="parent.move_type in ['out_invoice', 'out_refund', 'out_receipt'] and 'invoice' or parent.move_type in ['in_invoice', 'in_refund', 'in_receipt'] and 'bill' or 'general'"/>
+          
+          <field name="analytic_distribution_task" widget="analytic_distribution_task"
             string="Tarea"
             groups="analytic.group_analytic_accounting"
             optional="show"

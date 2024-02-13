@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record id="view_invoice_form" model="ir.ui.view">
+            <field name="model">account.move</field>
+            <field name="name">account.move.aec.form</field>
+            <field name="inherit_id" ref="l10n_cl_edi.view_invoice_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet/div[@name='button_box']" position="after">
+                    <widget name="web_ribbon" title="Yielded" bg_color="bg-success" attrs="{'invisible': [('payment_state', '!=', 'yielded')]}"/>
+                </xpath>
+                <button name="l10n_cl_verify_dte_status" position="after">
+                    <field name="l10n_latam_document_type_id_code" invisible="1"/>
+                    <field name="payment_state" invisible="1"/>
+                    <button name="l10n_cl_create_aec" type="object" attrs="{'invisible': ['|', '|', ['l10n_latam_document_type_id_code', 'not in', ['33', '34', '46', '43']], ['l10n_cl_dte_status', '!=', 'accepted'], ['payment_state', 'in', ['paid', 'yielded']]]}" string="⇒ Create AEC" class="oe_inline oe_link" groups="base.group_user"/>
+                </button>
+                <xpath expr="//sheet//group//group//label[@for='l10n_cl_dte_status']" position="before">
+                    <field name="l10n_cl_aec_file" invisible="1"/>
+                </xpath>
+                <xpath expr="//sheet//group//group//div[.//field[@name='l10n_cl_dte_status']]" position="before">
+                    <field name="l10n_cl_journal_point_of_sale_type" invisible="1"/>
+                </xpath>
+                <xpath expr="//sheet//group//group//label[@for='l10n_cl_dte_status']" position="attributes">
+                    <attribute name="attrs">{'invisible': [('move_type', 'not in', ['out_invoice', 'out_refund']), ('l10n_cl_aec_file', '=', False), ('l10n_cl_journal_point_of_sale_type', '=', False), ('country_code', '!=', 'CL')]}</attribute>
+                </xpath>
+                <xpath expr="//sheet//group//group//div//field[@name='l10n_cl_dte_status']" position="attributes">
+                    <attribute name="attrs">{'readonly': True, 'invisible': [('move_type', 'not in', ['out_invoice', 'out_refund']), ('l10n_cl_aec_file', '=', False)]}</attribute>
+                </xpath>
+                <xpath expr="//sheet//group//group//div[.//field[@name='l10n_cl_dte_status']]" position="attributes">
+                    <attribute name="attrs">{'invisible': [('l10n_cl_journal_point_of_sale_type', '=', False), ('l10n_cl_aec_file', '=', False), ('country_code', '!=', 'CL')]}</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_complete_invoice_refund_tree" model="ir.ui.view">
+            <field name="name">account.move.edi.tree2</field>
+            <field name="inherit_id" ref="l10n_cl.view_complete_invoice_refund_tree"/>
+            <field name="model">account.move</field>
+            <field name="arch" type="xml">
+                <field name="payment_state" position="after">
+                    <field name="l10n_cl_dte_status" optional="show" widget="badge" decoration-danger="l10n_cl_dte_status == 'rejected'" decoration-warning="l10n_cl_dte_status in ('ask_for_status', 'not_sent')" decoration-info="l10n_cl_dte_status == 'objected'" decoration-muted="l10n_cl_dte_status in ('manual', 'cancelled')" decoration-success="l10n_cl_dte_status == 'accepted'"/>
+                    <field name="l10n_cl_dte_partner_status" optional="show" widget="badge" decoration-danger="l10n_cl_dte_partner_status == 'not_sent'" decoration-success="l10n_cl_dte_partner_status == 'sent'"/>
+                    <field name="l10n_cl_dte_acceptation_status" optional="hide" widget="badge" decoration-info="l10n_cl_dte_acceptation_status == 'received'" decoration-warning="l10n_cl_dte_acceptation_status == 'ack_sent'" decoration-danger="l10n_cl_dte_acceptation_status == 'claimed'" decoration-success="l10n_cl_dte_acceptation_status == 'accepted'"/>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</odoo>

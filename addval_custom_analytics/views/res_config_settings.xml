@@ -48,6 +48,19 @@
                                     nolabel="1"
                                 />
                             </div>
+                            <label
+                                string="Plan analítico para tareas"
+                                for="task_analytic_plan_id"/>
+                            <div class="text-muted">
+                                Plan analítico de tareas
+                            </div>
+                            <div class="content-group mt16">
+                                <field
+                                    name="task_analytic_plan_id"
+                                    colspan="4"
+                                    nolabel="1"
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>

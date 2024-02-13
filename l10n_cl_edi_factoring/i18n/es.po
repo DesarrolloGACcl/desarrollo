@@ -1,0 +1,146 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_cl_edi_factoring
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-02 12:29+0000\n"
+"PO-Revision-Date: 2021-08-02 09:36-0300\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 2.4.3\n"
+"Last-Translator: Daniel Blanco <daniel@blancomartin.cl>\n"
+"Language: es\n"
+
+#. module: l10n_cl_edi_factoring
+#: model_terms:ir.ui.view,arch_db:l10n_cl_edi_factoring.view_aec_creation_control
+msgid "AEC Creation Wizard"
+msgstr "Asistente Creación AEC (Factoring)"
+
+#. module: l10n_cl_edi_factoring
+#: model:ir.model.fields,field_description:l10n_cl_edi_factoring.field_account_bank_statement_line__l10n_cl_aec_file
+#: model:ir.model.fields,field_description:l10n_cl_edi_factoring.field_account_move__l10n_cl_aec_file
+#: model:ir.model.fields,field_description:l10n_cl_edi_factoring.field_account_payment__l10n_cl_aec_file
+msgid "AEC File"
+msgstr "Archivo de Cesión (AEC)"
+
+#. module: l10n_cl_edi_factoring
+#: model_terms:ir.ui.view,arch_db:l10n_cl_edi_factoring.view_aec_creation_control
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: l10n_cl_edi_factoring
+#: model:ir.model,name:l10n_cl_edi_factoring.model_l10n_cl_aec_generator
+msgid "Chilean AEC Wizard Generator"
+msgstr "Generador de archivo AEC (factoring)"
+
+#. module: l10n_cl_edi_factoring
+#: model:ir.model.fields,field_description:l10n_cl_edi_factoring.field_l10n_cl_aec_generator__company_id
+msgid "Company"
+msgstr "Compañía"
+
+#. module: l10n_cl_edi_factoring
+#: model:ir.model,name:l10n_cl_edi_factoring.model_res_partner
+msgid "Contact"
+msgstr "Contacto"
+
+#. module: l10n_cl_edi_factoring
+#: model:ir.model.fields,field_description:l10n_cl_edi_factoring.field_l10n_cl_aec_generator__counterpart_account_id
+msgid "Counterpart Account"
+msgstr "Cuenta de contrapartida"
+
+#. module: l10n_cl_edi_factoring
+#: model:ir.actions.act_window,name:l10n_cl_edi_factoring.action_create_aec_wizard
+#: model_terms:ir.ui.view,arch_db:l10n_cl_edi_factoring.view_aec_creation_control
+msgid "Create AEC"
+msgstr "Crear Archivo de Cesión (AEC)"
+
+#. module: l10n_cl_edi_factoring
+#: model:ir.model.fields,field_description:l10n_cl_edi_factoring.field_l10n_cl_aec_generator__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: l10n_cl_edi_factoring
+#: model:ir.model.fields,field_description:l10n_cl_edi_factoring.field_l10n_cl_aec_generator__create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: l10n_cl_edi_factoring
+#: model:ir.model.fields,field_description:l10n_cl_edi_factoring.field_account_move__display_name
+#: model:ir.model.fields,field_description:l10n_cl_edi_factoring.field_l10n_cl_aec_generator__display_name
+#: model:ir.model.fields,field_description:l10n_cl_edi_factoring.field_res_partner__display_name
+msgid "Display Name"
+msgstr "Nombre Mostrado"
+
+#. module: l10n_cl_edi_factoring
+#: model:ir.model.fields,field_description:l10n_cl_edi_factoring.field_l10n_cl_aec_generator__partner_id
+#: model:ir.model.fields,field_description:l10n_cl_edi_factoring.field_res_partner__l10n_cl_is_factoring
+#: model:ir.model.fields,field_description:l10n_cl_edi_factoring.field_res_users__l10n_cl_is_factoring
+msgid "Factoring Company"
+msgstr "Empresa de Factoring"
+
+#. module: l10n_cl_edi_factoring
+#: model:ir.model.fields,field_description:l10n_cl_edi_factoring.field_account_move__id
+#: model:ir.model.fields,field_description:l10n_cl_edi_factoring.field_l10n_cl_aec_generator__id
+#: model:ir.model.fields,field_description:l10n_cl_edi_factoring.field_res_partner__id
+msgid "ID"
+msgstr ""
+
+#. module: l10n_cl_edi_factoring
+#: model:ir.model.fields,field_description:l10n_cl_edi_factoring.field_l10n_cl_aec_generator__journal_id
+msgid "Journal"
+msgstr "Diario"
+
+#. module: l10n_cl_edi_factoring
+#: model:ir.model,name:l10n_cl_edi_factoring.model_account_move
+msgid "Journal Entry"
+msgstr "Asiento Contable"
+
+#. module: l10n_cl_edi_factoring
+#: model:ir.model.fields,field_description:l10n_cl_edi_factoring.field_account_move____last_update
+#: model:ir.model.fields,field_description:l10n_cl_edi_factoring.field_l10n_cl_aec_generator____last_update
+#: model:ir.model.fields,field_description:l10n_cl_edi_factoring.field_res_partner____last_update
+msgid "Last Modified on"
+msgstr "Ultima Modificación el"
+
+#. module: l10n_cl_edi_factoring
+#: model:ir.model.fields,field_description:l10n_cl_edi_factoring.field_l10n_cl_aec_generator__write_uid
+msgid "Last Updated by"
+msgstr "Ultima Actualización por"
+
+#. module: l10n_cl_edi_factoring
+#: model:ir.model.fields,field_description:l10n_cl_edi_factoring.field_l10n_cl_aec_generator__write_date
+msgid "Last Updated on"
+msgstr "Ultima Actualización el"
+
+#. module: l10n_cl_edi_factoring
+#: model:ir.model.fields,field_description:l10n_cl_edi_factoring.field_account_bank_statement_line__payment_state
+#: model:ir.model.fields,field_description:l10n_cl_edi_factoring.field_account_move__payment_state
+#: model:ir.model.fields,field_description:l10n_cl_edi_factoring.field_account_payment__payment_state
+msgid "Payment Status"
+msgstr "Estado de Pago"
+
+#. module: l10n_cl_edi_factoring
+#: model_terms:ir.ui.view,arch_db:l10n_cl_edi_factoring.message_yield_link
+msgid "This invoice has been yielded in the following account entry:"
+msgstr "Esta factura ha sido cedida con el siguiente asiento contable:"
+
+#. module: l10n_cl_edi_factoring
+#: model_terms:ir.ui.view,arch_db:l10n_cl_edi_factoring.message_yield_account_entry
+msgid "This is the yield account entry for the following invoices:"
+msgstr "Este es el asiento contable de cesión para las siguientes facturas:"
+
+#. module: l10n_cl_edi_factoring
+#: model:ir.model.fields.selection,name:l10n_cl_edi_factoring.selection__account_move__payment_state__yielded
+msgid "Yielded"
+msgstr "Cedida"
+
+#. module: l10n_cl_edi_factoring
+#: model_terms:ir.ui.view,arch_db:l10n_cl_edi_factoring.view_invoice_form
+msgid "⇒ Create AEC"
+msgstr "⇒ Crear AEC"

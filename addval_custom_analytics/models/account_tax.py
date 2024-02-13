@@ -17,7 +17,7 @@ class AccountTax(models.Model):
             self, base_line,
             partner=None, currency=None, product=None, taxes=None, price_unit=None, quantity=None,
             discount=None, account=None, analytic_distribution=None, analytic_distribution_area=None, 
-            analytic_distribution_activity=None, price_subtotal=None,
+            analytic_distribution_activity=None, analytic_distribution_task=None,price_subtotal=None,
             is_refund=False, rate=None,
             handle_price_include=True,
             extra_context=None,
@@ -35,6 +35,7 @@ class AccountTax(models.Model):
             'analytic_distribution': analytic_distribution,
             'analytic_distribution_area': analytic_distribution_area,
             'analytic_distribution_activity': analytic_distribution_activity,
+            'analytic_distribution_task': analytic_distribution_task,
             'price_subtotal': price_subtotal or 0.0,
             'is_refund': is_refund,
             'rate': rate or 1.0,
@@ -48,7 +49,7 @@ class AccountTax(models.Model):
             self, tax_line,
             partner=None, currency=None, taxes=None, tax_tags=None, tax_repartition_line=None,
             group_tax=None, account=None, analytic_distribution=None, analytic_distribution_area=None, 
-            analytic_distribution_activity=None, tax_amount=None,
+            analytic_distribution_activity=None, analytic_distribution_task=None,tax_amount=None,
     ):
         return {
             'record': tax_line,
@@ -62,6 +63,7 @@ class AccountTax(models.Model):
             'analytic_distribution': analytic_distribution,
             'analytic_distribution_area': analytic_distribution_area,
             'analytic_distribution_activity': analytic_distribution_activity,
+            'analytic_distribution_task': analytic_distribution_task,
             'tax_amount': tax_amount or 0.0,
         }
     
@@ -88,6 +90,7 @@ class AccountTax(models.Model):
             'analytic_distribution': line_vals['analytic_distribution'] if tax_vals['analytic'] else {},
             'analytic_distribution_area': line_vals['analytic_distribution_area'] if tax_vals['analytic'] else {},
             'analytic_distribution_activity': line_vals['analytic_distribution_activity'] if tax_vals['analytic'] else {},
+            'analytic_distribution_task': line_vals['analytic_distribution_task'] if tax_vals['analytic'] else {},
         }
     
     @api.model
@@ -111,4 +114,5 @@ class AccountTax(models.Model):
             'analytic_distribution': line_vals['analytic_distribution'] if tax.analytic else {},
             'analytic_distribution_area': line_vals['analytic_distribution_area'] if tax.analytic else {},
             'analytic_distribution_activity': line_vals['analytic_distribution_activity'] if tax.analytic else {},
+            'analytic_distribution_task': line_vals['analytic_distribution_task'] if tax.analytic else {},
         }

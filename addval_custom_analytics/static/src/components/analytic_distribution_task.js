@@ -28,7 +28,7 @@ const PLAN_STATUS = {
     invalid: _lt("Invalid"),
     ok: _lt("OK"),
 }
-export class AnalyticDistributionActivity extends Component {
+export class AnalyticDistributionTask extends Component {
     setup(){
         this.orm = useService("orm");
 
@@ -173,7 +173,7 @@ export class AnalyticDistributionActivity extends Component {
     async fetchAllPlans(nextProps) {
         // TODO: Optimize to execute once for all records when `force_applicability` is set
         const argsPlan =  this.fetchPlansArgs(nextProps);
-        this.allPlans = await this.orm.call("account.analytic.plan", "get_activity_relevant_plans", [], argsPlan);
+        this.allPlans = await this.orm.call("account.analytic.plan", "get_task_relevant_plans", [], argsPlan);
     }
 
     async fetchAnalyticAccounts(domain, limit=null) {
@@ -185,14 +185,14 @@ export class AnalyticDistributionActivity extends Component {
         if (limit) {
             args['limit'] = limit;
         }
-        //const analyticDistribution = this.props.record.data.analytic_distribution;
-        //const claves = Object.keys(analyticDistribution).map(Number);
+        // const analyticDistribution = this.props.record.data.analytic_distribution;
+        // const claves = Object.keys(analyticDistribution).map(Number);
 
-        //console.log(claves);
+        // console.log(claves);
 
-        //if (claves.length > 0) {
-            //args.domain.push(["parent_id", "in", claves]); 
-        //}
+        // if (claves.length > 0) {
+        //     args.domain.push(["parent_id", "in", claves]); 
+        // }
         if (domain.length === 1 && domain[0][0] === "id") {
             //batch these orm calls
             return await this.props.record.model.orm.read("account.analytic.account", domain[0][2], args.fields, {});
@@ -671,17 +671,17 @@ export class AnalyticDistributionActivity extends Component {
         return formatPercentage(value / 100, { digits: [false, this.props.record.data.analytic_precision || 2] });
     }
 }
-AnalyticDistributionActivity.template = "analytic.AnalyticDistribution";
-AnalyticDistributionActivity.supportedTypes = ["char", "text"];
-AnalyticDistributionActivity.components = {
+AnalyticDistributionTask.template = "analytic.AnalyticDistribution";
+AnalyticDistributionTask.supportedTypes = ["char", "text"];
+AnalyticDistributionTask.components = {
     AutoComplete,
     TagsList,
 }
 
-AnalyticDistributionActivity.fieldDependencies = {
+AnalyticDistributionTask.fieldDependencies = {
     analytic_precision: { type: 'integer' },
 }
-AnalyticDistributionActivity.props = {
+AnalyticDistributionTask.props = {
     ...standardFieldProps,
     business_domain: { type: String, optional: true },
     account_field: { type: String, optional: true },
@@ -690,7 +690,7 @@ AnalyticDistributionActivity.props = {
     force_applicability: { type: String, optional: true },
     allow_save: { type: Boolean },
 }
-AnalyticDistributionActivity.extractProps = ({ field, attrs }) => {
+AnalyticDistributionTask.extractProps = ({ field, attrs }) => {
     return {
         business_domain: attrs.options.business_domain,
         account_field: attrs.options.account_field,
@@ -701,4 +701,4 @@ AnalyticDistributionActivity.extractProps = ({ field, attrs }) => {
     };
 };
 
-registry.category("fields").add("analytic_distribution_activity", AnalyticDistributionActivity);
+registry.category("fields").add("analytic_distribution_task", AnalyticDistributionTask);

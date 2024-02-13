@@ -53,6 +53,8 @@ class AccountReport(models.AbstractModel):
                 selected_fields.append(sql.SQL('to_jsonb(account_id) AS "account_move_line.analytic_distribution_area"'))
             elif fname == 'analytic_distribution_activity':
                 selected_fields.append(sql.SQL('to_jsonb(account_id) AS "account_move_line.analytic_distribution_activity"'))
+            elif fname == 'analytic_distribution_task':
+                selected_fields.append(sql.SQL('to_jsonb(account_id) AS "account_move_line.analytic_distribution_task"'))
             else:
                 if line_fields[fname].get("translate"):
                     typecast = sql.SQL('jsonb')
@@ -99,6 +101,7 @@ class AccountReport(models.AbstractModel):
         if options.get('analytic_accounts') and not any(x in options.get('analytic_accounts_list', []) for x in options['analytic_accounts']):
             where_clause = f'{where_clause} AND "account_move_line".analytic_distribution_area ?| array[%s]'
             where_clause = f'{where_clause} AND "account_move_line".analytic_distribution_activity ?| array[%s]'
+            where_clause = f'{where_clause} AND "account_move_line".analytic_distribution_task ?| array[%s]'
         
         return tables, where_clause, where_params
     
@@ -135,6 +138,9 @@ class AccountReport(models.AbstractModel):
                 elif field == 'analytic_distribution_activity':
                     account_ids = tuple(int(account_id) for account_id in column_group_options.get('analytic_accounts_list', []))
                     expression = [('account_id', 'in', account_ids)]
+                elif field == 'analytic_distribution_task':
+                    account_ids = tuple(int(account_id) for account_id in column_group_options.get('analytic_accounts_list', []))
+                    expression = [('account_id', 'in', account_ids)]
                 # For other fields not present in on the analytic line model, map them to get the info from the move_line.
                 # Or ignore these conditions if there is no move lines.
                 elif field.split('.')[0] not in AccountAnalyticLine._fields:
@@ -163,6 +169,7 @@ class AccountReport(models.AbstractModel):
                 [('analytic_distribution', 'in', options.get('analytic_accounts_list', []))],
                 [('analytic_distribution_area', 'in', options.get('analytic_accounts_list', []))],
                 [('analytic_distribution_activity', 'in', options.get('analytic_accounts_list', []))],
+                [('analytic_distribution_task', 'in', options.get('analytic_accounts_list', []))],
             ])
 
         return domain

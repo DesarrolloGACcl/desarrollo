@@ -29,7 +29,6 @@
         #'security/ir.model.access.csv',
         'views/res_config_settings.xml',
         'views/account_move.xml',
-        #'views/project_task.xml',
         'views/purchase_order.xml',
         'views/sale_order.xml',
         'views/account_analytic_account.xml',

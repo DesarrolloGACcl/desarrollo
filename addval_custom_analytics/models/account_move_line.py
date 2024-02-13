@@ -33,7 +33,11 @@ class AccountMoveLine(models.Model):
         inverse="_inverse_analytic_distribution",
     ) 
 
-    @api.depends('tax_ids', 'currency_id', 'partner_id', 'account_id', 'group_tax_id', 'analytic_distribution', 'analytic_distribution_area', 'analytic_distribution_activity')
+    analytic_distribution_task = fields.Json(
+        inverse="_inverse_analytic_distribution",
+    ) 
+
+    @api.depends('tax_ids', 'currency_id', 'partner_id', 'account_id', 'group_tax_id', 'analytic_distribution', 'analytic_distribution_area', 'analytic_distribution_activity', 'analytic_distribution_task')
     def _compute_tax_key(self):
         for line in self:
             if line.tax_repartition_line_id:
@@ -45,6 +49,7 @@ class AccountMoveLine(models.Model):
                     'analytic_distribution': line.analytic_distribution,
                     'analytic_distribution_area': line.analytic_distribution_area,
                     'analytic_distribution_activity': line.analytic_distribution_activity,
+                    'analytic_distribution_task': line.analytic_distribution_task,
                     'tax_ids': [(6, 0, line.tax_ids.ids)],
                     'tax_tag_ids': [(6, 0, line.tax_tag_ids.ids)],
                     'partner_id': line.partner_id.id,
@@ -54,7 +59,7 @@ class AccountMoveLine(models.Model):
             else:
                 line.tax_key = frozendict({'id': line.id})
 
-    @api.depends('tax_ids', 'currency_id', 'partner_id', 'analytic_distribution', 'analytic_distribution_area', 'analytic_distribution_activity', 'balance', 'partner_id', 'move_id.partner_id', 'price_unit', 'quantity')
+    @api.depends('tax_ids', 'currency_id', 'partner_id', 'analytic_distribution', 'analytic_distribution_area', 'analytic_distribution_activity', 'analytic_distribution_task', 'balance', 'partner_id', 'move_id.partner_id', 'price_unit', 'quantity')
     def _compute_all_tax(self):
         for line in self:
             sign = line.move_id.direction_sign
@@ -92,6 +97,7 @@ class AccountMoveLine(models.Model):
                     'analytic_distribution': (tax['analytic'] or not tax['use_in_tax_closing']) and line.analytic_distribution,
                     'analytic_distribution_area': (tax['analytic'] or not tax['use_in_tax_closing']) and line.analytic_distribution_area,
                     'analytic_distribution_activity': (tax['analytic'] or not tax['use_in_tax_closing']) and line.analytic_distribution_activity,
+                    'analytic_distribution_task': (tax['analytic'] or not tax['use_in_tax_closing']) and line.analytic_distribution_task,
                     'tax_ids': [(6, 0, tax['tax_ids'])],
                     'tax_tag_ids': [(6, 0, tax['tag_ids'])],
                     'partner_id': line.move_id.partner_id.id or line.partner_id.id,
@@ -120,6 +126,7 @@ class AccountMoveLine(models.Model):
                     'analytic_distribution': line.analytic_distribution,
                     'analytic_distribution_area': line.analytic_distribution_area,
                     'analytic_distribution_activity': line.analytic_distribution_activity,
+                    'analytic_distribution_task': line.analytic_distribution_task,
                     'tax_ids': [Command.set(line.tax_ids.ids)],
                     'tax_tag_ids': [Command.set(line.tax_tag_ids.ids)],
                     'move_id': line.move_id.id,
@@ -127,7 +134,7 @@ class AccountMoveLine(models.Model):
             else:
                 line.epd_key = False
 
-    @api.depends('move_id.needed_terms', 'account_id', 'analytic_distribution', 'analytic_distribution_area', 'analytic_distribution_activity', 'tax_ids', 'tax_tag_ids', 'company_id')
+    @api.depends('move_id.needed_terms', 'account_id', 'analytic_distribution', 'analytic_distribution_area', 'analytic_distribution_activity', 'analytic_distribution_task', 'tax_ids', 'tax_tag_ids', 'company_id')
     def _compute_epd_needed(self):
         for line in self:
             needed_terms = line.move_id.needed_terms
@@ -160,6 +167,7 @@ class AccountMoveLine(models.Model):
                         'analytic_distribution': line.analytic_distribution,
                         'analytic_distribution_area': line.analytic_distribution_area,
                         'analytic_distribution_activity': line.analytic_distribution_activity,
+                        'analytic_distribution_task': line.analytic_distribution_task,
                         'tax_ids': [Command.set(taxes.ids)],
                         'tax_tag_ids': line.compute_all_tax[frozendict({'id': line.id})]['tax_tag_ids'],
                         'display_type': 'epd',
@@ -235,6 +243,20 @@ class AccountMoveLine(models.Model):
                 })
                 line.analytic_distribution_activity = activity_distribution or line.analytic_distribution_activity
 
+    @api.depends('account_id', 'partner_id', 'product_id')
+    def _compute_analytic_distribution_task(self):
+        for line in self:
+            if not line.display_type:
+                task_distribution = self.env['account.analytic.distribution.model']._get_distribution({
+                    "product_id": line.product_id.id,
+                    "product_categ_id": line.product_id.categ_id.id,
+                    "partner_id": line.order_id.partner_id.id,
+                    "partner_category_id": line.order_id.partner_id.category_id.ids,
+                    "account_prefix": line.account_id.code,
+                    "company_id": line.company_id.id,
+                })
+                line.analytic_distribution_task = task_distribution or line.analytic_distribution_task
+
     def _prepare_analytic_lines(self):
         analytic_line_vals = super()._prepare_analytic_lines()
 
@@ -248,11 +270,18 @@ class AccountMoveLine(models.Model):
                 if not self.currency_id.is_zero(line_values.get('amount')):
                     analytic_line_vals.append(line_values)
         if self.analytic_distribution_activity:
-            # distribution_on_each_plan corresponds to the proportion that is distributed to each plan to be able to
-            # give the real amount when we achieve a 100% distribution
+
             distribution_on_each_plan = {}
 
             for account_id, distribution in self.analytic_distribution_activity.items():
+                line_values = self._prepare_analytic_distribution_line(float(distribution), account_id, distribution_on_each_plan)
+                if not self.currency_id.is_zero(line_values.get('amount')):
+                    analytic_line_vals.append(line_values)
+        if self.analytic_distribution_task:
+
+            distribution_on_each_plan = {}
+
+            for account_id, distribution in self.analytic_distribution_task.items():
                 line_values = self._prepare_analytic_distribution_line(float(distribution), account_id, distribution_on_each_plan)
                 if not self.currency_id.is_zero(line_values.get('amount')):
                     analytic_line_vals.append(line_values)
@@ -280,6 +309,7 @@ class AccountMoveLine(models.Model):
             analytic_distribution=self.analytic_distribution,
             analytic_distribution_area=self.analytic_distribution_area,
             analytic_distribution_activity=self.analytic_distribution_activity,
+            analytic_distribution_task=self.analytic_distribution_task,
             price_subtotal=sign * self.amount_currency,
             is_refund=self.is_refund,
             rate=(abs(self.amount_currency) / abs(self.balance)) if self.balance else 1.0
@@ -305,30 +335,6 @@ class AccountMoveLine(models.Model):
             analytic_distribution=self.analytic_distribution,
             analytic_distribution_area=self.analytic_distribution_area,
             analytic_distribution_activity=self.analytic_distribution_activity,
+            analytic_distribution_task=self.analytic_distribution_task,
             tax_amount=sign * self.amount_currency,
         )
-
-
-    # def _sale_determine_order(self):
-   
-    #     mapping = super()._sale_determine_order()
-
-    #     for move_line in self:
-    #         if move_line.analytic_distribution_area:
-    #             distribution_json = move_line.analytic_distribution_area
-    #             sale_order = self.env['sale.order'].search([('analytic_account_id', 'in', list(int(account_id) for account_id in distribution_json.keys())),
-    #                                                         ('state', '=', 'sale')], order='create_date ASC', limit=1)
-    #             if sale_order:
-    #                 mapping[move_line.id] = sale_order
-    #             else:
-    #                 sale_order = self.env['sale.order'].search([('analytic_account_id', 'in', list(int(account_id) for account_id in distribution_json.keys()))], order='create_date ASC', limit=1)
-    #                 mapping[move_line.id] = sale_order            
-    #         if move_line.analytic_distribution_activity:
-    #             distribution_json = move_line.analytic_distribution_activity
-    #             sale_order = self.env['sale.order'].search([('analytic_account_id', 'in', list(int(account_id) for account_id in distribution_json.keys())),
-    #                                                         ('state', '=', 'sale')], order='create_date ASC', limit=1)
-    #             if sale_order:
-    #                 mapping[move_line.id] = sale_order
-    #             else:
-    #                 sale_order = self.env['sale.order'].search([('analytic_account_id', 'in', list(int(account_id) for account_id in distribution_json.keys()))], order='create_date ASC', limit=1)
-    #                 mapping[move_line.id] = sale_order

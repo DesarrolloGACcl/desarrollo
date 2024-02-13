@@ -1,0 +1,185 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_cl_edi_factoring
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-09-08 17:52+0000\n"
+"PO-Revision-Date: 2021-09-08 17:52+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: l10n_cl_edi_factoring
+#: model_terms:ir.ui.view,arch_db:l10n_cl_edi_factoring.message_yield_draft
+msgid ""
+".<br/> In order to register the pay off for this invoice, you must post the "
+"account entry, and reconcile it."
+msgstr ""
+
+#. module: l10n_cl_edi_factoring
+#: model_terms:ir.ui.view,arch_db:l10n_cl_edi_factoring.message_yield_post
+msgid ""
+".<br/> In order to register the pay off for this invoice, you must reconcile"
+" it."
+msgstr ""
+
+#. module: l10n_cl_edi_factoring
+#: model_terms:ir.ui.view,arch_db:l10n_cl_edi_factoring.message_yield_draft
+msgid "A draft account entry for the yield of this invoice has been created:"
+msgstr ""
+
+#. module: l10n_cl_edi_factoring
+#: model_terms:ir.ui.view,arch_db:l10n_cl_edi_factoring.view_aec_creation_control
+msgid "AEC Creation Wizard"
+msgstr ""
+
+#. module: l10n_cl_edi_factoring
+#: model:ir.model.fields,field_description:l10n_cl_edi_factoring.field_account_bank_statement_line__l10n_cl_aec_file
+#: model:ir.model.fields,field_description:l10n_cl_edi_factoring.field_account_move__l10n_cl_aec_file
+#: model:ir.model.fields,field_description:l10n_cl_edi_factoring.field_account_payment__l10n_cl_aec_file
+msgid "AEC File"
+msgstr ""
+
+#. module: l10n_cl_edi_factoring
+#: model:ir.model.fields,field_description:l10n_cl_edi_factoring.field_l10n_cl_aec_generator__account_move_option
+msgid "Account Entry Actions"
+msgstr ""
+
+#. module: l10n_cl_edi_factoring
+#: model_terms:ir.ui.view,arch_db:l10n_cl_edi_factoring.view_aec_creation_control
+msgid "Cancel"
+msgstr ""
+
+#. module: l10n_cl_edi_factoring
+#: model:ir.model,name:l10n_cl_edi_factoring.model_l10n_cl_aec_generator
+msgid "Chilean AEC Wizard Generator"
+msgstr ""
+
+#. module: l10n_cl_edi_factoring
+#: model:ir.model.fields,field_description:l10n_cl_edi_factoring.field_l10n_cl_aec_generator__company_id
+msgid "Company"
+msgstr ""
+
+#. module: l10n_cl_edi_factoring
+#: model:ir.model,name:l10n_cl_edi_factoring.model_res_partner
+msgid "Contact"
+msgstr ""
+
+#. module: l10n_cl_edi_factoring
+#: model:ir.model.fields,field_description:l10n_cl_edi_factoring.field_l10n_cl_aec_generator__counterpart_account_id
+msgid "Counterpart Account"
+msgstr ""
+
+#. module: l10n_cl_edi_factoring
+#: model:ir.actions.act_window,name:l10n_cl_edi_factoring.action_create_aec_wizard
+#: model_terms:ir.ui.view,arch_db:l10n_cl_edi_factoring.view_aec_creation_control
+msgid "Create AEC"
+msgstr ""
+
+#. module: l10n_cl_edi_factoring
+#: model:ir.model.fields.selection,name:l10n_cl_edi_factoring.selection__l10n_cl_aec_generator__account_move_option__draft
+msgid "Create draft entry"
+msgstr ""
+
+#. module: l10n_cl_edi_factoring
+#: model:ir.model.fields.selection,name:l10n_cl_edi_factoring.selection__l10n_cl_aec_generator__account_move_option__post
+msgid "Create entry and post"
+msgstr ""
+
+#. module: l10n_cl_edi_factoring
+#: model:ir.model.fields.selection,name:l10n_cl_edi_factoring.selection__l10n_cl_aec_generator__account_move_option__reconcile
+msgid "Create entry, post and reconcile"
+msgstr ""
+
+#. module: l10n_cl_edi_factoring
+#: model:ir.model.fields,field_description:l10n_cl_edi_factoring.field_l10n_cl_aec_generator__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: l10n_cl_edi_factoring
+#: model:ir.model.fields,field_description:l10n_cl_edi_factoring.field_l10n_cl_aec_generator__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: l10n_cl_edi_factoring
+#: model:ir.model.fields,field_description:l10n_cl_edi_factoring.field_account_move__display_name
+#: model:ir.model.fields,field_description:l10n_cl_edi_factoring.field_l10n_cl_aec_generator__display_name
+#: model:ir.model.fields,field_description:l10n_cl_edi_factoring.field_res_partner__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: l10n_cl_edi_factoring
+#: model:ir.model.fields,field_description:l10n_cl_edi_factoring.field_l10n_cl_aec_generator__partner_id
+#: model:ir.model.fields,field_description:l10n_cl_edi_factoring.field_res_partner__l10n_cl_is_factoring
+#: model:ir.model.fields,field_description:l10n_cl_edi_factoring.field_res_users__l10n_cl_is_factoring
+msgid "Factoring Company"
+msgstr ""
+
+#. module: l10n_cl_edi_factoring
+#: model:ir.model.fields,field_description:l10n_cl_edi_factoring.field_account_move__id
+#: model:ir.model.fields,field_description:l10n_cl_edi_factoring.field_l10n_cl_aec_generator__id
+#: model:ir.model.fields,field_description:l10n_cl_edi_factoring.field_res_partner__id
+msgid "ID"
+msgstr ""
+
+#. module: l10n_cl_edi_factoring
+#: model:ir.model.fields,field_description:l10n_cl_edi_factoring.field_l10n_cl_aec_generator__journal_id
+msgid "Journal"
+msgstr ""
+
+#. module: l10n_cl_edi_factoring
+#: model:ir.model,name:l10n_cl_edi_factoring.model_account_move
+msgid "Journal Entry"
+msgstr ""
+
+#. module: l10n_cl_edi_factoring
+#: model:ir.model.fields,field_description:l10n_cl_edi_factoring.field_account_move____last_update
+#: model:ir.model.fields,field_description:l10n_cl_edi_factoring.field_l10n_cl_aec_generator____last_update
+#: model:ir.model.fields,field_description:l10n_cl_edi_factoring.field_res_partner____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: l10n_cl_edi_factoring
+#: model:ir.model.fields,field_description:l10n_cl_edi_factoring.field_l10n_cl_aec_generator__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: l10n_cl_edi_factoring
+#: model:ir.model.fields,field_description:l10n_cl_edi_factoring.field_l10n_cl_aec_generator__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: l10n_cl_edi_factoring
+#: model:ir.model.fields,field_description:l10n_cl_edi_factoring.field_account_bank_statement_line__payment_state
+#: model:ir.model.fields,field_description:l10n_cl_edi_factoring.field_account_move__payment_state
+#: model:ir.model.fields,field_description:l10n_cl_edi_factoring.field_account_payment__payment_state
+msgid "Payment Status"
+msgstr ""
+
+#. module: l10n_cl_edi_factoring
+#: model_terms:ir.ui.view,arch_db:l10n_cl_edi_factoring.message_yield_link
+msgid "This invoice has been yielded in the following account entry:"
+msgstr ""
+
+#. module: l10n_cl_edi_factoring
+#: model_terms:ir.ui.view,arch_db:l10n_cl_edi_factoring.message_yield_account_entry
+#: model_terms:ir.ui.view,arch_db:l10n_cl_edi_factoring.message_yield_post
+msgid "This is the yield account entry for the following invoices:"
+msgstr ""
+
+#. module: l10n_cl_edi_factoring
+#: model:ir.model.fields.selection,name:l10n_cl_edi_factoring.selection__account_move__payment_state__yielded
+#: model_terms:ir.ui.view,arch_db:l10n_cl_edi_factoring.view_invoice_form
+msgid "Yielded"
+msgstr ""
+
+#. module: l10n_cl_edi_factoring
+#: model_terms:ir.ui.view,arch_db:l10n_cl_edi_factoring.view_invoice_form
+msgid "⇒ Create AEC"
+msgstr ""

@@ -24,3 +24,10 @@ class ResCompany(models.Model):
         store = True,
         readonly=False,
     )
+
+    task_analytic_plan_id = fields.Many2one(
+        'account.analytic.plan',
+        string = 'Tarea',
+        store = True,
+        readonly=False,
+    )

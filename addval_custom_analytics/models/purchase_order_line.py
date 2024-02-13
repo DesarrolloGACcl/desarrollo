@@ -33,6 +33,19 @@ class PruchaseOrderLine(models.Model):
                 })
                 line.analytic_distribution_activity = activity_distribution or line.analytic_distribution_activity
 
+    @api.depends('product_id', 'order_id.partner_id')
+    def _compute_analytic_distribution_task(self):
+        for line in self:
+            if not line.display_type:
+                task_distribution = self.env['account.analytic.distribution.model']._get_distribution({
+                    "product_id": line.product_id.id,
+                    "product_categ_id": line.product_id.categ_id.id,
+                    "partner_id": line.order_id.partner_id.id,
+                    "partner_category_id": line.order_id.partner_id.category_id.ids,
+                    "company_id": line.company_id.id,
+                })
+                line.analytic_distribution_task = task_distribution or line.analytic_distribution_task
+
     def _prepare_account_move_line(self, move): 
         self.ensure_one()
         res = super()._prepare_account_move_line(move)
@@ -40,4 +53,6 @@ class PruchaseOrderLine(models.Model):
             res['analytic_distribution_area'] = self.analytic_distribution_area
         if self.analytic_distribution_activity and not self.display_type:
             res['analytic_distribution_activity'] = self.analytic_distribution_activity
+        if self.analytic_distribution_task and not self.display_type:
+            res['analytic_distribution_task'] = self.analytic_distribution_task
         return res

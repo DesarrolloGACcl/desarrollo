@@ -27,8 +27,9 @@
 
     <menuitem id="menu_export_account_move_line"
         name="Exportar movimientos contables"
+        parent="account.menu_finance_entries"
         action="action_export_account_move_line"
-        parent="account.menu_finance_entries"/>
+        sequence="500"/>
     
     
 </odoo>

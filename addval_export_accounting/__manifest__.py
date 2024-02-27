@@ -21,7 +21,7 @@
     'data': [
         'wizard/export_accounting.xml',
         'views/res_account_year.xml',        
-        #'security/ir.model.access.csv',
+        'security/ir.model.access.csv',
     ],
     'installable': True,
     'application': True,

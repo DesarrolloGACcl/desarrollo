@@ -40,7 +40,10 @@
             </field>
         </record>
 
-        <menuitem name="Mantenedor años" id="res_account_year_menu" action="res_account_year_act_window"
-            parent="account.menu_finance_configuration"/>
+        <menuitem name="Mantenedor años" 
+            id="res_account_year_menu" 
+            parent="account.menu_finance_configuration" 
+            action="res_account_year_act_window"
+            sequence="500"/>
     </data>
 </odoo>

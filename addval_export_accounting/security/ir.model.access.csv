@@ -1,1 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_export_accounting,export.accounting,model_export_accounting,,1,1,1,1
+access_res_account_year,res.account.year,model_res_account_year,,1,1,1,1

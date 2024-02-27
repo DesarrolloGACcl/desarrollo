@@ -6,7 +6,7 @@
         <field name="arch" type="xml">
             <form string="Export Account Move Lines">
                 <group>
-                    <field name="year"/>
+                    <field name="year_id"/>
                     <field name="month"/>
                 </group>
                 <footer>

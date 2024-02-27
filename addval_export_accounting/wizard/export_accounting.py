@@ -41,7 +41,7 @@ class ExportAccounting(models.TransientModel):
             worksheet.write(row, 0, str(line.date))
 
             invoice_or_move = self.env["account.move"].search(
-                [("id", "=", line.move_id)], limit=1
+                [("id", "=", line.move_id.id)], limit=1
             )
 
             if invoice_or_move.move_type == 'in_invoice' and invoice_or_move.l10n_latam_document_type_id.code == '71':

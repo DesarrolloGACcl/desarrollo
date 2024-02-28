@@ -185,7 +185,7 @@ class ExportAccounting(models.TransientModel):
             worksheet.write(row, 61, str(line.tax_tag_ids))
             worksheet.write(row, 62, line.tax_tag_invert)
             worksheet.write(row, 63, line.write_date)
-            worksheet.write(row, 64, line.write_uid)
+            worksheet.write(row, 64, str(line.write_uid))
 
             row += 1
 

@@ -25,8 +25,8 @@ class SaleOrderApi(http.Controller):
 
         existing_sale = request.env['sale.order'].sudo().search([('pre_invoice', '=', kw.get("pre_invoice"))])
 
-        # if existing_sale:
-        #     raise ValidationError(_('Registro ya existe'))
+        if existing_sale:
+            raise ValidationError(_('Registro ya existe'))
 
         log = request.env['sale.log'].sudo().search([('pre_invoice', '=', kw.get("pre_invoice"))],limit=1)
         if log:
@@ -172,6 +172,16 @@ class SaleOrderApi(http.Controller):
                 sale_order.unlink()
                 log.error_message = 'No fue posible crear pedido: discordancia entre tipo documento e impuestos'
                 return 'No fue posible crear pedido: discordancia entre tipo documento e impuestos'
+            
+            analytic_distribution = kw.get("analytic_distribution")
+            _logger.warning(analytic_distribution)
+            analytic_distribution_area = kw.get("analytic_distribution_area")
+            _logger.warning(analytic_distribution_area)
+            analytic_distribution_activity = kw.get("analytic_distribution_activity")
+            _logger.warning(analytic_distribution_activity)
+            analytic_distribution_task = kw.get("analytic_distribution_task")
+            _logger.warning(analytic_distribution_task)
+
             
             request.env['sale.order.line'].sudo().create({
                 'order_id': sale_order.id,

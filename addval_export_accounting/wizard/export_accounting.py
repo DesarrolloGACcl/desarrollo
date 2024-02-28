@@ -60,69 +60,61 @@ class ExportAccounting(models.TransientModel):
             worksheet.write(row, 1, tipo)
             worksheet.write(row, 2, line.move_id.name)
 
-            project_analytic_info_list = []
             if line.analytic_distribution:
                 distributions = json.loads(line.analytic_distribution)
-                
+                                 
+                formatted_project_analytic_info = ""
                 for account_id, percentage in distributions.items():
                     # Fetch the analytic account name using the ID
                     analytic_account = self.env['account.analytic.account'].browse(int(account_id))
-                    name = analytic_account.name if analytic_account else 'Unknown'
-                    
-                    # Append the info to the list in the format (Name, Percentage)
-                    project_analytic_info_list.append((name, percentage))
+                    if analytic_account:
+                        formatted_project_analytic_info += f"{analytic_account.name}: {percentage}%; "
             else:
-                project_analytic_info_list.append(('No se especificó')) 
+                formatted_project_analytic_info = 'No se especificó'
 
-            worksheet.write(row, 3, project_analytic_info_list)
+            worksheet.write(row, 3, formatted_project_analytic_info)
 
-            area_analytic_info_list = []
             if line.analytic_distribution_area:
                 distributions = json.loads(line.analytic_distribution_area)
                 
+                formatted_area_analytic_info = ""
                 for account_id, percentage in distributions.items():
                     # Fetch the analytic account name using the ID
-                    analytic_account = self.env['account.analytic.account'].browse(int(account_id))
-                    name = analytic_account.name if analytic_account else 'Unknown'
-                    
-                    # Append the info to the list in the format (Name, Percentage)
-                    area_analytic_info_list.append((name, percentage))
+                    analytic_account = self.env['account.analytic.account'].browse(int(account_id))                    
+                    if analytic_account:
+                        formatted_area_analytic_info += f"{analytic_account.name}: {percentage}%; "
             else:
-                area_analytic_info_list.append(('No se especificó')) 
+                formatted_area_analytic_info = 'No se especificó'
 
-            worksheet.write(row, 4, area_analytic_info_list)
+            worksheet.write(row, 4, formatted_area_analytic_info)
 
-            activity_analytic_info_list = []
             if line.analytic_distribution_activity:
                 distributions = json.loads(line.analytic_distribution_activity)
                 
+                formatted_activity_analytic_info = ""
                 for account_id, percentage in distributions.items():
                     # Fetch the analytic account name using the ID
-                    analytic_account = self.env['account.analytic.account'].browse(int(account_id))
-                    name = analytic_account.name if analytic_account else 'Unknown'
-                    
-                    # Append the info to the list in the format (Name, Percentage)
-                    activity_analytic_info_list.append((name, percentage))
+                    analytic_account = self.env['account.analytic.account'].browse(int(account_id))                    
+                    if analytic_account:
+                        formatted_activity_analytic_info += f"{analytic_account.name}: {percentage}%; "
             else:
-                activity_analytic_info_list.append(('No se especificó')) 
+                formatted_activity_analytic_info = 'No se especificó'
 
-            worksheet.write(row, 5, activity_analytic_info_list)
+            worksheet.write(row, 5, formatted_activity_analytic_info)
 
-            task_analytic_info_list = []
             if line.analytic_distribution_task:
                 distributions = json.loads(line.analytic_distribution_task)
                 
+                formatted_task_analytic_info = ""
                 for account_id, percentage in distributions.items():
                     # Fetch the analytic account name using the ID
-                    analytic_account = self.env['account.analytic.account'].browse(int(account_id))
-                    name = analytic_account.name if analytic_account else 'Unknown'
-                    
-                    # Append the info to the list in the format (Name, Percentage)
-                    task_analytic_info_list.append((name, percentage))
+                    analytic_account = self.env['account.analytic.account'].browse(int(account_id))                    
+                    if analytic_account:
+                        formatted_task_analytic_info += f"{analytic_account.name}: {percentage}%; "
             else:
-                task_analytic_info_list.append(('No se especificó')) 
+                formatted_task_analytic_info = 'No se especificó'
 
-            worksheet.write(row, 6, task_analytic_info_list)
+            worksheet.write(row, 6, formatted_task_analytic_info)
 
             worksheet.write(row, 7, line.name)
             worksheet.write(row, 8, line.debit)

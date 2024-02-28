@@ -61,7 +61,7 @@ class ExportAccounting(models.TransientModel):
             worksheet.write(row, 2, line.move_id.name)
 
             if line.analytic_distribution:
-                distributions = json.loads(line.analytic_distribution)
+                distributions = line.analytic_distribution
                                  
                 formatted_project_analytic_info = ""
                 for account_id, percentage in distributions.items():
@@ -75,7 +75,7 @@ class ExportAccounting(models.TransientModel):
             worksheet.write(row, 3, formatted_project_analytic_info)
 
             if line.analytic_distribution_area:
-                distributions = json.loads(line.analytic_distribution_area)
+                distributions = line.analytic_distribution_area
                 
                 formatted_area_analytic_info = ""
                 for account_id, percentage in distributions.items():
@@ -89,7 +89,7 @@ class ExportAccounting(models.TransientModel):
             worksheet.write(row, 4, formatted_area_analytic_info)
 
             if line.analytic_distribution_activity:
-                distributions = json.loads(line.analytic_distribution_activity)
+                distributions = line.analytic_distribution_activity
                 
                 formatted_activity_analytic_info = ""
                 for account_id, percentage in distributions.items():
@@ -103,7 +103,7 @@ class ExportAccounting(models.TransientModel):
             worksheet.write(row, 5, formatted_activity_analytic_info)
 
             if line.analytic_distribution_task:
-                distributions = json.loads(line.analytic_distribution_task)
+                distributions = line.analytic_distribution_task
                 
                 formatted_task_analytic_info = ""
                 for account_id, percentage in distributions.items():

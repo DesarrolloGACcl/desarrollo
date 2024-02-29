@@ -40,6 +40,7 @@ class SaleOrderApi(http.Controller):
             log.partner_commune = partner_dict['commune']
             log.partner_id = None
             log.invoice_document_type= kw.get("document_type")
+            log.pre_invoice = kw.get("pre_invoice")
             log.company_name= kw.get("company_name")
             log.company_vat = kw.get("company_vat")
             log.company_id= None
@@ -60,6 +61,7 @@ class SaleOrderApi(http.Controller):
                 'partner_commune' : partner_dict['commune'],
                 'partner_id': None,
                 'invoice_document_type': kw.get("document_type"),
+                'pre_invoice': kw.get("pre_invoice"),
                 'company_name': kw.get("company_name"),
                 'company_vat': kw.get("company_vat"),
                 'company_id': None,
@@ -69,7 +71,7 @@ class SaleOrderApi(http.Controller):
             })
 
         for line in order_lines:
-            product = request.env['product.template'].sudo().search([('name', '=ilike', line['product'])], limit=1)
+            product = request.env['product.template'].sudo().search([('name', '=ilike', line['sku'])], limit=1)
             if not product:
                 request.env['sale.log.line'].sudo().create({
                     'sale_log_id': log.id,
@@ -150,6 +152,7 @@ class SaleOrderApi(http.Controller):
         sale_order = request.env['sale.order'].sudo().create({
             'partner_id': partner.id,
             'invoice_document_type': kw.get("document_type"),
+            'pre_invoice': kw.get("pre_invoice"),
             'company_id': company.id,
             'user_id': user_id
         })
@@ -175,6 +178,14 @@ class SaleOrderApi(http.Controller):
             
             analytic_distribution = line['analytic_distribution']
             _logger.warning(analytic_distribution)
+
+            for project in analytic_distribution:
+                _logger.warning(project)
+                _logger.warning(project['name'])
+                _logger.warning(project['percent'])
+
+            #{"17657": 50.0, "17750": 50.0}
+
             analytic_distribution_area = line['analytic_distribution_area']
             _logger.warning(analytic_distribution_area)
             analytic_distribution_activity = line['analytic_distribution_activity']

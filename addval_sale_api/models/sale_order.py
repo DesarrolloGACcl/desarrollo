@@ -12,7 +12,7 @@ class SaleOrder(models.Model):
     @api.model
     def auto_invoice_sale_orders(self):
         # Fetch confirmed sale orders which are not invoiced yet
-        sale_orders = self.search([('state', '=', 'sale'), ('invoice_status', '=', 'to invoice')])
+        sale_orders = self.search([('state', '=', 'sale'), ('invoice_status', '=', 'to invoice')], limit = 100)
 
         for order in sale_orders:
             # Create invoice

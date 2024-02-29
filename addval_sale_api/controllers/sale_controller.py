@@ -173,13 +173,13 @@ class SaleOrderApi(http.Controller):
                 log.error_message = 'No fue posible crear pedido: discordancia entre tipo documento e impuestos'
                 return 'No fue posible crear pedido: discordancia entre tipo documento e impuestos'
             
-            analytic_distribution = kw.get("analytic_distribution")
+            analytic_distribution = line['analytic_distribution']
             _logger.warning(analytic_distribution)
-            analytic_distribution_area = kw.get("analytic_distribution_area")
+            analytic_distribution_area = line['analytic_distribution_area']
             _logger.warning(analytic_distribution_area)
-            analytic_distribution_activity = kw.get("analytic_distribution_activity")
+            analytic_distribution_activity = line['analytic_distribution_activity']
             _logger.warning(analytic_distribution_activity)
-            analytic_distribution_task = kw.get("analytic_distribution_task")
+            analytic_distribution_task = line['analytic_distribution_task']
             _logger.warning(analytic_distribution_task)
 
             

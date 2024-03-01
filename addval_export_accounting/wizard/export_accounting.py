@@ -61,19 +61,7 @@ class ExportAccounting(models.TransientModel):
         headers = ['Fecha', 'Tipo', 'Documento', 'Código Proyecto','Proyecto', 'Código Área', 'Área', 
                    'Código Actividad', 'Actividad', 'Código Tarea', 'Tarea', 
                    'Detalle (Etiqueta)', 'Debe', 'Haber', 'Código Cuenta Contable', 'Nombre Cuenta',
-                   'Raíz de cuenta', 'Importe en moneda', 'Importe residual',
-                   'Importe residual en moneda', 'Líneas analíticas', 'Activos relacionados',
-                   'Saldo', 'Moneda de la Compañía', 'Moneda' , 'Fecha de vencimiento',
-                   'Descuento (%)', 'Importe de Descuento en Divisa', 'Descuento de Balance',
-                   'Fecha descuento', 'Porcentaje de descuento', 'Tipo de visualización',
-                   'Fecha prevista','Nivel del seguimiento', 'Conciliación', 'Grupo de impuestos originador',
-                   'Es un anticipo', 'Diario', 'Tipo de Documento', 'Conciliación #','Número',
-                   'Estado', 'Empresa','Emisor del pago', 'Subtotal', 'Total', 'Precio un.', 'Precio un. orig.',
-                   'Producto', 'Unidad de medida','Línea pedido de compra', 'Cantidad', 'Modelo de conciliación',
-                   'Conciliado', 'Referencia','Secuencia','Extracto', 'Línea de estado de cuenta del originador',
-                   'Cadena de auditoría fiscal', 'Importe base', 'Grupo de impuestos del originador',
-                   'Impuestos', 'Impuesto (cuota)', 'Línea de distribución de impuestos del originador',
-                   'Etiquetas', 'Invertir etiquetas', 'Última actualización en', 'Última actualización de']
+                   'Raíz de cuenta', 'Saldo']
         worksheet.write_row(0, 0, headers)
 
         row = 1
@@ -179,57 +167,8 @@ class ExportAccounting(models.TransientModel):
             worksheet.write(row, 14, line.account_id.code)
             worksheet.write(row, 15, line.account_id.name)
             worksheet.write(row, 16, line.account_root_id.name)
-            worksheet.write(row, 17, line.amount_currency)
-            worksheet.write(row, 18, line.amount_residual)
-            worksheet.write(row, 19, line.amount_residual_currency)
-            worksheet.write(row, 20, str(line.analytic_line_ids))
-            worksheet.write(row, 21, str(line.asset_ids))
-            worksheet.write(row, 22, line.balance)
-            worksheet.write(row, 23, line.company_currency_id.name)
-            worksheet.write(row, 24, line.currency_id.name)
-            worksheet.write(row, 25, line.date_maturity)
-            worksheet.write(row, 26, line.discount)
-            worksheet.write(row, 27, line.discount_amount_currency)
-            worksheet.write(row, 28, line.discount_balance)
-            worksheet.write(row, 29, line.discount_date)
-            worksheet.write(row, 30, line.discount_percentage)
-            worksheet.write(row, 31, line.display_type)
-            worksheet.write(row, 32, line.expected_pay_date)
-            worksheet.write(row, 33, line.followup_line_id.name)
-            worksheet.write(row, 34, line.full_reconcile_id.name)
-            worksheet.write(row, 35, line.group_tax_id.name)
-            worksheet.write(row, 36, line.is_downpayment)
-            worksheet.write(row, 37, line.journal_id.name)
-            worksheet.write(row, 38, line.l10n_latam_document_type_id.name)
-            worksheet.write(row, 39, line.matching_number)
-            worksheet.write(row, 40, line.move_name)
-            worksheet.write(row, 41, line.parent_state)
-            worksheet.write(row, 42, line.partner_id.name)
-            worksheet.write(row, 43, line.payment_id.name)
-            worksheet.write(row, 44, line.price_subtotal)
-            worksheet.write(row, 45, line.price_total)
-            worksheet.write(row, 46, line.price_unit)
-            worksheet.write(row, 47, line.price_unit_original)
-            worksheet.write(row, 48, line.product_id.name)
-            worksheet.write(row, 49, line.product_uom_id.name)
-            worksheet.write(row, 50, line.purchase_line_id.name)
-            worksheet.write(row, 51, line.quantity)
-            worksheet.write(row, 52, line.reconcile_model_id.name)
-            worksheet.write(row, 53, line.reconciled)
-            worksheet.write(row, 54, line.ref)
-            worksheet.write(row, 55, line.sequence)
-            worksheet.write(row, 56, line.statement_id.name)
-            worksheet.write(row, 57, line.statement_line_id.name)
-            worksheet.write(row, 58, line.tax_audit)
-            worksheet.write(row, 59, line.tax_base_amount)
-            worksheet.write(row, 60, line.tax_group_id.name)
-            worksheet.write(row, 61, str(line.tax_ids))
-            worksheet.write(row, 62, line.tax_line_id.name)
-            worksheet.write(row, 63, str(line.tax_repartition_line_id))
-            worksheet.write(row, 64, str(line.tax_tag_ids))
-            worksheet.write(row, 65, line.tax_tag_invert)
-            worksheet.write(row, 66, line.write_date)
-            worksheet.write(row, 67, str(line.write_uid))
+
+            worksheet.write(row, 17, line.balance)
 
             row += 1
 

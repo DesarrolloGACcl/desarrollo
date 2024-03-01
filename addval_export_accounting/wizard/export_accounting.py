@@ -25,7 +25,7 @@ class ExportAccounting(models.TransientModel):
                 ('date', '<=', f'{self.year_id.name}-{str(self.month).zfill(2)}-31'),
                 ('move_id.state', '=', 'posted')
             ]
-            
+
         elif self.month == '4' or self.month == '6' or self.month == '9' or self.month == '11':
 
             domain = [
@@ -34,7 +34,7 @@ class ExportAccounting(models.TransientModel):
                 ('move_id.state', '=', 'posted')
             ]
 
-        elif (self.month == '2' and self.year == '2024') or (self.month == '2' and self.year == '2028'):
+        elif (self.month == '2' and self.year_id.name == '2024') or (self.month == '2' and self.year_id.name == '2028'):
             domain = [
                 ('date', '>=', f'{self.year_id.name}-{str(self.month).zfill(2)}-01'),
                 ('date', '<=', f'{self.year_id.name}-{str(self.month).zfill(2)}-29'),

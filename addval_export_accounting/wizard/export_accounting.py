@@ -58,7 +58,7 @@ class ExportAccounting(models.TransientModel):
         worksheet = workbook.add_worksheet()
 
         # Add Excel file headers (based on your needs)
-        headers = ['Fecha', 'Tipo', 'Documento', 'Proyecto', 'Área', 'Actividad', 'Tarea', 
+        headers = ['Fecha', 'Tipo', 'Documento', 'Código Proyecto','Proyecto', 'Área', 'Actividad', 'Tarea', 
                    'Detalle', 'Debe', 'Haber', 'Código Gasto', 'Nombre Cuenta',
                    'Raíz de cuenta', 'Importe en moneda', 'Importe residual',
                    'Importe residual en moneda', 'Líneas analíticas', 'Activos relacionados',
@@ -104,15 +104,19 @@ class ExportAccounting(models.TransientModel):
                 distributions = line.analytic_distribution
                                  
                 formatted_project_analytic_info = ""
+                project_codes = ""
                 for account_id, percentage in distributions.items():
                     # Fetch the analytic account name using the ID
                     analytic_account = self.env['account.analytic.account'].browse(int(account_id))
                     if analytic_account:
                         formatted_project_analytic_info += f"{analytic_account.name}: {percentage}%; "
+                        project_codes += f"{analytic_account.code};"
             else:
                 formatted_project_analytic_info = 'No se especificó'
+                project_codes = 'No se especificó'
 
-            worksheet.write(row, 3, formatted_project_analytic_info)
+            worksheet.write(row, 3, project_codes)
+            worksheet.write(row, 4, formatted_project_analytic_info)
 
             if line.analytic_distribution_area:
                 distributions = line.analytic_distribution_area
@@ -126,7 +130,7 @@ class ExportAccounting(models.TransientModel):
             else:
                 formatted_area_analytic_info = 'No se especificó'
 
-            worksheet.write(row, 4, formatted_area_analytic_info)
+            worksheet.write(row, 5, formatted_area_analytic_info)
 
             if line.analytic_distribution_activity:
                 distributions = line.analytic_distribution_activity
@@ -140,7 +144,7 @@ class ExportAccounting(models.TransientModel):
             else:
                 formatted_activity_analytic_info = 'No se especificó'
 
-            worksheet.write(row, 5, formatted_activity_analytic_info)
+            worksheet.write(row, 6, formatted_activity_analytic_info)
 
             if line.analytic_distribution_task:
                 distributions = line.analytic_distribution_task
@@ -154,13 +158,13 @@ class ExportAccounting(models.TransientModel):
             else:
                 formatted_task_analytic_info = 'No se especificó'
 
-            worksheet.write(row, 6, formatted_task_analytic_info)
+            worksheet.write(row, 7, formatted_task_analytic_info)
 
-            worksheet.write(row, 7, line.name)
-            worksheet.write(row, 8, line.debit)
-            worksheet.write(row, 9, line.credit)
-            worksheet.write(row, 10, line.account_id.code)
-            worksheet.write(row, 11, line.account_id.name)
+            worksheet.write(row, 8, line.name)
+            worksheet.write(row, 9, line.debit)
+            worksheet.write(row, 10, line.credit)
+            worksheet.write(row, 11, line.account_id.code)
+            worksheet.write(row, 12, line.account_id.name)
             worksheet.write(row, 13, line.account_root_id.name)
             worksheet.write(row, 14, line.amount_currency)
             worksheet.write(row, 15, line.amount_residual)

@@ -98,8 +98,8 @@ class ExportAccounting(models.TransientModel):
                     # Fetch the analytic account name using the ID
                     analytic_account = self.env['account.analytic.account'].browse(int(account_id))
                     if analytic_account:
-                        formatted_project_analytic_info += f"{analytic_account.name}: {percentage}%; "
-                        project_codes += f"{analytic_account.code};"
+                        formatted_project_analytic_info += f"{analytic_account.name}: {percentage}% "
+                        project_codes += f"{analytic_account.code}"
             else:
                 formatted_project_analytic_info = 'No se especificó'
                 project_codes = 'No se especificó'
@@ -116,8 +116,8 @@ class ExportAccounting(models.TransientModel):
                     # Fetch the analytic account name using the ID
                     analytic_account = self.env['account.analytic.account'].browse(int(account_id))                    
                     if analytic_account:
-                        formatted_area_analytic_info += f"{analytic_account.name}: {percentage}%; "
-                        area_codes += f"{analytic_account.code};"
+                        formatted_area_analytic_info += f"{analytic_account.name}: {percentage}% "
+                        area_codes += f"{analytic_account.code}"
             else:
                 formatted_area_analytic_info = 'No se especificó'
                 area_codes = 'No se especificó'
@@ -134,8 +134,8 @@ class ExportAccounting(models.TransientModel):
                     # Fetch the analytic account name using the ID
                     analytic_account = self.env['account.analytic.account'].browse(int(account_id))                    
                     if analytic_account:
-                        formatted_activity_analytic_info += f"{analytic_account.name}: {percentage}%; "
-                        activity_codes += f"{analytic_account.code};"
+                        formatted_activity_analytic_info += f"{analytic_account.name}: {percentage}%"
+                        activity_codes += f"{analytic_account.code}"
             else:
                 formatted_activity_analytic_info = 'No se especificó'
                 activity_codes = 'No se especificó'
@@ -152,8 +152,8 @@ class ExportAccounting(models.TransientModel):
                     # Fetch the analytic account name using the ID
                     analytic_account = self.env['account.analytic.account'].browse(int(account_id))                    
                     if analytic_account:
-                        formatted_task_analytic_info += f"{analytic_account.name}: {percentage}%; "
-                        task_codes += f"{analytic_account.code};"
+                        formatted_task_analytic_info += f"{analytic_account.name}: {percentage}% "
+                        task_codes += f"{analytic_account.code}"
             else:
                 formatted_task_analytic_info = 'No se especificó'
                 task_codes = 'No se especificó'

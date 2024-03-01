@@ -58,8 +58,9 @@ class ExportAccounting(models.TransientModel):
         worksheet = workbook.add_worksheet()
 
         # Add Excel file headers (based on your needs)
-        headers = ['Fecha', 'Tipo', 'Documento', 'Código Proyecto','Proyecto', 'Área', 'Actividad', 'Tarea', 
-                   'Detalle', 'Debe', 'Haber', 'Código Gasto', 'Nombre Cuenta',
+        headers = ['Fecha', 'Tipo', 'Documento', 'Código Proyecto','Proyecto', 'Código Área', 'Área', 
+                   'Código Actividad', 'Actividad', 'Código Tarea', 'Tarea', 
+                   'Detalle (Etiqueta)', 'Debe', 'Haber', 'Código Cuenta Contable', 'Nombre Cuenta',
                    'Raíz de cuenta', 'Importe en moneda', 'Importe residual',
                    'Importe residual en moneda', 'Líneas analíticas', 'Activos relacionados',
                    'Saldo', 'Moneda de la Compañía', 'Moneda' , 'Fecha de vencimiento',
@@ -122,101 +123,113 @@ class ExportAccounting(models.TransientModel):
                 distributions = line.analytic_distribution_area
                 
                 formatted_area_analytic_info = ""
+                area_codes = ""
                 for account_id, percentage in distributions.items():
                     # Fetch the analytic account name using the ID
                     analytic_account = self.env['account.analytic.account'].browse(int(account_id))                    
                     if analytic_account:
                         formatted_area_analytic_info += f"{analytic_account.name}: {percentage}%; "
+                        area_codes += f"{analytic_account.code};"
             else:
                 formatted_area_analytic_info = 'No se especificó'
+                area_codes = 'No se especificó'
 
-            worksheet.write(row, 5, formatted_area_analytic_info)
+            worksheet.write(row, 5, area_codes)
+            worksheet.write(row, 6, formatted_area_analytic_info)
 
             if line.analytic_distribution_activity:
                 distributions = line.analytic_distribution_activity
                 
                 formatted_activity_analytic_info = ""
+                activity_codes = ""
                 for account_id, percentage in distributions.items():
                     # Fetch the analytic account name using the ID
                     analytic_account = self.env['account.analytic.account'].browse(int(account_id))                    
                     if analytic_account:
                         formatted_activity_analytic_info += f"{analytic_account.name}: {percentage}%; "
+                        activity_codes += f"{analytic_account.code};"
             else:
                 formatted_activity_analytic_info = 'No se especificó'
+                activity_codes = 'No se especificó'
 
-            worksheet.write(row, 6, formatted_activity_analytic_info)
+            worksheet.write(row, 7, activity_codes)
+            worksheet.write(row, 8, formatted_activity_analytic_info)
 
             if line.analytic_distribution_task:
                 distributions = line.analytic_distribution_task
                 
                 formatted_task_analytic_info = ""
+                task_codes = ""
                 for account_id, percentage in distributions.items():
                     # Fetch the analytic account name using the ID
                     analytic_account = self.env['account.analytic.account'].browse(int(account_id))                    
                     if analytic_account:
                         formatted_task_analytic_info += f"{analytic_account.name}: {percentage}%; "
+                        task_codes += f"{analytic_account.code};"
             else:
                 formatted_task_analytic_info = 'No se especificó'
+                task_codes = 'No se especificó'
 
-            worksheet.write(row, 7, formatted_task_analytic_info)
+            worksheet.write(row, 9, task_codes)
+            worksheet.write(row, 10, formatted_task_analytic_info)
 
-            worksheet.write(row, 8, line.name)
-            worksheet.write(row, 9, line.debit)
-            worksheet.write(row, 10, line.credit)
-            worksheet.write(row, 11, line.account_id.code)
-            worksheet.write(row, 12, line.account_id.name)
-            worksheet.write(row, 13, line.account_root_id.name)
-            worksheet.write(row, 14, line.amount_currency)
-            worksheet.write(row, 15, line.amount_residual)
-            worksheet.write(row, 16, line.amount_residual_currency)
-            worksheet.write(row, 17, str(line.analytic_line_ids))
-            worksheet.write(row, 18, str(line.asset_ids))
-            worksheet.write(row, 19, line.balance)
-            worksheet.write(row, 20, line.company_currency_id.name)
-            worksheet.write(row, 21, line.currency_id.name)
-            worksheet.write(row, 22, line.date_maturity)
-            worksheet.write(row, 23, line.discount)
-            worksheet.write(row, 24, line.discount_amount_currency)
-            worksheet.write(row, 25, line.discount_balance)
-            worksheet.write(row, 26, line.discount_date)
-            worksheet.write(row, 27, line.discount_percentage)
-            worksheet.write(row, 28, line.display_type)
-            worksheet.write(row, 29, line.expected_pay_date)
-            worksheet.write(row, 30, line.followup_line_id.name)
-            worksheet.write(row, 31, line.full_reconcile_id.name)
-            worksheet.write(row, 32, line.group_tax_id.name)
-            worksheet.write(row, 33, line.is_downpayment)
-            worksheet.write(row, 34, line.journal_id.name)
-            worksheet.write(row, 35, line.l10n_latam_document_type_id.name)
-            worksheet.write(row, 36, line.matching_number)
-            worksheet.write(row, 37, line.move_name)
-            worksheet.write(row, 38, line.parent_state)
-            worksheet.write(row, 39, line.partner_id.name)
-            worksheet.write(row, 40, line.payment_id.name)
-            worksheet.write(row, 41, line.price_subtotal)
-            worksheet.write(row, 42, line.price_total)
-            worksheet.write(row, 43, line.price_unit)
-            worksheet.write(row, 44, line.price_unit_original)
-            worksheet.write(row, 45, line.product_id.name)
-            worksheet.write(row, 46, line.product_uom_id.name)
-            worksheet.write(row, 47, line.purchase_line_id.name)
-            worksheet.write(row, 48, line.quantity)
-            worksheet.write(row, 49, line.reconcile_model_id.name)
-            worksheet.write(row, 50, line.reconciled)
-            worksheet.write(row, 51, line.ref)
-            worksheet.write(row, 52, line.sequence)
-            worksheet.write(row, 53, line.statement_id.name)
-            worksheet.write(row, 54, line.statement_line_id.name)
-            worksheet.write(row, 55, line.tax_audit)
-            worksheet.write(row, 56, line.tax_base_amount)
-            worksheet.write(row, 57, line.tax_group_id.name)
-            worksheet.write(row, 58, str(line.tax_ids))
-            worksheet.write(row, 59, line.tax_line_id.name)
-            worksheet.write(row, 60, str(line.tax_repartition_line_id))
-            worksheet.write(row, 61, str(line.tax_tag_ids))
-            worksheet.write(row, 62, line.tax_tag_invert)
-            worksheet.write(row, 63, line.write_date)
-            worksheet.write(row, 64, str(line.write_uid))
+            worksheet.write(row, 11, line.name)
+            worksheet.write(row, 12, line.debit)
+            worksheet.write(row, 13, line.credit)
+            worksheet.write(row, 14, line.account_id.code)
+            worksheet.write(row, 15, line.account_id.name)
+            worksheet.write(row, 16, line.account_root_id.name)
+            worksheet.write(row, 17, line.amount_currency)
+            worksheet.write(row, 18, line.amount_residual)
+            worksheet.write(row, 19, line.amount_residual_currency)
+            worksheet.write(row, 20, str(line.analytic_line_ids))
+            worksheet.write(row, 21, str(line.asset_ids))
+            worksheet.write(row, 22, line.balance)
+            worksheet.write(row, 23, line.company_currency_id.name)
+            worksheet.write(row, 24, line.currency_id.name)
+            worksheet.write(row, 25, line.date_maturity)
+            worksheet.write(row, 26, line.discount)
+            worksheet.write(row, 27, line.discount_amount_currency)
+            worksheet.write(row, 28, line.discount_balance)
+            worksheet.write(row, 29, line.discount_date)
+            worksheet.write(row, 30, line.discount_percentage)
+            worksheet.write(row, 31, line.display_type)
+            worksheet.write(row, 32, line.expected_pay_date)
+            worksheet.write(row, 33, line.followup_line_id.name)
+            worksheet.write(row, 34, line.full_reconcile_id.name)
+            worksheet.write(row, 35, line.group_tax_id.name)
+            worksheet.write(row, 36, line.is_downpayment)
+            worksheet.write(row, 37, line.journal_id.name)
+            worksheet.write(row, 38, line.l10n_latam_document_type_id.name)
+            worksheet.write(row, 39, line.matching_number)
+            worksheet.write(row, 40, line.move_name)
+            worksheet.write(row, 41, line.parent_state)
+            worksheet.write(row, 42, line.partner_id.name)
+            worksheet.write(row, 43, line.payment_id.name)
+            worksheet.write(row, 44, line.price_subtotal)
+            worksheet.write(row, 45, line.price_total)
+            worksheet.write(row, 46, line.price_unit)
+            worksheet.write(row, 47, line.price_unit_original)
+            worksheet.write(row, 48, line.product_id.name)
+            worksheet.write(row, 49, line.product_uom_id.name)
+            worksheet.write(row, 50, line.purchase_line_id.name)
+            worksheet.write(row, 51, line.quantity)
+            worksheet.write(row, 52, line.reconcile_model_id.name)
+            worksheet.write(row, 53, line.reconciled)
+            worksheet.write(row, 54, line.ref)
+            worksheet.write(row, 55, line.sequence)
+            worksheet.write(row, 56, line.statement_id.name)
+            worksheet.write(row, 57, line.statement_line_id.name)
+            worksheet.write(row, 58, line.tax_audit)
+            worksheet.write(row, 59, line.tax_base_amount)
+            worksheet.write(row, 60, line.tax_group_id.name)
+            worksheet.write(row, 61, str(line.tax_ids))
+            worksheet.write(row, 62, line.tax_line_id.name)
+            worksheet.write(row, 63, str(line.tax_repartition_line_id))
+            worksheet.write(row, 64, str(line.tax_tag_ids))
+            worksheet.write(row, 65, line.tax_tag_invert)
+            worksheet.write(row, 66, line.write_date)
+            worksheet.write(row, 67, str(line.write_uid))
 
             row += 1
 

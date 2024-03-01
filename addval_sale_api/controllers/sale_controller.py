@@ -184,6 +184,12 @@ class SaleOrderApi(http.Controller):
                 _logger.warning(project['name'])
                 _logger.warning(project['percent'])
 
+                distribution = {}
+                account = request.env['account.analytic.account'].sudo().search([('name', '=ilike',project['name'])], limit=1)
+                
+                
+                
+
             #{"17657": 50.0, "17750": 50.0}
 
             analytic_distribution_area = line['analytic_distribution_area']

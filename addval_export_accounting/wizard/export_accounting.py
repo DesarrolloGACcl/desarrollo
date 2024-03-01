@@ -19,10 +19,37 @@ class ExportAccounting(models.TransientModel):
 
     def action_export(self):
         # Retrieve account.move.line records
-        domain = [
-            ('date', '>=', f'{self.year_id.name}-{str(self.month).zfill(2)}-01'),
-            ('date', '<=', f'{self.year_id.name}-{str(self.month).zfill(2)}-31'),
-        ]
+        if self.month == '1' or self.month == '3' or self.month == '5' or self.month == '7' or self.month == '8' or self.month == '10' or self.month == '12': 
+            domain = [
+                ('date', '>=', f'{self.year_id.name}-{str(self.month).zfill(2)}-01'),
+                ('date', '<=', f'{self.year_id.name}-{str(self.month).zfill(2)}-31'),
+                ('move_id.state', '=', 'posted')
+            ]
+            
+        elif self.month == '4' or self.month == '6' or self.month == '9' or self.month == '11':
+
+            domain = [
+                ('date', '>=', f'{self.year_id.name}-{str(self.month).zfill(2)}-01'),
+                ('date', '<=', f'{self.year_id.name}-{str(self.month).zfill(2)}-30'),
+                ('move_id.state', '=', 'posted')
+            ]
+
+        elif (self.month == '2' and self.year == '2024') or (self.month == '2' and self.year == '2028'):
+            domain = [
+                ('date', '>=', f'{self.year_id.name}-{str(self.month).zfill(2)}-01'),
+                ('date', '<=', f'{self.year_id.name}-{str(self.month).zfill(2)}-29'),
+                ('move_id.state', '=', 'posted')
+            ]
+
+        elif self.month == '2':
+
+            domain = [
+                ('date', '>=', f'{self.year_id.name}-{str(self.month).zfill(2)}-01'),
+                ('date', '<=', f'{self.year_id.name}-{str(self.month).zfill(2)}-28'),
+                ('move_id.state', '=', 'posted')
+            ]
+        
+
         account_move_lines = self.env['account.move.line'].search(domain)
 
         # Create an Excel file in memory

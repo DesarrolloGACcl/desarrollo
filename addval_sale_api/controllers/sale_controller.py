@@ -239,7 +239,7 @@ class SaleOrderApi(http.Controller):
                 'analytic_distribution': distribution,
                 'analytic_distribution_area': area_distribution,
                 'analytic_distribution_activity': activity_distribution,
-                'analytic_distribution_area' :task_distribution
+                'analytic_distribution_task' :task_distribution
             })
         
         if sale_order and sale_order.order_line:

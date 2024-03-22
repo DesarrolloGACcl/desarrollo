@@ -187,7 +187,8 @@ class SaleOrderApi(http.Controller):
                 distribution = {}
                 account = request.env['account.analytic.account'].sudo().search([('name', '=ilike',project['name'])], limit=1)
                 
-                
+                distribution[account.id] = project['percent']
+            _logger.warning('analytic distribution: %s', distribution)
                 
 
             #{"17657": 50.0, "17750": 50.0}

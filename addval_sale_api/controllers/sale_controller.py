@@ -189,17 +189,46 @@ class SaleOrderApi(http.Controller):
                 distribution.update({account.id : project['percent']})
             _logger.warning('analytic distribution: %s', distribution)
                 
-
-            #{"17657": 50.0, "17750": 50.0}
-
             analytic_distribution_area = line['analytic_distribution_area']
             _logger.warning(analytic_distribution_area)
+            area_distribution = {}
+            for project in analytic_distribution:
+                _logger.warning(project)
+                _logger.warning(project['name'])
+                _logger.warning(project['percent'])
+
+                account = request.env['account.analytic.account'].sudo().search([('name', '=ilike',project['name'])], limit=1)
+                
+                area_distribution.update({account.id : project['percent']})
+            _logger.warning('analytic distribution area: %s', area_distribution)
+
+
             analytic_distribution_activity = line['analytic_distribution_activity']
             _logger.warning(analytic_distribution_activity)
+            activity_distribution = {}
+            for project in analytic_distribution:
+                _logger.warning(project)
+                _logger.warning(project['name'])
+                _logger.warning(project['percent'])
+
+                account = request.env['account.analytic.account'].sudo().search([('name', '=ilike',project['name'])], limit=1)
+                
+                activity_distribution.update({account.id : project['percent']})
+            _logger.warning('analytic distribution area: %s', activity_distribution)
+
             analytic_distribution_task = line['analytic_distribution_task']
             _logger.warning(analytic_distribution_task)
+            task_distribution = {}
+            for project in analytic_distribution:
+                _logger.warning(project)
+                _logger.warning(project['name'])
+                _logger.warning(project['percent'])
 
-            
+                account = request.env['account.analytic.account'].sudo().search([('name', '=ilike',project['name'])], limit=1)
+                
+                task_distribution.update({account.id : project['percent']})
+            _logger.warning('analytic distribution area: %s', task_distribution)
+
             request.env['sale.order.line'].sudo().create({
                 'order_id': sale_order.id,
                 'product_id': product.id,
@@ -207,15 +236,10 @@ class SaleOrderApi(http.Controller):
                 'product_uom_qty': line['product_uom_qty'],
                 'price_unit': line['unit_price'],
                 'tax_id': tax_id,
-                'analytic_distribution': distribution
-                # 'analytic_distribution_area': {
-                #         cls.analytic_account_a.id : 80.0,
-                #         cls.analytic_account_b.id : 20.0,
-                #     },
-                # 'analytic_distribution_activity': {
-                #         cls.analytic_account_a.id : 80.0,
-                #         cls.analytic_account_b.id : 20.0,
-                #     },
+                'analytic_distribution': distribution,
+                'analytic_distribution_area': area_distribution,
+                'analytic_distribution_activity': activity_distribution,
+                'analytic_distribution_area' :task_distribution
             })
         
         if sale_order and sale_order.order_line:

@@ -187,7 +187,7 @@ class SaleOrderApi(http.Controller):
                 distribution = {}
                 account = request.env['account.analytic.account'].sudo().search([('name', '=ilike',project['name'])], limit=1)
                 
-                distribution[account.id] = project['percent']
+                distribution.update({account.id : project['percent']})
             _logger.warning('analytic distribution: %s', distribution)
                 
 
@@ -226,6 +226,6 @@ class SaleOrderApi(http.Controller):
             sale_order.action_confirm()
             log.state = 'done'
 
-            return sale_order
+            return sale_order.name
         else:
             raise ValidationError (_('No fue posible crear la orden de venta'))

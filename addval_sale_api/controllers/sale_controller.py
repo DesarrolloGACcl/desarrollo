@@ -178,13 +178,12 @@ class SaleOrderApi(http.Controller):
             
             analytic_distribution = line['analytic_distribution']
             _logger.warning(analytic_distribution)
-
+            distribution = {}
             for project in analytic_distribution:
                 _logger.warning(project)
                 _logger.warning(project['name'])
                 _logger.warning(project['percent'])
 
-                distribution = {}
                 account = request.env['account.analytic.account'].sudo().search([('name', '=ilike',project['name'])], limit=1)
                 
                 distribution.update({account.id : project['percent']})

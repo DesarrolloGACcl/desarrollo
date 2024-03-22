@@ -207,10 +207,7 @@ class SaleOrderApi(http.Controller):
                 'product_uom_qty': line['product_uom_qty'],
                 'price_unit': line['unit_price'],
                 'tax_id': tax_id,
-                # 'analytic_distribution': {
-                #         cls.analytic_account_a.id : 80.0,
-                #         cls.analytic_account_b.id : 20.0,
-                #     },
+                'analytic_distribution': distribution
                 # 'analytic_distribution_area': {
                 #         cls.analytic_account_a.id : 80.0,
                 #         cls.analytic_account_b.id : 20.0,

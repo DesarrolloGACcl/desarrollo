@@ -35,7 +35,9 @@
     ],
     'assets': {
         'web.assets_backend': [
-            'addval_custom_analytics/static/src/components/**/*',
+            'addval_custom_analytics/static/src/components/analytic_distribution_activity',
+            'addval_custom_analytics/static/src/components/analytic_distribution_area',
+            'addval_custom_analytics/static/src/components/analytic_distribution_task',
         ]
     },
 

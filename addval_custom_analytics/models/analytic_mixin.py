@@ -23,7 +23,7 @@ class AnalyticMixin(models.AbstractModel):
     )
 
     analytic_distribution_task = fields.Json(
-        'Actividad',
+        'Tarea',
         compute='_compute_analytic_distribution_task', store=True, copy=True, readonly=False,
         precompute=True
     )

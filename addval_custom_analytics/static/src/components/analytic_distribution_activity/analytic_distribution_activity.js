@@ -429,7 +429,6 @@ export class AnalyticDistributionActivity extends Component {
     }
 
     get editingRecord() {
-        this.props.readonly = false;
         return !this.props.readonly;
     }
 

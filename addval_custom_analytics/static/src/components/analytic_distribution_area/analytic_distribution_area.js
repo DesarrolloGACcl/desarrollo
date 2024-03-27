@@ -85,7 +85,6 @@ export class AnalyticDistributionArea extends Component {
     // Lifecycle
     async willStart() {
         console.log('willStart');
-        console.log(this.editingRecord);
         if (this.editingRecord){
             console.log('Entró al if')
             await this.fetchAllPlans(this.props);
@@ -460,9 +459,6 @@ export class AnalyticDistributionArea extends Component {
     }
 
     get editingRecord() {
-        this.props.readonly = false;
-        console.log(this.props)
-        console.log(this.props.readonly)
         return !this.props.readonly;
     }
 

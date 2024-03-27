@@ -429,6 +429,7 @@ export class AnalyticDistributionActivity extends Component {
     }
 
     get editingRecord() {
+        this.props.readonly = false;
         return !this.props.readonly;
     }
 
@@ -681,7 +682,7 @@ export class AnalyticDistributionActivity extends Component {
         return formatPercentage(value / 100, { digits: [false, this.props.record.data.analytic_precision || 2] });
     }
 }
-AnalyticDistributionActivity.template = "addval_custom_analytics.AnalyticDistributionAcivity";
+AnalyticDistributionActivity.template = "analytic.AnalyticDistribution";
 AnalyticDistributionActivity.supportedTypes = ["char", "text"];
 AnalyticDistributionActivity.components = {
     AutoComplete,

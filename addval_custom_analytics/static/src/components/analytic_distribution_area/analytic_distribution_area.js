@@ -32,16 +32,12 @@ export class AnalyticDistributionArea extends Component {
     setup(){
         console.log('SETUP');
         this.orm = useService("orm");
-        console.log(this.orm );
         this.state = useState({
             showDropdown: false,
             list: {},
         });
-        console.log(this.state );
         this.widgetRef = useRef("analyticDistribution");
-        console.log(this.widgetRef );
         this.dropdownRef = useRef("analyticDropdown");
-        console.log(this.dropdownRef );
         this.mainRef = useRef("mainElement");
         usePosition(() => this.widgetRef.el, {
             popper: "analyticDropdown",
@@ -464,12 +460,9 @@ export class AnalyticDistributionArea extends Component {
     }
 
     get editingRecord() {
-        console.log('metodo editingRecord')
-        console.log('before editing')
-        console.log(this.props)
         this.props.readonly = false;
-        console.log('after editing')
         console.log(this.props)
+        console.log(this.props.readonly)
         return !this.props.readonly;
     }
 

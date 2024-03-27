@@ -427,6 +427,8 @@ export class AnalyticDistributionTask extends Component {
     }
 
     get editingRecord() {
+        this.props.readonly = false
+        console.log(this.props)
         return !this.props.readonly;
     }
 

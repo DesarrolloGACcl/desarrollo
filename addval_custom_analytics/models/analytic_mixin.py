@@ -12,17 +12,17 @@ class AnalyticMixin(models.AbstractModel):
 
     analytic_distribution_area = fields.Json(
         'Área',
-        compute='_compute_analytic_distribution_area', store=True, copy=True
+        compute='_compute_analytic_distribution_area', store=True, copy=True, readonly=False
     )
 
     analytic_distribution_activity = fields.Json(
         'Actividad',
-        compute='_compute_analytic_distribution_activity', store=True, copy=True
+        compute='_compute_analytic_distribution_activity', store=True, copy=True, readonly=False
     )
 
     analytic_distribution_task = fields.Json(
         'Tarea',
-        compute='_compute_analytic_distribution_task', store=True, copy=True
+        compute='_compute_analytic_distribution_task', store=True, copy=True, readonly=False
     )
 
     analytic_distribution_area_search = fields.Json(

@@ -30,13 +30,14 @@ const PLAN_STATUS = {
 }
 export class AnalyticDistributionArea extends Component {
     setup(){
+        console.log('SETUP')
         this.orm = useService("orm");
-
+        console.log(this.orm )
         this.state = useState({
             showDropdown: false,
             list: {},
         });
-
+        console.log(this.state )
         this.widgetRef = useRef("analyticDistribution");
         this.dropdownRef = useRef("analyticDropdown");
         this.mainRef = useRef("mainElement");

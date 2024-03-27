@@ -118,7 +118,9 @@ export class AnalyticDistributionArea extends Component {
     }
 
     async formatData(nextProps) {
+        console.log('ENTRO AL FORMAT DATA')
         const data = nextProps.value;
+        console.log('CONST DATA: ' + data)
         const analytic_account_ids = Object.keys(data).map((id) => parseInt(id));
         const records = analytic_account_ids.length ? await this.fetchAnalyticAccounts([["id", "in", analytic_account_ids]]) : [];
         let widgetData = Object.assign({}, ...this.allPlans.map((plan) => ({[plan.id]: {...plan, distribution: []}})));

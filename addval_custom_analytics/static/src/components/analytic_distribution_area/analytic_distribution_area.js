@@ -90,10 +90,9 @@ export class AnalyticDistributionArea extends Component {
     async willStart() {
         console.log('willStart');
         console.log(this.editingRecord);
-        if (this.editingRecord) {
-            console.log('Entró al if')
-            await this.fetchAllPlans(this.props);
-        }
+       
+        await this.fetchAllPlans(this.props);
+        
         await this.formatData(this.props);
     }
 

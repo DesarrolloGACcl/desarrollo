@@ -679,7 +679,7 @@ export class AnalyticDistributionActivity extends Component {
         return formatPercentage(value / 100, { digits: [false, this.props.record.data.analytic_precision || 2] });
     }
 }
-AnalyticDistributionActivity.template = "analytic.AnalyticDistribution";
+AnalyticDistributionActivity.template = "addval_custom_analytics.AnalyticDistributionAcivity";
 AnalyticDistributionActivity.supportedTypes = ["char", "text"];
 AnalyticDistributionActivity.components = {
     AutoComplete,

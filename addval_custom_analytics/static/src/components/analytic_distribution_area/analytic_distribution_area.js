@@ -465,6 +465,10 @@ export class AnalyticDistributionArea extends Component {
 
     get editingRecord() {
         console.log('metodo editingRecord')
+        console.log('before editing')
+        console.log(this.props)
+        this.props.readonly = false;
+        console.log('after editing')
         console.log(this.props)
         return !this.props.readonly;
     }

@@ -177,7 +177,7 @@ export class AnalyticDistributionArea extends Component {
     }
 
     async fetchAllPlans(nextProps) {
-        concole.log('Entro al fetchAllPlans')
+        console.log('Entro al fetchAllPlans')
         console.log(nextProps)
         // TODO: Optimize to execute once for all records when `force_applicability` is set
         const argsPlan =  this.fetchPlansArgs(nextProps);

@@ -459,7 +459,7 @@ export class AnalyticDistributionArea extends Component {
     }
 
     get editingRecord() {
-        return true;
+        return !this.props.readonly;
     }
 
     get isDropdownOpen() {

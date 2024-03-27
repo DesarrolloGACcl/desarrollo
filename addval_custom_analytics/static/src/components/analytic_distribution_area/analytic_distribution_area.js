@@ -30,16 +30,18 @@ const PLAN_STATUS = {
 }
 export class AnalyticDistributionArea extends Component {
     setup(){
-        console.log('SETUP')
+        console.log('SETUP');
         this.orm = useService("orm");
-        console.log(this.orm )
+        console.log(this.orm );
         this.state = useState({
             showDropdown: false,
             list: {},
         });
-        console.log(this.state )
+        console.log(this.state );
         this.widgetRef = useRef("analyticDistribution");
+        console.log(this.widgetRef );
         this.dropdownRef = useRef("analyticDropdown");
+        console.log(this.dropdownRef );
         this.mainRef = useRef("mainElement");
         usePosition(() => this.widgetRef.el, {
             popper: "analyticDropdown",
@@ -86,6 +88,7 @@ export class AnalyticDistributionArea extends Component {
 
     // Lifecycle
     async willStart() {
+        console.log('willStart');
         if (this.editingRecord) {
             await this.fetchAllPlans(this.props);
         }

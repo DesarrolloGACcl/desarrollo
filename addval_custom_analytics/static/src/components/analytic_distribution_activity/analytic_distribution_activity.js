@@ -172,11 +172,13 @@ export class AnalyticDistributionActivity extends Component {
 
     async fetchAllPlans(nextProps) {
         // TODO: Optimize to execute once for all records when `force_applicability` is set
+        console.log('Entró a funcion que filtra los planes')
         const argsPlan =  this.fetchPlansArgs(nextProps);
         this.allPlans = await this.orm.call("account.analytic.plan", "get_activity_relevant_plans", [], argsPlan);
     }
 
     async fetchAnalyticAccounts(domain, limit=null) {
+        console.log('Entró a funcion que encuentra las cuentas analíticas')
         const args = {
             domain: domain,
             fields: ["id", "display_name", "root_plan_id", "color"],

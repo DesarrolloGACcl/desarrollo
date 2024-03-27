@@ -18,6 +18,7 @@
         'base',
         'account',
         'sale',
+        'purchase',
         'account_accountant',
         'web_domain_field',
         'account_reports',

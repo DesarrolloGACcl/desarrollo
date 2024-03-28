@@ -469,14 +469,16 @@ export class AnalyticDistributionArea extends Component {
 
     get editingRecord() {
         console.log('GET EDITING RECORD');
-        console.log(this.props)
-        console.log(this.props.readonly)
+        console.log(this.props);
+        console.log(this.props.readonly);
         return !this.props.readonly;
     }
 
     get isDropdownOpen() {
-        console.log('GET EDITING RECORD');
-        console.log(this.state.showDropdown)
+        console.log('GET IS DROPDOWN OPEN');
+        console.log(this);
+        console.log(this.state);
+        console.log(this.state.showDropdown);
         return this.state.showDropdown && !!this.dropdownRef.el;
     }
 

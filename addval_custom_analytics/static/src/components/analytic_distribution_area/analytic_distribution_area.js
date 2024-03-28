@@ -28,7 +28,7 @@ const PLAN_STATUS = {
     invalid: _lt("Invalid"),
     ok: _lt("OK"),
 }
-export class AnalyticDistribution extends Component {
+export class AnalyticDistributionArea extends Component {
     setup(){
         this.orm = useService("orm");
 
@@ -671,17 +671,17 @@ export class AnalyticDistribution extends Component {
         return formatPercentage(value / 100, { digits: [false, this.props.record.data.analytic_precision || 2] });
     }
 }
-AnalyticDistribution.template = "analytic.AnalyticDistribution";
-AnalyticDistribution.supportedTypes = ["char", "text"];
-AnalyticDistribution.components = {
+AnalyticDistributionArea.template = "analytic.AnalyticDistribution";
+AnalyticDistributionArea.supportedTypes = ["char", "text"];
+AnalyticDistributionArea.components = {
     AutoComplete,
     TagsList,
 }
 
-AnalyticDistribution.fieldDependencies = {
+AnalyticDistributionArea.fieldDependencies = {
     analytic_precision: { type: 'integer' },
 }
-AnalyticDistribution.props = {
+AnalyticDistributionArea.props = {
     ...standardFieldProps,
     business_domain: { type: String, optional: true },
     account_field: { type: String, optional: true },
@@ -690,7 +690,7 @@ AnalyticDistribution.props = {
     force_applicability: { type: String, optional: true },
     allow_save: { type: Boolean },
 }
-AnalyticDistribution.extractProps = ({ field, attrs }) => {
+AnalyticDistributionArea.extractProps = ({ field, attrs }) => {
     return {
         business_domain: attrs.options.business_domain,
         account_field: attrs.options.account_field,
@@ -701,4 +701,4 @@ AnalyticDistribution.extractProps = ({ field, attrs }) => {
     };
 };
 
-registry.category("fields").add("analytic_distribution_area", AnalyticDistribution);
+registry.category("fields").add("analytic_distribution_area", AnalyticDistributionArea);

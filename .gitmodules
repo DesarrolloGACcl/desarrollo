@@ -1,4 +1,4 @@
 [submodule "Addval-Connect/odoo-addval-modules"]
 	path = Addval-Connect/odoo-addval-modules
 	url = git@github.com:Addval-Connect/odoo-addval-modules.git
-	branch = Odoo-16
+	branch = Odoo-16-test

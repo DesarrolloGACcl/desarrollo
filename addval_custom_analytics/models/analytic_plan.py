@@ -14,7 +14,7 @@ class AccountAnalyticPlan(models.Model):
         _logger.warning('KWARGS: %s', kwargs)
         company_id = kwargs.get('company_id', self.env.company.id)
         record_account_ids = kwargs.get('existing_account_ids', [])
-        company = self.env['res.company'].search([('id', '=', company_id)])
+        company = self.env['res.company'].browse(company_id)
         all_plans = self.search([
             ('account_ids', '!=', False),
             '|', ('company_id', '=', company_id), ('company_id', '=', False),
@@ -47,13 +47,12 @@ class AccountAnalyticPlan(models.Model):
         _logger.warning('SELF DATA: %s', self)
         _logger.warning('KWARGS: %s', kwargs)
         company_id = kwargs.get('company_id', self.env.company.id)
-        company_obj = self.env['res.company'].search([('id', '=', company_id)])
         record_account_ids = kwargs.get('existing_account_ids', [])
         all_plans = self.search([
             ('account_ids', '!=', False),
             ('company_id', '=', company_id), 
             ('company_id', '=', False),
-            ('id', '=', company_obj.area_analytic_plan_id.id)
+            ('id', '=', self.env.company.area_analytic_plan_id.id)
         ])
         _logger.warning('all_plans: %s', all_plans)
 

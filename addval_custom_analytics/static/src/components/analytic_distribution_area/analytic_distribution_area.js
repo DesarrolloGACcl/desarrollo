@@ -103,10 +103,10 @@ export class AnalyticDistributionArea extends Component {
         console.log('FUNCION ASYNC WILLSTART');
         console.log('editingRecord')
         console.log(this.editingRecord);
-        if (this.editingRecord) {
-            console.log('entro if editingRecord');
-            await this.fetchAllPlans(this.props);
-        }
+
+        console.log('entro if editingRecord');
+        await this.fetchAllPlans(this.props);
+    
         await this.formatData(this.props);
     }
 

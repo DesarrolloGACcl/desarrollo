@@ -42,17 +42,17 @@ export class AnalyticDistributionArea extends Component {
         console.log('THIS STATE');
         console.log(this.state);
 
-        this.widgetRef = useRef("analyticDistribution");
+        this.widgetRef = useRef("analyticDistributionArea");
         console.log('THIS WIDGET REF');
         console.log(this.widgetRef);
 
-        this.dropdownRef = useRef("analyticDropdown");
+        this.dropdownRef = useRef("analyticDropdownArea");
         console.log('THIS DROPDOWN REF');
         console.log(this.dropdownRef);
 
         this.mainRef = useRef("mainElement");
         usePosition(() => this.widgetRef.el, {
-            popper: "analyticDropdown",
+            popper: "analyticDropdownArea",
         });
         console.log('THIS MAIN REF');
         console.log(this.mainRef);
@@ -105,7 +105,9 @@ export class AnalyticDistributionArea extends Component {
         console.log(this.editingRecord);
 
         console.log('entro if editingRecord');
-        await this.fetchAllPlans(this.props);
+        if(this.editingRecord){
+            await this.fetchAllPlans(this.props);
+        }
     
         await this.formatData(this.props);
     }
@@ -730,7 +732,7 @@ export class AnalyticDistributionArea extends Component {
         return formatPercentage(value / 100, { digits: [false, this.props.record.data.analytic_precision || 2] });
     }
 }
-AnalyticDistributionArea.template = "analytic.AnalyticDistribution";
+AnalyticDistributionArea.template = "addval_custom_analytics.AnalyticDistributionArea";
 AnalyticDistributionArea.supportedTypes = ["char", "text"];
 AnalyticDistributionArea.components = {
     AutoComplete,

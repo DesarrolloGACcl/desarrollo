@@ -105,9 +105,9 @@ export class AnalyticDistributionArea extends Component {
         console.log(this.editingRecord);
 
         console.log('entro if editingRecord');
-        if(this.editingRecord){
-            await this.fetchAllPlans(this.props);
-        }
+        
+        await this.fetchAllPlans(this.props);
+        
     
         await this.formatData(this.props);
     }

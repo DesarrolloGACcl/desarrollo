@@ -28,17 +28,15 @@ const PLAN_STATUS = {
     invalid: _lt("Invalid"),
     ok: _lt("OK"),
 }
-export class AnalyticDistributionArea extends Component {
+export class AnalyticDistribution extends Component {
     setup(){
-        console.log('SETUP');
-        this.props.readonly = false;
-        console.log(this.props);
-
         this.orm = useService("orm");
+
         this.state = useState({
             showDropdown: false,
             list: {},
         });
+
         this.widgetRef = useRef("analyticDistribution");
         this.dropdownRef = useRef("analyticDropdown");
         this.mainRef = useRef("mainElement");
@@ -76,7 +74,6 @@ export class AnalyticDistributionArea extends Component {
             fieldString: this.env._t("Analytic Distribution Template"),
         });
         this.allPlans = [];
-        //this.filterIds = [];
         this.lastAccount = this.props.account_field && this.props.record.data[this.props.account_field] || false;
         this.lastProduct = this.props.product_field && this.props.record.data[this.props.product_field] || false;
 
@@ -87,9 +84,7 @@ export class AnalyticDistributionArea extends Component {
 
     // Lifecycle
     async willStart() {
-        console.log('willStart');
-        if (this.editingRecord){
-            console.log('Entró al if')
+        if (this.editingRecord) {
             await this.fetchAllPlans(this.props);
         }
         await this.formatData(this.props);
@@ -120,12 +115,7 @@ export class AnalyticDistributionArea extends Component {
     }
 
     async formatData(nextProps) {
-        console.log('ENTRO AL FORMAT DATA')
         const data = nextProps.value;
-        console.log('NEXT PROPS: ')
-        console.log(nextProps)
-        console.log('CONST DATA: ')
-        console.log(data)
         const analytic_account_ids = Object.keys(data).map((id) => parseInt(id));
         const records = analytic_account_ids.length ? await this.fetchAnalyticAccounts([["id", "in", analytic_account_ids]]) : [];
         let widgetData = Object.assign({}, ...this.allPlans.map((plan) => ({[plan.id]: {...plan, distribution: []}})));
@@ -181,8 +171,6 @@ export class AnalyticDistributionArea extends Component {
     }
 
     async fetchAllPlans(nextProps) {
-        console.log('Entro al fetchAllPlans')
-        console.log(nextProps)
         // TODO: Optimize to execute once for all records when `force_applicability` is set
         const argsPlan =  this.fetchPlansArgs(nextProps);
         this.allPlans = await this.orm.call("account.analytic.plan", "get_area_relevant_plans", [], argsPlan);
@@ -197,14 +185,6 @@ export class AnalyticDistributionArea extends Component {
         if (limit) {
             args['limit'] = limit;
         }
-        // const analyticDistribution = this.props.record.data.analytic_distribution;
-        // const claves = Object.keys(analyticDistribution).map(Number);
-
-        // console.log(claves);
-
-        // if (claves.length > 0) {
-        //     args.domain.push(["parent_id", "in", claves]); 
-        // }
         if (domain.length === 1 && domain[0][0] === "id") {
             //batch these orm calls
             return await this.props.record.model.orm.read("account.analytic.account", domain[0][2], args.fields, {});
@@ -225,30 +205,7 @@ export class AnalyticDistributionArea extends Component {
     }
 
     analyticAccountDomain(groupId=null) {
-        console.log('analyticAccountDomain')
         let domain = [['id', 'not in', this.existingAnalyticAccountIDs]];
-        // const accounts = this.fetchAnalyticAccounts([["parent_id", "in", claves]]).then(function(value) {
-            // This block will be executed once the promise is resolved
-         //   console.log(value);
-           // const ids = value.map(function(item) {
-             //   return item.id;
-            //});
-
-            //console.log(ids)
-
-            //this.filterIds = ids
-            
-        //});
-        
-        //const idsDeResultados = accounts.map(account => accounts.id);
-        //console.log(idsDeResultados);
-
-        //console.log(this.filterIds);
-
-        //if(this.filterIds){
-          //  domain.push(['id', 'in', this.filterIds]);
-        //}
-
         if (this.props.record.data.company_id){
             domain.push(
                 '|',
@@ -260,7 +217,6 @@ export class AnalyticDistributionArea extends Component {
         if (groupId) {
             domain.push(['root_plan_id', '=', groupId]);
         }
-
         return domain;
     }
 
@@ -276,15 +232,11 @@ export class AnalyticDistributionArea extends Component {
 
     async loadOptionsSourceAnalytic(groupId, searchTerm) {
         const searchLimit = 6;
-        console.log('ACÁ')
-        console.log(groupId);
-        console.log(searchTerm);
 
         const records = await this.fetchAnalyticAccounts([
             ...this.analyticAccountDomain(groupId),
             ...this.searchAnalyticDomain(searchTerm)], searchLimit + 1);
 
-        // copiar esta logica luego
         let options = records.map((result) => ({
             value: result.id,
             label: result.display_name,
@@ -555,9 +507,17 @@ export class AnalyticDistributionArea extends Component {
     }
 
     onSaveNew() {
-        this.openTemplate({ resId: false, context: {
-            'default_analytic_distribution': this.listForJson,
-        }});
+        const { record, product_field, account_field } = this.props;
+        this.openTemplate({
+            resId: false,
+            context: {
+                default_analytic_distribution: this.listForJson,
+                default_partner_id: record.data['partner_id'] ? record.data['partner_id'][0] : undefined,
+                default_product_id: product_field ? record.data[product_field][0] : undefined,
+                default_account_prefix: account_field ? record.data[account_field][1].substr(0, 3) : undefined,
+            },
+        });
+
         this.closeAnalyticEditor();
     }
 
@@ -711,17 +671,17 @@ export class AnalyticDistributionArea extends Component {
         return formatPercentage(value / 100, { digits: [false, this.props.record.data.analytic_precision || 2] });
     }
 }
-AnalyticDistributionArea.template = "analytic.AnalyticDistribution";
-AnalyticDistributionArea.supportedTypes = ["char", "text"];
-AnalyticDistributionArea.components = {
+AnalyticDistribution.template = "analytic.AnalyticDistribution";
+AnalyticDistribution.supportedTypes = ["char", "text"];
+AnalyticDistribution.components = {
     AutoComplete,
     TagsList,
 }
 
-AnalyticDistributionArea.fieldDependencies = {
+AnalyticDistribution.fieldDependencies = {
     analytic_precision: { type: 'integer' },
 }
-AnalyticDistributionArea.props = {
+AnalyticDistribution.props = {
     ...standardFieldProps,
     business_domain: { type: String, optional: true },
     account_field: { type: String, optional: true },
@@ -730,7 +690,7 @@ AnalyticDistributionArea.props = {
     force_applicability: { type: String, optional: true },
     allow_save: { type: Boolean },
 }
-AnalyticDistributionArea.extractProps = ({ field, attrs }) => {
+AnalyticDistribution.extractProps = ({ field, attrs }) => {
     return {
         business_domain: attrs.options.business_domain,
         account_field: attrs.options.account_field,
@@ -741,4 +701,4 @@ AnalyticDistributionArea.extractProps = ({ field, attrs }) => {
     };
 };
 
-registry.category("fields").add("analytic_distribution_area", AnalyticDistributionArea);
+registry.category("fields").add("analytic_distribution_area", AnalyticDistribution);

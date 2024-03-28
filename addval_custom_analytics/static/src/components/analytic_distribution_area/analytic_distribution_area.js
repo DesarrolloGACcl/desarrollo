@@ -30,19 +30,32 @@ const PLAN_STATUS = {
 }
 export class AnalyticDistributionArea extends Component {
     setup(){
+        console.log('SETUP');
+        console.log(this);
         this.orm = useService("orm");
-
+        console.log('THIS ORM');
+        console.log(this.orm);
         this.state = useState({
             showDropdown: false,
             list: {},
         });
+        console.log('THIS STATE');
+        console.log(this.state);
 
         this.widgetRef = useRef("analyticDistribution");
+        console.log('THIS WIDGET REF');
+        console.log(this.widgetRef);
+
         this.dropdownRef = useRef("analyticDropdown");
+        console.log('THIS DROPDOWN REF');
+        console.log(this.dropdownRef);
+
         this.mainRef = useRef("mainElement");
         usePosition(() => this.widgetRef.el, {
             popper: "analyticDropdown",
         });
+        console.log('THIS MAIN REF');
+        console.log(this.mainRef);
 
         this.nextId = 1;
         this.focusSelector = false;
@@ -80,17 +93,27 @@ export class AnalyticDistributionArea extends Component {
         this.selectCreateIsOpen = false;
         this.addDialog = useOwnedDialogs();
         this.onSearchMore = this._onSearchMore.bind(this);
+
+        console.log('PROPS');
+        console.log(this.props);
     }
 
     // Lifecycle
     async willStart() {
+        console.log('FUNCION ASYNC WILLSTART');
+        console.log('editingRecord')
+        console.log(this.editingRecord);
         if (this.editingRecord) {
+            console.log('entro if editingRecord');
             await this.fetchAllPlans(this.props);
         }
         await this.formatData(this.props);
     }
 
     async willUpdate(nextProps) {
+        console.log('FUNCION ASYN WILL UPDATE');
+        console.log(nextProps);
+
         // Unless force_applicability, Plans need to be retrieved again as the product or account might have changed
         // and thus different applicabilities apply
         // or a model applies that contains unavailable plans
@@ -115,8 +138,12 @@ export class AnalyticDistributionArea extends Component {
     }
 
     async formatData(nextProps) {
+        console.log('FUNCION ASYNC FORMAT DATA')
+        console.log(nextProps)
         const data = nextProps.value;
         const analytic_account_ids = Object.keys(data).map((id) => parseInt(id));
+        console.log('CONST ANALYTIC ACCOUNT IDS')
+        console.log(analytic_account_ids);
         const records = analytic_account_ids.length ? await this.fetchAnalyticAccounts([["id", "in", analytic_account_ids]]) : [];
         let widgetData = Object.assign({}, ...this.allPlans.map((plan) => ({[plan.id]: {...plan, distribution: []}})));
         records.map((record) => {
@@ -144,6 +171,9 @@ export class AnalyticDistributionArea extends Component {
 
     // ORM
     fetchPlansArgs(nextProps) {
+        console.log('FUNCION FETCH PLANS ARGS')
+        console.log(nextProps)
+
         let args = {};
         if (this.props.business_domain_compute) {
             args['business_domain'] = evaluateExpr(this.props.business_domain_compute, this.props.record.evalContext);
@@ -167,21 +197,38 @@ export class AnalyticDistributionArea extends Component {
         if (this.props.record.data.company_id) {
             args['company_id'] = this.props.record.data.company_id[0];
         }
+        console.log('FETCH PLANS ARGS RETURN')
+        console.log(args)
         return args;
     }
 
     async fetchAllPlans(nextProps) {
+        console.log('FUNCION FETCH ALL PLANS')
+
         // TODO: Optimize to execute once for all records when `force_applicability` is set
         const argsPlan =  this.fetchPlansArgs(nextProps);
+        console.log('ARGS PLAN')
+
+        console.log(argsPlan)
         this.allPlans = await this.orm.call("account.analytic.plan", "get_area_relevant_plans", [], argsPlan);
+        console.log('THIS ALL PLANS')
+        console.log(this.allPlans)
     }
 
     async fetchAnalyticAccounts(domain, limit=null) {
+        console.log('FUNCION FETCH ANALYTIC ACCOUNTS')
+        console.log('DOMAIN')
+        console.log(domain)
         const args = {
             domain: domain,
             fields: ["id", "display_name", "root_plan_id", "color"],
             context: [],
         }
+        console.log('ARGS')
+
+        console.log(args)
+        console.log('LIMIT')
+        console.log(limit)
         if (limit) {
             args['limit'] = limit;
         }
@@ -194,10 +241,12 @@ export class AnalyticDistributionArea extends Component {
 
     // Autocomplete
     sourcesAnalyticAccount(groupId) {
+        console.log('sourcesAnalyticAccount')
         return [this.optionsSourceAnalytic(groupId)];
     }
 
     optionsSourceAnalytic(groupId) {
+        console.log('optionsSourceAnalytic')
         return {
             placeholder: this.env._t("Loading..."),
             options:(searchTerm) => this.loadOptionsSourceAnalytic(groupId, searchTerm),
@@ -419,10 +468,15 @@ export class AnalyticDistributionArea extends Component {
     }
 
     get editingRecord() {
+        console.log('GET EDITING RECORD');
+        console.log(this.props)
+        console.log(this.props.readonly)
         return !this.props.readonly;
     }
 
     get isDropdownOpen() {
+        console.log('GET EDITING RECORD');
+        console.log(this.state.showDropdown)
         return this.state.showDropdown && !!this.dropdownRef.el;
     }
 
@@ -536,6 +590,8 @@ export class AnalyticDistributionArea extends Component {
     }
 
     async openAnalyticEditor() {
+        console.log('openAnalyticEditor')
+        console.log(!this.allPlans.length)
         if (!this.allPlans.length) {
             await this.fetchAllPlans(this.props);
             await this.formatData(this.props);
@@ -547,6 +603,7 @@ export class AnalyticDistributionArea extends Component {
     }
 
     tagClicked(ev, id) {
+        console.log('TAG CLICKED')
         if (this.editingRecord && !this.isDropdownOpen) {
             this.openAnalyticEditor();
         }

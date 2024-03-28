@@ -31,7 +31,6 @@ const PLAN_STATUS = {
 export class AnalyticDistributionArea extends Component {
     setup(){
         console.log('SETUP');
-        this.props.readonly = false;
         console.log(this);
         this.orm = useService("orm");
         console.log('THIS ORM');

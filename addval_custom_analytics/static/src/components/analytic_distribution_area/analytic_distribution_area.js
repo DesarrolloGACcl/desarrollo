@@ -1,4 +1,4 @@
-import { AnalyticDistribution } from "@analityc/components/analytic_distribution/analytic_distribution";
+import { AnalyticDistribution } from "@analytic/components/analytic_distribution/analytic_distribution";
 import { registry } from "@web/core/registry";
 import { useService, useOwnedDialogs } from "@web/core/utils/hooks";
 import { evaluateExpr } from "@web/core/py_js/py";

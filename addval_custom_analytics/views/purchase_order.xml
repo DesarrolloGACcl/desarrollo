@@ -13,20 +13,20 @@
                     options="{'product_field': 'product_id', 'business_domain': 'sale_order'}"
                 />
                 
-                <field name="analytic_distribution_area" widget="analytic_distribution_area"
+                <field name="analytic_distribution_area" widget="analytic_distribution"
                     string="Área"
                     groups="analytic.group_analytic_accounting"
                     optional="show"
                     options="{'product_field': 'product_id', 'business_domain': 'sale_order'}"
                 />  
 
-                <field name="analytic_distribution_activity" widget="analytic_distribution_activity"
+                <field name="analytic_distribution_activity" widget="analytic_distribution"
                     string="Actividad"
                     groups="analytic.group_analytic_accounting"
                     optional="show"
                     options="{'product_field': 'product_id', 'business_domain': 'sale_order'}"
                 />
-                <field name="analytic_distribution_task" widget="analytic_distribution_task"
+                <field name="analytic_distribution_task" widget="analytic_distribution"
                     string="Tarea"
                     groups="analytic.group_analytic_accounting"
                     optional="show"

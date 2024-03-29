@@ -52,8 +52,7 @@ class AccountAnalyticPlan(models.Model):
         #que esta buscando registros que tengan compañia y a la vez no XD
         all_plans = self.search([
             ('account_ids', '!=', False),
-            ('company_id', '=', company_id), 
-            ('company_id', '=', False),
+            '|', ('company_id', '=', company_id), ('company_id', '=', False),
             ('id', '=', self.env.company.area_analytic_plan_id.id)
         ])
         _logger.warning('all_plans: %s', all_plans)

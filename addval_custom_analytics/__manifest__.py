@@ -16,6 +16,7 @@
 
     'depends': [
         'base',
+        'web',
         'analytic',
         'account',
         'sale',

@@ -1,11 +1,13 @@
-import { AnalyticDistribution } from 'analytic.analytic_distribution';
+/** @odoo-module **/
+
+
 import { registry } from "@web/core/registry";
 
-import { _lt } from "@web/core/l10n/translation";
+const {AnalyticDistribution} =  owl;
 
- 
 export class AnalyticDistributionArea extends AnalyticDistribution {
     async fetchAllPlans(nextProps) {
+        // TODO: Optimize to execute once for all records when `force_applicability` is set
         const argsPlan = this.fetchPlansArgs(nextProps);
         this.allPlans = await this.orm.call("account.analytic.plan", "get_area_relevant_plans", [], argsPlan);
     }

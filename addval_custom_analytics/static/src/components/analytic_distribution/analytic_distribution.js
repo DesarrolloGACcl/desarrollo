@@ -6,9 +6,10 @@ import { AnalyticDistribution } from "@analytic/components/analytic_distribution
 
 export class AnalyticDistributionArea extends AnalyticDistribution {
     async fetchAllPlans(nextProps) {
-        // TODO: Optimize to execute once for all records when `force_applicability` is set
+        // TODO: Optimize to execute once for all records when `force_applicability` is set}
+        console.log('Entro al metodo heredado')
         const argsPlan = this.fetchPlansArgs(nextProps);
-        this.allPlans = await this.orm.call("account.analytic.plan", "get_area_relevant_plans", [], argsPlan);
+        this.allPlans = await this.orm.call("account.analytic.plan", "get_relevant_plans", [], argsPlan);
     }
 }
  

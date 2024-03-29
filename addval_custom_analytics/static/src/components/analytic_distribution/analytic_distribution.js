@@ -8,10 +8,9 @@ export class AnalyticDistributionArea extends AnalyticDistribution {
     async fetchAllPlans(nextProps) {
         // TODO: Optimize to execute once for all records when `force_applicability` is set}
         console.log('Entro al metodo heredado')
-
-
         
         const argsPlan = this.fetchPlansArgs(nextProps);
+        console.log(nextProps)
         //traerse el campo que estas haciendo click, para que dependiendo del campo
         //usar la funcion que corresponda
         // o probar opcion de daniel y usar area actividad y tarea en js individuales

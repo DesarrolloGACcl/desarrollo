@@ -9,7 +9,9 @@ export class AnalyticDistributionArea extends AnalyticDistribution {
         // TODO: Optimize to execute once for all records when `force_applicability` is set}
         console.log('Entro al metodo heredado')
         const argsPlan = this.fetchPlansArgs(nextProps);
-        this.allPlans = await this.orm.call("account.analytic.plan", "get_relevant_plans", [], argsPlan);
+        //traerse el campo que estas haciendo click, para que dependiendo del campo
+        //usar la funcion que corresponda
+        this.allPlans = await this.orm.call("account.analytic.plan", "get_activity_relevant_plans", [], argsPlan);
     }
 }
  

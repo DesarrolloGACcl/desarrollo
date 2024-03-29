@@ -14,7 +14,7 @@ class AccountAnalyticPlan(models.Model):
         _logger.warning('KWARGS: %s', kwargs)
         company_id = kwargs.get('company_id', self.env.company.id)
         record_account_ids = kwargs.get('existing_account_ids', [])
-        company = self.env['res.company'].search([('id', '=', company_id)])
+        company = self.env['res.company'].browse(company_id)
         all_plans = self.search([
             ('account_ids', '!=', False),
             '|', ('company_id', '=', company_id), ('company_id', '=', False),
@@ -48,15 +48,14 @@ class AccountAnalyticPlan(models.Model):
         _logger.warning('KWARGS: %s', kwargs)
         company_id = kwargs.get('company_id', self.env.company.id)
         record_account_ids = kwargs.get('existing_account_ids', [])
-        company = self.env['res.company'].search([('id', '=', company_id)])
+        #Esta funcion no esta devolviendo porque hay un & entre ambos company osea
+        #que esta buscando registros que tengan compañia y a la vez no XD
         all_plans = self.search([
             ('account_ids', '!=', False),
             '|', ('company_id', '=', company_id), ('company_id', '=', False),
-            ('id', '=', company.area_analytic_plan_id.id)
+            ('id', '=', self.env.company.area_analytic_plan_id.id)
         ])
         _logger.warning('all_plans: %s', all_plans)
-        _logger.warning("#### revisar acá")
-        _logger.info(self.env['account.analytic.account'].search([('id', '=', 149)]).parent_id)
         root_plans = self.browse({
             int(plan.parent_path.split('/')[0])
             for plan in all_plans

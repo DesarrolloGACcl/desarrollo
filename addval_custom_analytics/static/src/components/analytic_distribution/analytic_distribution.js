@@ -11,6 +11,11 @@ export class AnalyticDistributionArea extends AnalyticDistribution {
         
         const argsPlan = this.fetchPlansArgs(nextProps);
         console.log(nextProps)
+        console.log('this.state.showDropdown')
+        console.log(this.state.showDropdown)
+        console.log('this.dropdownRef.el')
+        console.log(this.dropdownRef.el)
+        
         //traerse el campo que estas haciendo click, para que dependiendo del campo
         //usar la funcion que corresponda
         // o probar opcion de daniel y usar area actividad y tarea en js individuales

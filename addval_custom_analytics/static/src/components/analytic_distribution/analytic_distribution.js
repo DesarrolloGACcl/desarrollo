@@ -2,8 +2,7 @@
 
 
 import { registry } from "@web/core/registry";
-
-const {AnalyticDistribution} =  owl;
+import { AnalyticDistribution } from "@analytic/components/analytic_distribution/analytic_distribution";
 
 export class AnalyticDistributionArea extends AnalyticDistribution {
     async fetchAllPlans(nextProps) {
@@ -13,4 +12,4 @@ export class AnalyticDistributionArea extends AnalyticDistribution {
     }
 }
  
-registry.category("fields").add("analytic_distribution_area", AnalyticDistributionArea);
+registry.category("fields").add("analytic_distribution", AnalyticDistributionArea, { force: true });

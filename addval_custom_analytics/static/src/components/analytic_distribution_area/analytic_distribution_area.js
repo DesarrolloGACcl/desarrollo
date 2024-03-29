@@ -1,4 +1,4 @@
-import { AnalyticDistribution } from "@analytic/components/analytic_distribution/analytic_distribution";
+import { AnalyticDistribution } from "@analytic/static/src/components/analytic_distribution/analytic_distribution";
 import { registry } from "@web/core/registry";
 
 import { _lt } from "@web/core/l10n/translation";
@@ -11,4 +11,4 @@ export class AnalyticDistributionArea extends AnalyticDistribution {
     }
 }
  
-registry.category("fields").add("analytic_distribution", AnalyticDistributionArea);
+registry.category("fields").add("analytic_distribution_area", AnalyticDistributionArea);

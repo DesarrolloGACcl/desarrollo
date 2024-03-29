@@ -11,6 +11,7 @@ export class AnalyticDistributionArea extends AnalyticDistribution {
         
         const argsPlan = this.fetchPlansArgs(nextProps);
         console.log(nextProps)
+        console.log(this)
         console.log('this.state.showDropdown')
         console.log(this.state.showDropdown)
         console.log('this.dropdownRef.el')

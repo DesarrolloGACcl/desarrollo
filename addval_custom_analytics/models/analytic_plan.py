@@ -48,6 +48,8 @@ class AccountAnalyticPlan(models.Model):
         _logger.warning('KWARGS: %s', kwargs)
         company_id = kwargs.get('company_id', self.env.company.id)
         record_account_ids = kwargs.get('existing_account_ids', [])
+        #Esta funcion no esta devolviendo porque hay un & entre ambos company osea
+        #que esta buscando registros que tengan compañia y a la vez no XD
         all_plans = self.search([
             ('account_ids', '!=', False),
             ('company_id', '=', company_id), 

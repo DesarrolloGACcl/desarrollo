@@ -9,7 +9,10 @@
                 <tree>
                     <field name="name" string=""/>
                     <field name="partner_id" string="Cliente"/>
+                    <field name="order_name"/>
+                    <field name="channel_sale" string="Canal de venta"/>
                     <field name="invoice_document_type" string="Tipo de documento"/>
+                    <field name="woocommerce_order" string="Orden WooCommerce"/>
                     <field name="amount_total" string="Monto total"/>
                     <field name="company_id" string="Compañía"/>
                 </tree>
@@ -24,20 +27,31 @@
                     <header>
                         <button name="re_procesing_order" type="object" data-hotkey="shift+g"
                                 string="Re-procesar pedido" class="oe_highlight"
-                                attrs="{'invisible': [('state', '=', 'done')]}"/>
-                        <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
+                                attrs="{'invisible': [('state', 'in', ('done','not_done'))]}"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,done,not_done"/>
                     </header>
                     <sheet>     
                         <h1><field name="name" string=""/></h1>                   
                         <group>
                             <group>
                                 <field name="partner_id" string="Cliente"/>
+                                <field name="sale_order_id"/>
+                                <field name="order_name"/>
+                                <field name="partner_name" string="Nombre cliente"/>
+                                <field name="partner_street" string="Dirección cliente"/>
+                                <field name="partner_state" string="Región cliente"/>
                                 <field name="invoice_document_type" string="Tipo de documento"/>
+                                <field name="pre_invoice" string="Pre-factura"/>
+                                <field name="order_date" string="Fecha pre-factura"/>
+                                <field name="payment_method" string="Método de pago"/>
+                                <field name="dues_qty" string="Cantidad cuotas"/>
                             </group>
                             <group>                            
+                                <field name="card_type" string="Tipo tarjeta"/>
+                                <field name="authorization_code" string="Código autorización"/>
+                                <field name="channel_sale" string="Canal de venta"/>
                                 <field name="company_name" string="Razón social"/>
                                 <field name="error_message" string="Razón error"/>
-                                <field name="amount_total" string="Monto total"/>
                                 <field name="company_id" string="Compañía"/>
                             </group>
                         </group>
@@ -49,23 +63,73 @@
                                     <form>
                                         <group>
                                             <field name="product_id"/>
-                                            <field name="name"/>
+                                            <field name="sku"/>
                                             <field name="product_uom_qty"/>
                                             <field name="unit_price"/>
                                             <field name="has_iva"/>
+                                            <field name="analytic_distribution" widget="analytic_distribution"
+                                                string="Proyecto"
+                                                groups="analytic.group_analytic_accounting"
+                                                options="{'product_field': 'product_id', 'business_domain': 'sale_order'}"
+                                            />
+                                            
+                                            <field name="analytic_distribution_area" widget="analytic_distribution"
+                                                string="Área"
+                                                groups="analytic.group_analytic_accounting"
+                                                options="{'product_field': 'product_id', 'business_domain': 'sale_order'}"
+                                            />  
+                            
+                                            <field name="analytic_distribution_activity" widget="analytic_distribution"
+                                                string="Actividad"
+                                                groups="analytic.group_analytic_accounting"
+                                                options="{'product_field': 'product_id', 'business_domain': 'sale_order'}"
+                                            />
+                            
+                                            <field name="analytic_distribution_task" widget="analytic_distribution"
+                                                string="Tarea"
+                                                groups="analytic.group_analytic_accounting"
+                                                options="{'product_field': 'product_id', 'business_domain': 'sale_order'}"
+                                            />
                                         </group>
                                     </form>
                                     <tree string="Sales Order Lines">
                                         <field name="product_id"/>
-                                        <field name="name"/>
+                                        <field name="sku"/>
                                         <field name="product_uom_qty"/>
                                         <field name="unit_price"/>
                                         <field name="has_iva"/>
+                                        <field name="analytic_distribution" widget="analytic_distribution"
+                                            string="Proyecto"
+                                            groups="analytic.group_analytic_accounting"
+                                            options="{'product_field': 'product_id', 'business_domain': 'sale_order'}"
+                                        />
+                                        
+                                        <field name="analytic_distribution_area" widget="analytic_distribution"
+                                            string="Área"
+                                            groups="analytic.group_analytic_accounting"
+                                            options="{'product_field': 'product_id', 'business_domain': 'sale_order'}"
+                                        />  
+                        
+                                        <field name="analytic_distribution_activity" widget="analytic_distribution"
+                                            string="Actividad"
+                                            groups="analytic.group_analytic_accounting"
+                                            options="{'product_field': 'product_id', 'business_domain': 'sale_order'}"
+                                        />
+                        
+                                        <field name="analytic_distribution_task" widget="analytic_distribution"
+                                            string="Tarea"
+                                            groups="analytic.group_analytic_accounting"
+                                            options="{'product_field': 'product_id', 'business_domain': 'sale_order'}"
+                                        />
                                     </tree>
                                 </field>
                             </page>
                         </notebook> 
                     </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_ids" widget="mail_thread"/>
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                    </div>
                 </form>
             </field>
         </record>

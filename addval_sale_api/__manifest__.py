@@ -12,6 +12,7 @@
          - Crear facturas (cron)
          - Confirmar facturas (cron)
          - Generar envío de documentos al SII y cliente
+         - Generar proceso de movimiento de inventario
     """,
 
     "author": "Addval Connect",
@@ -20,14 +21,17 @@
     "license": "Other proprietary",
     'version': '0.1',
 
-    'depends': ['base','website','sale_management', 'addval_sale', 'stock'],
+    'depends': ['base','website','sale_management', 'addval_sale', 'stock', 'account', 'mail', 'addval_custom_analytics'],
 
     'data': [
         'data/cron.xml',
+        'data/mail_template.xml',
         'views/res_config_settings.xml',
         'views/account_move.xml',
         'views/sale_order.xml',
         'views/sale_log.xml',
+        'views/stock_picking.xml',
+        'views/res_users.xml',
         'security/ir.model.access.csv',
     ],
     'installable': True,

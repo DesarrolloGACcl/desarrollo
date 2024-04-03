@@ -11,4 +11,14 @@
             </field>
         </field>
     </record>
+
+    <record id="action_create_payments" model="ir.actions.server">
+        <field name="name">Crear pagos (emergencia)</field>
+        <field name="model_id" ref="account.model_account_move"/>
+        <field name="state">code</field>
+        <field name="code">
+            for record in records:
+                record.create_payment_in_emergency()
+        </field>
+    </record>
 </odoo>

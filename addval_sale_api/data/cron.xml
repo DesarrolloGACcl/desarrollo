@@ -2,7 +2,7 @@
 <odoo>
     <data>
         <record id="cron_auto_invoice_sale_orders" model="ir.cron">
-            <field name="name">Auto Invoice Sale Orders</field>
+            <field name="name">Creación DTE y pagos, pre-factura</field>
             <field name="model_id" ref="sale.model_sale_order"/>
             <field name="state">code</field>
             <field name="code">model.auto_invoice_sale_orders()</field>
@@ -11,5 +11,39 @@
             <field name="numbercall">-1</field>
             <field name="doall" eval="False"/>
         </record>
+
+        <record id="cron_send_invoices" model="ir.cron">
+            <field name="name">Notificación de DTE emitidos</field>
+            <field name="model_id" ref="account.model_account_move"/>
+            <field name="state">code</field>
+            <field name="code">model.send_invoice_notification()</field>
+            <field name="interval_number">15</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+        </record>
+
+        <record id="failed_orders_daily_cron" model="ir.cron">
+            <field name="name">Aviso diario Ordenes con fallo</field>
+            <field name="model_id" ref="addval_sale_api.model_sale_log_warning_cron" />
+            <field name="state">code</field>
+            <field name="code">model.send_daily_warning()</field>
+            <field name="user_id" ref="base.user_root" />
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+        </record>
+
+        <record id="failed_orders_weekly_cron" model="ir.cron">
+            <field name="name">Aviso semanal Ordenes con fallo</field>
+            <field name="model_id" ref="addval_sale_api.model_sale_log_warning_cron" />
+            <field name="state">code</field>
+            <field name="code">model.send_weekly_warning()</field>
+            <field name="user_id" ref="base.user_root" />
+            <field name="interval_number">7</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+        </record>
+
     </data>
 </odoo>

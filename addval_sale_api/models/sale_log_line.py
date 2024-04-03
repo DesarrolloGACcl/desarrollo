@@ -4,10 +4,10 @@ _logger = logging.getLogger(__name__)
 
 class SaleLogLine(models.Model):
     _name = 'sale.log.line'
+    _inherit = 'analytic_mixin'
 
     sale_log_id = fields.Many2one('sale.log', string="Log venta", readonly=True)
     product_id = fields.Many2one('product.template', string="Producto")
-    name = fields.Char(string='Descripción')
     error_product = fields.Text(string="Razón error", readonly=True)
     sku =  fields.Char("SKU")
     unit_price = fields.Monetary(string="Precio unitario", currency_field='currency_id', readonly=True)

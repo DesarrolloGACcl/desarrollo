@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="failed_orders_daily_mail_template" model="mail.template">
+            <field name="name">Plantilla de aviso diario Ordenes con Fallo</field>
+            <field name="model_id" ref="sale.model_sale_order"/>
+            <field name="subject">Ordenes fallidas del día</field>
+            <!-- <field name="email_from">{{ user.email_formatted }}</field> -->
+            <!-- <field name="email_to"></field> -->
+            <field name="body_html" type="html">
+<table border="0" cellpadding="0" cellspacing="0"
+    style="padding-top: 16px; background-color: #FFFFFF; font-family:Verdana, Arial,sans-serif; color: #454748; width: 100%; border-collapse:separate;">
+    <tbody>
+        <tr>
+            <td align="center">
+                <table border="0" cellpadding="0" cellspacing="0" width="590"
+                    style="padding: 16px; background-color: #FFFFFF; color: #454748; border-collapse:separate;">
+                    <tbody>
+
+                        <tr>
+                            <td align="center" style="min-width: 590px;">
+                                <table border="0" cellpadding="0" cellspacing="0" width="590"
+                                    style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                    <tbody>
+                                        <tr>
+                                            <span style="font-size: 20px; font-weight: bold;">
+                                                Boletín Diario
+                                            </span>
+                                            <td valign="middle" align="right">
+                                                <img t-attf-src="/logo.png?company={{ object.company_id.id }}"
+                                                    style="padding: 0px; margin: 0px; height: auto; width: 80px;"
+                                                    t-att-alt="object.company_id.name"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" style="text-align:center;">
+                                                <hr width="100%"
+                                                    style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td align="center" style="min-width: 590px;">
+                                <table border="0" cellpadding="0" cellspacing="0" width="590"
+                                    style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                    <tbody>
+                                        <tr>
+                                            <td valign="top" style="font-size: 13px;">
+                                                <div>
+                                                    Estimado,
+                                                    <br/><br/>
+                                                    El siguiente listado de Pedidos presentan problemas que deben ser
+                                                    revisados:<br/><br/>
+                                                    <t t-foreach="ctx.get('record_names')" t-as="record">
+                                                        <span t-esc="record" /><br/>
+                                                    </t>
+                                                    <br/><br/>
+                                                    Puede utilizar el siguiente enlace para obtener acceso a su cuenta:
+                                                    <div style="margin: 16px 0px 16px 0px;">
+                                                        <!-- <a t-attf-href="/web?view_type=list&amp;model=sale.log"
+                                                            style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                                                            Ir Logs de Venta
+                                                        </a> -->
+                                                        <!-- <a href="https://appia.odoo.com/web#action=660&amp;model=sale.log&amp;view_type=list&amp;cids=1&amp;menu_id=234"
+                                                            style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                                                            Ir Logs de Venta
+                                                        </a> -->
+                                                        <a t-attf-href="/web#action=660&amp;model=sale.log&amp;view_type=list&amp;cids=1&amp;menu_id=234"
+                                                            style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                                                            Ir Logs de Venta
+                                                        </a>
+                                                    </div>
+                                                    Gracias.
+                                                    <br/><br/>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align:center;">
+                                                <hr width="100%"
+                                                    style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td align="center" style="min-width: 590px;">
+                                <table border="0" cellpadding="0" cellspacing="0" width="590"
+                                    style="min-width: 590px; background-color: white; font-size: 11px; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                    <tbody>
+                                        <tr>
+                                            <td valign="middle" align="left">
+                                                <t t-out="ctx.get('company_obj').name or ''">SuEmpresa</t>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="middle" align="left" style="opacity: 0.7;">
+                                                <t t-out="ctx.get('company_obj').phone or ''">+1 650-123-4567</t>
+                                                <t t-if="ctx.get('company_obj').email">
+                                                    | <a t-attf-href="'mailto:%s' % {{ ctx.get('company_obj').email }}"
+                                                        style="text-decoration:none; color: #454748;">
+                                                        <t t-out="ctx.get('company_obj').email or ''">info@suempresa.com</t>
+                                                    </a>
+                                                </t>
+                                                <t t-if="ctx.get('company_obj').website">
+                                                    | <a t-attf-href="'%s' % {{ ctx.get('company_obj').website }}"
+                                                        style="text-decoration:none; color: #454748;">
+                                                        <t t-out="ctx.get('company_obj').website or ''">
+                                                            http://www.ejemplo.com</t>
+                                                    </a>
+                                                </t>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+
+        <tr>
+            <td align="center" style="min-width: 590px;">
+                <table border="0" cellpadding="0" cellspacing="0" width="590"
+                    style="min-width: 590px; background-color: #F1F1F1; color: #454748; padding: 8px; border-collapse:separate;">
+                    <tbody>
+                        <tr>
+                            <td style="text-align: center; font-size: 13px;">
+                                Con tecnología de <a target="_blank"
+                                    href="https://www.odoo.com?utm_source=db&amp;utm_medium=auth"
+                                    style="color: #875A7B;">Odoo</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>
+            </field>
+            <field name="auto_delete" eval="False"/>
+        </record>
+
+        <record id="failed_orders_weekly_template" model="mail.template">
+            <field name="name">Plantilla de aviso semanal Ordenes con Fallo</field>
+            <field name="model_id" ref="sale.model_sale_order"/>
+            <field name="subject">Ordenes fallidas de la semana</field>
+            <!-- <field name="email_from">{{ user.email_formatted }}</field> -->
+            <field name="email_to">{{ object.sudo().user_id.email }}</field>
+            <field name="body_html" type="html">
+<table border="0" cellpadding="0" cellspacing="0"
+    style="padding-top: 16px; background-color: #FFFFFF; font-family:Verdana, Arial,sans-serif; color: #454748; width: 100%; border-collapse:separate;">
+    <tbody>
+        <tr>
+            <td align="center">
+                <table border="0" cellpadding="0" cellspacing="0" width="590"
+                    style="padding: 16px; background-color: #FFFFFF; color: #454748; border-collapse:separate;">
+                    <tbody>
+
+                        <tr>
+                            <td align="center" style="min-width: 590px;">
+                                <table border="0" cellpadding="0" cellspacing="0" width="590"
+                                    style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                    <tbody>
+                                        <tr>
+                                            <span style="font-size: 20px; font-weight: bold;">
+                                                Boletín Semanal
+                                            </span>
+                                            <td valign="middle" align="right">
+                                                <img t-attf-src="/logo.png?company={{ object.company_id.id }}"
+                                                    style="padding: 0px; margin: 0px; height: auto; width: 80px;"
+                                                    t-att-alt="object.company_id.name"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" style="text-align:center;">
+                                                <hr width="100%"
+                                                    style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td align="center" style="min-width: 590px;">
+                                <table border="0" cellpadding="0" cellspacing="0" width="590"
+                                    style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                    <tbody>
+                                        <tr>
+                                            <td valign="top" style="font-size: 13px;">
+                                                <div>
+                                                    Estimado,
+                                                    <br/><br/>
+                                                    El siguiente listado de Pedidos presentan problemas al término de esta semana y deben ser
+                                                    revisados:<br/>
+                                                    <t t-foreach="ctx.get('record_names')" t-as="record">
+                                                        <span t-esc="record" /><br/>
+                                                    </t>
+                                                    <br/><br/>
+                                                    Puede utilizar el siguiente enlace para obtener acceso a su cuenta:
+                                                    <div style="margin: 16px 0px 16px 0px;">
+                                                        <a t-attf-href="/web?view_type=list&amp;model=sale.log"
+                                                            style="background-color: #875A7B; padding: 8px 16px 8px 16px; text-decoration: none; color: #fff; border-radius: 5px; font-size:13px;">
+                                                            Ir Logs de Venta
+                                                        </a>
+                                                    </div>
+                                                    Gracias.
+                                                    <br/>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align:center;">
+                                                <hr width="100%"
+                                                    style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td align="center" style="min-width: 590px;">
+                                <table border="0" cellpadding="0" cellspacing="0" width="590"
+                                    style="min-width: 590px; background-color: white; font-size: 11px; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                                    <tbody>
+                                        <tr>
+                                            <td valign="middle" align="left">
+                                                <t t-out="ctx.get('company_obj').name or ''">SuEmpresa</t>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="middle" align="left" style="opacity: 0.7;">
+                                                <t t-out="ctx.get('company_obj').phone or ''">+1 650-123-4567</t>
+                                                <t t-if="ctx.get('company_obj').email">
+                                                    | <a t-attf-href="'mailto:%s' % {{ ctx.get('company_obj').email }}"
+                                                        style="text-decoration:none; color: #454748;">
+                                                        <t t-out="ctx.get('company_obj').email or ''">info@suempresa.com</t>
+                                                    </a>
+                                                </t>
+                                                <t t-if="ctx.get('company_obj').website">
+                                                    | <a t-attf-href="'%s' % {{ ctx.get('company_obj').website }}"
+                                                        style="text-decoration:none; color: #454748;">
+                                                        <t t-out="ctx.get('company_obj').website or ''">
+                                                            http://www.ejemplo.com</t>
+                                                    </a>
+                                                </t>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+
+        <tr>
+            <td align="center" style="min-width: 590px;">
+                <table border="0" cellpadding="0" cellspacing="0" width="590"
+                    style="min-width: 590px; background-color: #F1F1F1; color: #454748; padding: 8px; border-collapse:separate;">
+                    <tbody>
+                        <tr>
+                            <td style="text-align: center; font-size: 13px;">
+                                Con tecnología de <a target="_blank"
+                                    href="https://www.odoo.com?utm_source=db&amp;utm_medium=auth"
+                                    style="color: #875A7B;">Odoo</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>
+            </field>
+            <field name="auto_delete" eval="False"/>
+        </record>
+    </data>
+</odoo>

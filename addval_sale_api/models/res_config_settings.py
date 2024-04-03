@@ -1,4 +1,4 @@
-from odoo import models, fields
+from odoo import models, fields, api
 
 
 class ResConfigSettings(models.TransientModel):
@@ -11,7 +11,7 @@ class ResConfigSettings(models.TransientModel):
         store = True,
         readonly=False,
     )
-    
+
     api_account_id = fields.Many2one(
         'account.account',
         related='company_id.api_account_id',

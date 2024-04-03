@@ -30,7 +30,6 @@
         'views/account_move.xml',
         'views/sale_order.xml',
         'views/sale_log.xml',
-        'views/stock_picking.xml',
         'views/res_users.xml',
         'security/ir.model.access.csv',
     ],

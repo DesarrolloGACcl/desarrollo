@@ -12,8 +12,7 @@
                     <field name="order_name"/>
                     <field name="channel_sale" string="Canal de venta"/>
                     <field name="invoice_document_type" string="Tipo de documento"/>
-                    <field name="woocommerce_order" string="Orden WooCommerce"/>
-                    <field name="amount_total" string="Monto total"/>
+                    <field name="pre_invoice" string="Pre-factura"/>
                     <field name="company_id" string="Compañía"/>
                 </tree>
             </field>

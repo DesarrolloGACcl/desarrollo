@@ -20,7 +20,7 @@
     "license": "Other proprietary",
     'version': '0.1',
 
-    'depends': ['base','website','sale_management', 'stock', 'account', 'mail', 'addval_custom_analytics'],
+    'depends': ['base','sale_management', 'account', 'mail', 'addval_custom_analytics'],
 
     'data': [
         'data/cron.xml',

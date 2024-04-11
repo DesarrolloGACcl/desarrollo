@@ -27,13 +27,12 @@ class AccountMove(models.Model):
             invoice_data = {
                 'folio_boleta': invoice.name,
                 'pedido_odoo': invoice.sale_id.name,
-                'pedido_woocommerce': invoice.sale_id.woocommerce_order,
+                'pre_factura': invoice.sale_id.pre_invoice,
                 'monto_bruto': invoice.amount_total,
                 'fecha_boleta': invoice_date_str,
                 'tipo_documento': invoice.l10n_latam_document_type_id.name,
                 'rut_compañia': invoice.company_id.vat,
-                'razon_social': invoice.company_id.name,
-                'url_pdf': 'https://appia.odoo.com/'
+                'razon_social': invoice.company_id.name
             }
             
             # Serialize the dictionary to JSON
@@ -57,10 +56,7 @@ class AccountMove(models.Model):
     def create_payment_in_emergency(self):
         order = self.env['sale.order'].search([('name', '=', self.invoice_origin)], limit=1)
 
-        if order.card_type.upper() == 'CRÉDITO' or order.card_type.upper() == 'CREDIT' or order.card_type.upper() == 'CREDITO':
-            payment_journal = self.env['account.journal'].search([('code', '=', 'TC'), ('company_id', '=', order.company_id.id)], limit=1)
-        else:
-            payment_journal = self.env['account.journal'].search([('code', '=', 'TD'), ('company_id', '=', order.company_id.id)], limit=1)
+        payment_journal = self.env['account.journal'].search([('code', '=', 'LV'), ('company_id', '=', order.company_id.id)], limit=1)
 
         try:
             payment_register = self.action_register_payment()
@@ -69,7 +65,6 @@ class AccountMove(models.Model):
         
         #try:
         payment_method = self.env['account.payment.method.line'].search([('journal_id', '=', payment_journal.id), ('payment_type', '=', 'inbound'), ('code', '=ilike', 'manual')], limit=1)
-        _logger.warning('Metodo de pago: %s', payment_method)
         payment_register_data = self.env['account.payment.register'].with_context(payment_register['context']).create({
             'amount': self.amount_total,
             'payment_method_line_id': payment_method.id,

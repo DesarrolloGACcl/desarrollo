@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_xlsx_reports,account.financial.report.manager,model_account_financial_report,account.group_account_manager,1,1,1,1
+access_account_aged_trial_balance_xlsx,access.account.aged.trial.balance.xlsx,model_account_aged_trial_balance_xlsx,account.group_account_user,1,1,1,1
+access_account_report_partner_ledger_xlsx,access.account.report.partner.ledger.xlsx,model_account_report_partner_ledger_xlsx,account.group_account_user,1,1,1,1
+access_account_report_general_ledger_xlsx,access.account.report.general.ledger.xlsx,model_account_report_general_ledger_xlsx,account.group_account_user,1,1,1,1
+access_accounting_report_xlsx,access.accounting.report.xlsx,model_accounting_report_xlsx,account.group_account_user,1,1,1,1
+access_report_account_reports_xlsx_report_agedpartnerbalance,access.report.account_reports_xlsx.report_agedpartnerbalance,model_report_account_reports_xlsx_report_agedpartnerbalance,account.group_account_user,1,1,1,1

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+	    <record id="financial_wizard_xlsx_form_view" model="ir.ui.view">
+            <field name="name">Accounting report</field>
+            <field name="model">accounting.report.xlsx</field>
+            <field name="inherit_id" ref="account.account_common_report_view"/>
+            <!--XLS print button in financial report  wizard-->
+            <field name="arch" type="xml">
+				<xpath expr="//button[@name='check_report']" position="after">
+                    <button name="check_report" string="Export XLSX" type="object" context="{'xls_export':1}" class="oe_highlight"  style="margin: 0 5px;"/>
+                </xpath>
+			</field>
+        </record>
+	</data>
+</odoo>

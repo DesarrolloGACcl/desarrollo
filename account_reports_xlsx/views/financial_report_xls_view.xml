@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+         <report
+            id="accounting_report_xls"
+            model="accounting.report.xlsx"
+            string="Financial Report "
+            print_report_name = "Financial Report"
+            report_type="xlsx"
+            name="account_reports_xlsx.financial_report_xls"
+            file="account_reports_xlsx.financial_report_xls"
+            attachment_use="False"
+        />
+    </data>
+</odoo>

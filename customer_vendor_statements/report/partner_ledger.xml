@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <report
+                id="partner_ledger_report"
+                model="res.partner"
+                string="Customer Statement"
+                report_type="qweb-pdf"
+                name="customer_vendor_statements.partner_ledger_statement_report"
+                file="customer_vendor_statements.partner_ledger_statement_report"
+        />
+
+        <template id="partner_ledger_statement_report">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="web.external_layout">
+                        <div class="page">
+                            <h2>Partner Statement</h2>
+                            <div class="row">
+                                <div class="col-6">
+                                    <p>
+                                        <strong>Partner Name:</strong>
+                                        <span t-field="o.name"/>
+                                    </p>
+                                </div>
+                                <div class="col-6">
+                                    <!--                  <p><strong>Date:</strong> <span t-field="o.date"/> </p>-->
+                                </div>
+                            </div>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Invoice Date</th>
+                                        <th>Invoice Number</th>
+                                        <th>Company</th>
+                                        <th>Reference</th>
+                                        <th>Due Date</th>
+                                        <th>Debit</th>
+                                        <th>Credit</th>
+                                        <th>Balance</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-set="total_balance" t-value="0"/>
+                                    <t t-set="total_debit" t-value="0"/>
+                                    <t t-set="total_credit" t-value="0"/>
+                                    <tr t-foreach="o.statement_ids" t-as="statement">
+                                        <td>
+                                            <span t-esc="statement.move_id.date"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="statement.move_id.name"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="statement.company_id.name"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="statement.move_id.ref"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="statement.statement_date_due"/>
+                                        </td>
+
+                                        <td>
+                                            <span t-esc="statement.debit"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="statement.credit"/>
+                                        </td>
+                                        <t t-set="total_balance" t-value="total_balance + statement.balance"/>
+                                        <t t-set="total_debit" t-value="total_debit + statement.debit"/>
+                                        <t t-set="total_credit" t-value="total_credit + statement.credit"/>
+                                        <td>
+                                            <span t-esc="float(total_balance)"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Total</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>
+                                            <span t-esc="'%.2f'% total_debit"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="'%.2f'% total_credit"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="'%.2f'% total_balance"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table width="100%" class="table table-bordered" >
+                                <thead>
+                                    <tr>
+                                        <th>0-30</th>
+                                        <th>30-60</th>
+                                        <th>60-90</th>
+                                        <th>90-120</th>
+                                        <th>120+</th>
+                                        <th style="text-align:right;">Total Balance</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <t t-foreach="o.aged_balance_ids" t-as="aged">
+
+                                            <td><span t-esc="aged.period_30"/></td>
+                                            <td><span t-esc="aged.period_3060"/></td>
+                                            <td><span t-esc="aged.period_6090"/></td>
+                                            <td><span t-esc="aged.period_90120"/></td>
+                                            <td><span t-esc="aged.period_120"/></td>
+                                            <td style="text-align:right;"><span t-esc="aged.balance"/></td>
+                                        </t>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

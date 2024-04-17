@@ -1,0 +1,54 @@
+<!-- res_partner_view.xml file -->
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="res_partner_form_view_statements">
+            <field name="name">res.partner.form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook/page[@name='accounting']" position="after">
+                    <page string="Statements" groups="customer_vendor_statements.partner_statement_security_group">
+                        <group>
+                            <group>
+                                <field name="statement_state" selection_type="multiple"/>
+                                <button string="Refresh Statements" name="get_statement" type="object" class="oe_highlight"/>
+                            </group>
+                            <group>
+                                <button string="Print Report PDF" type="object" name="print_partner_statements" icon="fa-print"/>
+<!--                                <button string="Download xlsx" type="object" name="download_xlsx_statements" icon="fa-download"/>-->
+<!--                                <button string="Send By Email" icon="fa-envelope" type="object" name="email_partner_statement"/>-->
+<!--                                <button string="Send By Whatsapp" icon="fa-whatsapp"/>-->
+                            </group>
+                        </group>
+                        <field name="statement_ids" readonly="1">
+                            <tree readonly="1">
+                                <field name="date"/>
+                                <field name="move_id" widget="many2one_link"/>
+                                <field name="account_id" widget="many2one_link"/>
+                                <field name="company_id"/>
+                                <field name="ref" string="Reference"/>
+                                <field name="statement_date_due" string="Due Date"/>
+                                <field name="debit" sum="Sum Debit"/>
+                                <field name="credit" sum="Sum Credit"/>
+                                <field name="balance" sum="Total Balance"/>
+                            </tree>
+                        </field>
+                        <field name="aged_balance_ids" readonly="1">
+                            <tree readonly="1">
+                                <field name="period_30" string="0-30"/>
+                                <field name="period_3060" string="30-60"/>
+                                <field name="period_6090" string="60-90"/>
+                                <field name="period_90120" string="90-120"/>
+                                <field name="period_120" string="120+"/>
+                                <field name="balance" string="Total Balance"/>
+                            </tree>
+                        </field>
+                    </page>
+
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>
+

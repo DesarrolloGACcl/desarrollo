@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+	    <record id="general_ledger_wizard_xlsx_form_view" model="ir.ui.view">
+            <field name="name">General Ledger</field>
+            <field name="model">account.report.general.ledger.xlsx</field>
+            <field name="inherit_id" ref="account.account_report_general_ledger_view"/>
+            <field name="arch" type="xml">
+				<xpath expr="//button[@name='check_report']" position="after">
+                    <button name="report_xlsx" string="Export XLSX" type="object"  class="oe_highlight"  style="margin: 0 5px;"/>
+                </xpath>
+			</field>
+        </record>
+	</data>
+</odoo>

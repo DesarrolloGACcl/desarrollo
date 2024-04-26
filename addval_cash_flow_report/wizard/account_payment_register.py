@@ -10,7 +10,7 @@ class AccountPaymentRegister(models.TransientModel):
     _inherit= 'account.payment.register'
     
     def _create_payments(self):
-        payments = super()._create_payments(self)
+        payments = super()._create_payments()
 
         for payment in payments:
             payment.principal_account_id = payment.partner_id.principal_account_id

@@ -18,7 +18,7 @@
     'depends': ['base', 'account_accountant'],
 
     'data': [
-        'data/data.xml'
+        'data/data.xml',
         'security/ir.model.access.csv',
         'views/account_payment.xml',
         'views/principal_account.xml',

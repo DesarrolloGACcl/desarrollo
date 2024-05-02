@@ -4,7 +4,7 @@
         <record id="action_account_report_cs" model="ir.actions.client">
             <field name="name">Flujo de caja</field>
             <field name="tag">account_report</field>
-            <field name="context" eval="{'report_id': ref('account_reports.addval_cash_flow_report')}"/>
+            <field name="context" eval="{'report_id': ref('account_reports.custom_cash_flow_report')}"/>
         </record>
     </data>
 </odoo>

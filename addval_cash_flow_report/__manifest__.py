@@ -19,6 +19,8 @@
 
     'data': [
         'data/data.xml',
+        'data/account_report_actions.xml',
+        'data/addval_cash_flow_report.xml',
         'security/ir.model.access.csv',
         'views/account_payment.xml',
         'views/principal_account.xml',

@@ -9,7 +9,7 @@
         <field name="filter_multi_company">selector</field>
         <field name="custom_handler_model_id" ref="model_custom_cash_flow_report_handler"/>
         <field name="column_ids">
-            <record id="cash_flow_report_balance" model="account.report.column">
+            <record id="custom_cash_flow_report_balance" model="account.report.column">
                 <field name="name">Balance</field>
                 <field name="expression_label">balance</field>
                 <field name="figure_type">monetary</field>

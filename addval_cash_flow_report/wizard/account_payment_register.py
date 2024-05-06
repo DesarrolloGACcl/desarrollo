@@ -37,7 +37,9 @@ class AccountPaymentRegister(models.TransientModel):
             payment.move_id.secondary_account_id = payment.secondary_account_id
             _logger.warning('Move line: %s', payment.move_id.line_ids)
             _logger.warning('Move line 0: %s', payment.move_id.line_ids[0])
-            payment.move_id.line_ids[0].principal_account_id = payment.move_id.principal_account_id
-            payment.move_id.line_ids[0].secondary_account_id = payment.move_id.secondary_account_id
+            payment.move_id.line_ids[0].principal_account_id = payment.principal_account_id
+            _logger.warning('Move line 0 principal_account_id: %s', payment.move_id.line_ids[0].principal_account_id)
+            payment.move_id.line_ids[0].secondary_account_id = payment.secondary_account_id
+            _logger.warning('Move line 0 secondary_account_id: %s', payment.move_id.line_ids[0].secondary_account_id)
 
         payments.action_post()

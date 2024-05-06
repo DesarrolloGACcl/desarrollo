@@ -27,6 +27,8 @@ class AccountPaymentRegister(models.TransientModel):
             payments |= vals['payment']
 
         for payment in payments:
+            payment.principal_account_id = payment.partner_id.principal_account_id
+            payment.secondary_account_id = payment.partner_id.secondary_account_id
             _logger.warning('Payment: %s', payment)
             _logger.warning('Payment principal: %s', payment.principal_account_id)
             _logger.warning('Payment secondary: %s', payment.secondary_account_id)
@@ -38,12 +40,3 @@ class AccountPaymentRegister(models.TransientModel):
             payment.move_id.line_ids[0].secondary_account_id = payment.move_id.secondary_account_id
 
         payments.action_post()
-    
-    def _create_payments(self):
-        payments = super()._create_payments()
-
-        for payment in payments:
-            payment.principal_account_id = payment.partner_id.principal_account_id
-            payment.secondary_account_id = payment.partner_id.secondary_account_id
-
-        return payments

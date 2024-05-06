@@ -25,7 +25,7 @@ class CustomCashFlowReport(models.AbstractModel):
     #             'dividend': {'name': _('Diviendo'), 'level': 2, 'parent_line_id': 'unsorted_flow'},
     #     }
     
-    def _report_custom_engine_get_amls_fixed(self):
+    def _report_custom_engine_get_amls_fixed(self, options, date_scope, formulas_dict, current_groupby, next_groupby, offset=0, limit=None):
         
         amls_fixed = self.env["account.move.line"].search([("secondary_account_id", "=", 1)])
 

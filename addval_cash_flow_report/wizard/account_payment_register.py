@@ -4,12 +4,15 @@ from collections import defaultdict
 from odoo import Command, models, fields, api, _
 from odoo.exceptions import UserError
 from odoo.tools import frozendict
+import logging
+_logger = logging.getLogger(__name__)
 
 
 class AccountPaymentRegister(models.TransientModel):
     _inherit= 'account.payment.register'
 
     def _post_payments(self, to_process, edit_mode=False):
+        _logger.warning('ENTRO A LA FUNCION POST PAYMENT HEREDADA')
         """ Post the newly created payments.
 
         :param to_process:  A list of python dictionary, one for each payment to create, containing:
@@ -24,6 +27,10 @@ class AccountPaymentRegister(models.TransientModel):
             payments |= vals['payment']
 
         for payment in payments:
+            _logger.warning('Payment: %s', payment)
+            _logger.warning('Payment principal: %s', payment.principal_account_id)
+            _logger.warning('Payment secondary: %s', payment.secondary_account_id)
+            _logger.warning('Move: %s', payment.move_id)
             payment.move_id.principal_account_id = payment.principal_account_id
             payment.move_id.secondary_account_id = payment.secondary_account_id
 

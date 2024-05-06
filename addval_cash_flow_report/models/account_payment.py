@@ -15,11 +15,11 @@ class AccountPayment(models.Model):
 
     def action_post(self):
         ''' draft -> posted '''
-        self.move_id.principal_account_id = self.principal_account_id
-        self.move_id.secondary_account_id = self.secondary_account_id
+        self.move_id.principal_account_id = self.principal_account_id.id
+        self.move_id.secondary_account_id = self.secondary_account_id.id
 
-        self.move_id.line_ids[0].principal_account_id = self.move_id.principal_account_id
-        self.move_id.line_ids[0].secondary_account_id = self.move_id.secondary_account_id
+        self.move_id.line_ids[0].principal_account_id = self.move_id.principal_account_id.id
+        self.move_id.line_ids[0].secondary_account_id = self.move_id.secondary_account_id.id
 
         self.move_id._post(soft=False)
 

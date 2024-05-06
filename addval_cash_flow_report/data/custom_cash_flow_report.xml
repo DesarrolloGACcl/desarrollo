@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <record id="custom_cash_flow_report" model="account.report">
-        <field name="name">Cash Flow Statement</field>
+        <field name="name">Flujo de caja</field>
         <field name="filter_unfold_all" eval="True"/>
         <field name="filter_date_range" eval="True"/>
         <field name="filter_journals" eval="True"/>

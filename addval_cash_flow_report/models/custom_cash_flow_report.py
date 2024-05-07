@@ -14,24 +14,18 @@ class CustomCashFlowReport(models.AbstractModel):
         lines = []
 
         layout_data = self._get_layout_data()
+        _logger.warning('layout_data: %s', layout_data)
         report_data = self._get_report_data(report, options, layout_data)
 
-        return layout_data
+        for aml_data in self._get_amls_fixed():
+            _logger.warning('Entro al _dynamic_lines_generator: %s', aml_data)
+
+        return lines
 
 
     def _custom_options_initializer(self, report, options, previous_options=None):
         super()._custom_options_initializer(report, options, previous_options=previous_options)
         report._init_options_journals(options, previous_options=previous_options, additional_journals_domain=[('type', 'in', ('bank', 'cash', 'general'))])
-
-    def _get_report_data(self, report, options, layout_data):
-        report_data = {}
-
-        # Compute 'Cash and cash equivalents, beginning of period'
-        for aml_data in self._get_amls_fixed():
-            _logger.warning('Entro al get report data: %s', aml_data)
-
-        return report_data
-    
     
     def _get_amls_fixed(self):
         

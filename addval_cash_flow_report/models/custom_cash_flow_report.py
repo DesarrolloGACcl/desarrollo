@@ -37,7 +37,7 @@ class CustomCashFlowReport(models.AbstractModel):
 
         for aml in amls_fixed:
 
-            account_id = aml.account_id.display_name
+            account_id = aml.account_id.id
 
             # Check if the account_id is already in the dictionary
             if account_id not in account_balances:

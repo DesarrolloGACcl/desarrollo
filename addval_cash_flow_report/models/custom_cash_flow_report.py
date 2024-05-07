@@ -16,10 +16,10 @@ class CustomCashFlowReport(models.AbstractModel):
         layout_data = self._get_layout_data()
         _logger.warning('layout_data: %s', layout_data)
 
-        lines.append(layout_data['operating_activites'])
+        lines.append(0, layout_data['operating_activites'])
 
-        for aml_data in self._get_amls_fixed():
-            _logger.warning('Entro al _dynamic_lines_generator: %s', aml_data)
+        report_data = self._get_amls_fixed()
+        _logger.warning('report_data: %s', report_data)
 
         return lines
 
@@ -37,7 +37,7 @@ class CustomCashFlowReport(models.AbstractModel):
 
         for aml in amls_fixed:
 
-            account_id = aml.account_id
+            account_id = aml.account_id.display_name
 
             # Check if the account_id is already in the dictionary
             if account_id not in account_balances:

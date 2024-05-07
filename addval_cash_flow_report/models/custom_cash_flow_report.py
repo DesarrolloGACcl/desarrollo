@@ -16,7 +16,7 @@ class CustomCashFlowReport(models.AbstractModel):
         layout_data = self._get_layout_data()
         _logger.warning('layout_data: %s', layout_data)
 
-        lines.append(0, layout_data['operating_activites'])
+        lines.append((0, layout_data['operating_activites']))
 
         report_data = self._get_amls_fixed()
         _logger.warning('report_data: %s', report_data)

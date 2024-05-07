@@ -10,6 +10,15 @@ class CustomCashFlowReport(models.AbstractModel):
     _inherit = 'account.report.custom.handler'
     _description = 'Reporte flujo de caja'
 
+    def _dynamic_lines_generator(self, report, options, all_column_groups_expression_totals):
+        lines = []
+
+        layout_data = self._get_layout_data()
+        report_data = self._get_report_data(report, options, layout_data)
+
+        return layout_data
+
+
     def _custom_options_initializer(self, report, options, previous_options=None):
         super()._custom_options_initializer(report, options, previous_options=previous_options)
         report._init_options_journals(options, previous_options=previous_options, additional_journals_domain=[('type', 'in', ('bank', 'cash', 'general'))])

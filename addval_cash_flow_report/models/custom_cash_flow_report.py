@@ -15,7 +15,8 @@ class CustomCashFlowReport(models.AbstractModel):
 
         layout_data = self._get_layout_data()
         _logger.warning('layout_data: %s', layout_data)
-        report_data = self._get_report_data(report, options, layout_data)
+
+        lines.append(layout_data['operating_activites'])
 
         for aml_data in self._get_amls_fixed():
             _logger.warning('Entro al _dynamic_lines_generator: %s', aml_data)

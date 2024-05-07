@@ -16,13 +16,12 @@ class CustomCashFlowReport(models.AbstractModel):
         layout_data = self._get_layout_data()
         _logger.warning('layout_data: %s', layout_data)
 
-        lines.append((0, layout_data['operating_activites']))
+        lines.append(layout_data[0])
 
         report_data = self._get_amls_fixed()
         _logger.warning('report_data: %s', report_data)
 
         return lines
-
 
     def _custom_options_initializer(self, report, options, previous_options=None):
         super()._custom_options_initializer(report, options, previous_options=previous_options)

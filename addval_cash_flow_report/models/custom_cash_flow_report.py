@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api, _
 from odoo.tools.misc import get_lang
+import logging
+_logger = logging.getLogger(__name__)
 
 
 class CustomCashFlowReport(models.AbstractModel):
@@ -48,17 +50,17 @@ class CustomCashFlowReport(models.AbstractModel):
         and the values can contain 2 dictionnaries:
             * (required) 'balance' where the key is the column_group_key and the value is the balance of the line
             * (optional) 'aml_groupby_account' where the key is an account_id and the values are the aml data
-        """
-        def _report_update_parent(layout_line_id, aml_column_group_key, aml_balance, layout_data, report_data):
-            # Update the balance in report_data of the parent of the layout_line_id recursively (Stops when the line has no parent)
-            if 'parent_line_id' in layout_data[layout_line_id]:
-                parent_line_id = layout_data[layout_line_id]['parent_line_id']
+        # """
+        # def _report_update_parent(layout_line_id, aml_column_group_key, aml_balance, layout_data, report_data):
+        #     # Update the balance in report_data of the parent of the layout_line_id recursively (Stops when the line has no parent)
+        #     if 'parent_line_id' in layout_data[layout_line_id]:
+        #         parent_line_id = layout_data[layout_line_id]['parent_line_id']
 
-                report_data.setdefault(parent_line_id, {'balance': {}})
-                report_data[parent_line_id]['balance'].setdefault(aml_column_group_key, 0.0)
-                report_data[parent_line_id]['balance'][aml_column_group_key] += aml_balance
+        #         report_data.setdefault(parent_line_id, {'balance': {}})
+        #         report_data[parent_line_id]['balance'].setdefault(aml_column_group_key, 0.0)
+        #         report_data[parent_line_id]['balance'][aml_column_group_key] += aml_balance
 
-                _report_update_parent(parent_line_id, aml_column_group_key, aml_balance, layout_data, report_data)
+        #         _report_update_parent(parent_line_id, aml_column_group_key, aml_balance, layout_data, report_data)
 
         aml_column_group_key = aml_data['column_group_key']
         aml_account_id = aml_data['account_id']

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record model="principal.account"><field name="name">Flujo de caja de actividades operativas</field></record>
+        <record model="principal.account"><field name="name">Flujo de caja actividades de inversion</field></record>
+        <record model="principal.account"><field name="name">Flujo de caja financiero</field></record>
+        <record model="principal.account"><field name="name">Flujo sin clasificar</field></record>
+        <record model="secondary.account"><field name="name">Fijos</field><field name="parent_id">1</field></record>
+        <record model="secondary.account"><field name="name">Variables</field><field name="parent_id">1</field></record>
+        <record model="secondary.account"><field name="name">Inversion</field><field name="parent_id">2</field></record>
+        <record model="secondary.account"><field name="name">Fijo C/P</field><field name="parent_id">3</field></record>
+        <record model="secondary.account"><field name="name">Fijo L/P</field><field name="parent_id">3</field></record>
+        <record model="secondary.account"><field name="name">Dividendo</field><field name="parent_id">4</field></record>
+    </data>
+</odoo>

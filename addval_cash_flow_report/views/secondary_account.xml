@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="secondary_account_tree" model="ir.ui.view">
+            <field name="name">secondary.account.tree</field>
+            <field name="model">secondary.account</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="parent_id"/>
+                    <field name="company_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="secondary_account_form" model="ir.ui.view">
+            <field name="name">secondary.account.form</field>
+            <field name="model">secondary.account</field>
+            <field name="arch" type="xml">
+                <form string="Subcuentas">
+                    <sheet>
+                        <group>
+                            <field name="name" string="Nombre"/>
+                            <field name="parent_id" string="Cuenta padre"/>
+                            <field name="company_id" string="Compañía"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="secondary_account_act_window" model="ir.actions.act_window">
+            <field name="name">Subcuentas</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">secondary.account</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}</field>
+            <field name="view_id" eval="False"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No hay registros creados
+                </p>
+            </field>
+        </record>
+
+        <menuitem name="Subcuentas" id="secondary_account_menu" action="secondary_account_act_window"
+            parent="account.account_management_menu" sequence="80"/>
+    </data>
+</odoo>

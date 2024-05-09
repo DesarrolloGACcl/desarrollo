@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="action_account_report_cs" model="ir.actions.client">
+            <field name="name">Flujo de caja</field>
+            <field name="tag">account_report</field>
+            <field name="context" eval="{'report_id': ref('addval_cash_flow_report.custom_cash_flow_report')}"/>
+        </record>
+    </data>
+</odoo>

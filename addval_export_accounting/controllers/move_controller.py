@@ -79,27 +79,90 @@ class StockApi(http.Controller):
             else:
                 tipo = 'T'
             
+            if aml.analytic_distribution:
+                distributions = aml.analytic_distribution
+                                 
+                formatted_project_analytic_info = ""
+                project_codes = ""
+                for account_id, percentage in distributions.items():
+                    # Fetch the analytic account name using the ID
+                    analytic_account = self.env['account.analytic.account'].browse(int(account_id))
+                    if analytic_account:
+                        formatted_project_analytic_info += f"{analytic_account.name}: {percentage}%; "
+                        project_codes += f"{analytic_account.code};"
+            else:
+                formatted_project_analytic_info = 'No se especificó'
+                project_codes = 'No se especificó'
+
+
+            if aml.analytic_distribution_area:
+                distributions = aml.analytic_distribution_area
+                
+                formatted_area_analytic_info = ""
+                area_codes = ""
+                for account_id, percentage in distributions.items():
+                    # Fetch the analytic account name using the ID
+                    analytic_account = self.env['account.analytic.account'].browse(int(account_id))                    
+                    if analytic_account:
+                        formatted_area_analytic_info += f"{analytic_account.name}: {percentage}%; "
+                        area_codes += f"{analytic_account.code};"
+            else:
+                formatted_area_analytic_info = 'No se especificó'
+                area_codes = 'No se especificó'
+
+            if aml.analytic_distribution_activity:
+                distributions = aml.analytic_distribution_activity
+                
+                formatted_activity_analytic_info = ""
+                activity_codes = ""
+                for account_id, percentage in distributions.items():
+                    # Fetch the analytic account name using the ID
+                    analytic_account = self.env['account.analytic.account'].browse(int(account_id))                    
+                    if analytic_account:
+                        formatted_activity_analytic_info += f"{analytic_account.name}: {percentage}%; "
+                        activity_codes += f"{analytic_account.code};"
+            else:
+                formatted_activity_analytic_info = 'No se especificó'
+                activity_codes = 'No se especificó'
+            
+            if aml.analytic_distribution_task:
+                distributions = aml.analytic_distribution_task
+                
+                formatted_task_analytic_info = ""
+                task_codes = ""
+                for account_id, percentage in distributions.items():
+                    # Fetch the analytic account name using the ID
+                    analytic_account = self.env['account.analytic.account'].browse(int(account_id))                    
+                    if analytic_account:
+                        formatted_task_analytic_info += f"{analytic_account.name}: {percentage}%; "
+                        task_codes += f"{analytic_account.code};"
+            else:
+                formatted_task_analytic_info = 'No se especificó'
+                task_codes = 'No se especificó'
+
             # Constructing the json data structure
+
             aml_data_list = ({
                 'fecha': str(aml.date),
                 'tipo': tipo,
-                'documento': tipo,
-                'empresa': tipo,
-                'codigo_proyecto': tipo,
-                'proyecto': tipo, 
-                'codigo_area': tipo, 
-                'area': tipo, 
-                'codigo_actividad': tipo, 
-                'actividad': tipo, 
-                'codigo_tarea': tipo, 
-                'tarea': tipo, 
-                'detalle_etiqueta': tipo,
-                'debe': tipo, 
-                'haber': tipo, 
-                'codigo_cuenta_contable': tipo, 
-                'nombre_cuenta': tipo,
-                'raiz_de_cuenta': tipo, 
-                'saldo':tipo 
+                'documento': aml.move_id.name,
+                'empresa': aml.partner_id.name,
+                'rut': aml.partner_id.vat,
+                'codigo_proyecto': project_codes,
+                'proyecto': formatted_project_analytic_info, 
+                'codigo_area': area_codes, 
+                'area': formatted_area_analytic_info, 
+                'codigo_actividad': activity_codes, 
+                'actividad': formatted_activity_analytic_info, 
+                'codigo_tarea': task_codes, 
+                'tarea': formatted_task_analytic_info, 
+                'detalle_etiqueta': aml.name,
+                'debe': aml.debit, 
+                'haber': aml.credit, 
+                'codigo_cuenta_contable': aml.account_id.code, 
+                'nombre_cuenta': aml.account_id.name,
+                'raiz_de_cuenta': aml.account_root_id.name, 
+                'saldo':aml.balance 
             })
             
             aml_data_list.append(aml_data_list)

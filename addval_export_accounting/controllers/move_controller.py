@@ -18,6 +18,9 @@ class StockApi(http.Controller):
         expected_token = 'gTRk73b95h6VuFQq'
         provided_token = request.httprequest.headers.get('Authorization')
 
+        if not provided_token:
+            return Response(json.dumps({"error": "Falta token"}), status=401, content_type='application/json')
+
         if provided_token != expected_token:
             return Response(json.dumps({"error": "Unauthorized"}), status=401, content_type='application/json')
 

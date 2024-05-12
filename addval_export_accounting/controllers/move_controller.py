@@ -10,10 +10,10 @@ from odoo.exceptions import AccessError, MissingError, ValidationError
 import logging
 _logger = logging.getLogger(__name__)
 
-class StockApi(http.Controller):
+class MoveController(http.Controller):
 
     @http.route('/api/aml/<int:dia>/<int:mes>/<int:anio>/<string:type>', type='http', auth='public', methods=['GET'])
-    def send_stock_notification(self, dia, mes, anio, type):
+    def send_account_move_line(self, dia, mes, anio, type):
 
         expected_token = 'gTRk73b95h6VuFQq'
         provided_token = request.httprequest.headers.get('Authorization')

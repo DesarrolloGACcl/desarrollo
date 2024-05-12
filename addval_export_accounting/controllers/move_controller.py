@@ -12,8 +12,8 @@ _logger = logging.getLogger(__name__)
 
 class StockApi(http.Controller):
 
-    @http.route('/api/aml/<int:mes>/<int:anio>', type='http', auth='public', methods=['GET'])
-    def send_stock_notification(self, mes, anio):
+    @http.route('/api/aml/<int:dia>/<int:mes>/<int:anio>/<string:type>', type='http', auth='public', methods=['GET'])
+    def send_stock_notification(self, dia, mes, anio, type):
 
         expected_token = 'gTRk73b95h6VuFQq'
         provided_token = request.httprequest.headers.get('Authorization')
@@ -24,37 +24,11 @@ class StockApi(http.Controller):
         if provided_token != expected_token:
             return Response(json.dumps({"error": "Unauthorized"}), status=401, content_type='application/json')
 
-        if mes == '1' or mes == '3' or mes == '5' or mes == '7' or mes == '8' or mes == '10' or mes == '12': 
-            domain = [
-                ('date', '>=', f'{anio}-{str(mes).zfill(2)}-01'),
-                ('date', '<=', f'{anio}-{str(mes).zfill(2)}-31'),
-                ('move_id.state', '=', 'posted')
-            ]
-
-        elif mes == '4' or mes == '6' or mes == '9' or mes == '11':
-
-            domain = [
-                ('date', '>=', f'{anio}-{str(mes).zfill(2)}-01'),
-                ('date', '<=', f'{anio}-{str(mes).zfill(2)}-30'),
-                ('move_id.state', '=', 'posted')
-            ]
-
-        elif (mes == '2' and anio == '2024') or (mes == '2' and anio == '2028'):
-            domain = [
-                ('date', '>=', f'{anio}-{str(mes).zfill(2)}-01'),
-                ('date', '<=', f'{anio}-{str(mes).zfill(2)}-29'),
-                ('move_id.state', '=', 'posted')
-            ]
-
-        elif mes == '2':
-
-            domain = [
-                ('date', '>=', f'{anio}-{str(mes).zfill(2)}-01'),
-                ('date', '<=', f'{anio}-{str(mes).zfill(2)}-28'),
-                ('move_id.state', '=', 'posted')
-            ]
+        domain = [
+            ('date', '=', f'{anio}-{mes}-{dia}')
+            ('move_id.state', '=', 'posted')
+        ]
         
-
         account_move_lines = request.env['account.move.line'].search(domain)
 
 
@@ -168,7 +142,8 @@ class StockApi(http.Controller):
                 'saldo':aml.balance 
             })
             
-            aml_data_list.append(aml_data_list)
+            if tipo == type:
+                aml_data_list.append(aml_data_list)
 
         # Serialize the list to JSON
         aml_json = json.dumps(aml_data_list)

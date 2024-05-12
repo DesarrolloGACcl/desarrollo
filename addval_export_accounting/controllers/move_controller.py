@@ -25,7 +25,7 @@ class MoveController(http.Controller):
             return Response(json.dumps({"error": "Unauthorized"}), status=401, content_type='application/json')
 
         domain = [
-            ('date', '=', f'{anio}-{mes}-{dia}')
+            ('date', '=', str(anio)+'-'+str(mes)+'-'+str(dia))
             ('move_id.state', '=', 'posted')
         ]
         

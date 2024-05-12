@@ -12,7 +12,7 @@ _logger = logging.getLogger(__name__)
 
 class StockApi(http.Controller):
 
-    @http.route('/api/stock/<int:mes>/<int:anio>', type='http', auth='public', methods=['GET'])
+    @http.route('/api/aml/<int:mes>/<int:anio>', type='http', auth='public', methods=['GET'])
     def send_stock_notification(self, mes, anio):
 
         expected_token = 'gTRk73b95h6VuFQq'

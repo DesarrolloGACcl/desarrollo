@@ -65,7 +65,7 @@ class MoveApi(http.Controller):
 
         for aml in account_move_lines:
 
-            invoice_or_move = self.env["account.move"].sudo().search(
+            invoice_or_move = request.env["account.move"].sudo().search(
                 [("id", "=", aml.move_id.id)], limit=1
             )
 
@@ -89,7 +89,7 @@ class MoveApi(http.Controller):
                 project_codes = ""
                 for account_id, percentage in distributions.items():
                     # Fetch the analytic account name using the ID
-                    analytic_account = self.env['account.analytic.account'].sudo().browse(int(account_id))
+                    analytic_account = request.env['account.analytic.account'].sudo().browse(int(account_id))
                     if analytic_account:
                         formatted_project_analytic_info += f"{analytic_account.name}: {percentage}%; "
                         project_codes += f"{analytic_account.code};"
@@ -105,7 +105,7 @@ class MoveApi(http.Controller):
                 area_codes = ""
                 for account_id, percentage in distributions.items():
                     # Fetch the analytic account name using the ID
-                    analytic_account = self.env['account.analytic.account'].sudo().browse(int(account_id))                    
+                    analytic_account = request.env['account.analytic.account'].sudo().browse(int(account_id))                    
                     if analytic_account:
                         formatted_area_analytic_info += f"{analytic_account.name}: {percentage}%; "
                         area_codes += f"{analytic_account.code};"
@@ -120,7 +120,7 @@ class MoveApi(http.Controller):
                 activity_codes = ""
                 for account_id, percentage in distributions.items():
                     # Fetch the analytic account name using the ID
-                    analytic_account = self.env['account.analytic.account'].sudo().browse(int(account_id))                    
+                    analytic_account = request.env['account.analytic.account'].sudo().browse(int(account_id))                    
                     if analytic_account:
                         formatted_activity_analytic_info += f"{analytic_account.name}: {percentage}%; "
                         activity_codes += f"{analytic_account.code};"
@@ -135,7 +135,7 @@ class MoveApi(http.Controller):
                 task_codes = ""
                 for account_id, percentage in distributions.items():
                     # Fetch the analytic account name using the ID
-                    analytic_account = self.env['account.analytic.account'].sudo().browse(int(account_id))                    
+                    analytic_account = request.env['account.analytic.account'].sudo().browse(int(account_id))                    
                     if analytic_account:
                         formatted_task_analytic_info += f"{analytic_account.name}: {percentage}%; "
                         task_codes += f"{analytic_account.code};"

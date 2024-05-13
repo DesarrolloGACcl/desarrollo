@@ -55,7 +55,7 @@ class MoveApi(http.Controller):
             ]
         
 
-        account_move_lines = request.env['account.move.line'].sudo().search(domain, limit=40)
+        account_move_lines = request.env['account.move.line'].sudo().search(domain)
 
 
         if not account_move_lines:

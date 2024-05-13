@@ -12,7 +12,7 @@ _logger = logging.getLogger(__name__)
 
 class MoveApi(http.Controller):
 
-    @http.route('/api/aml/<int:mes>/<int:anio>', type='http', auth='public', methods=['GET'])
+    @http.route('/api/aml/<int:mes>/<string:anio>', type='http', auth='public', methods=['GET'])
     def send_aml_info(self, mes, anio):
 
         expected_token = 'gTRk73b95h6VuFQq'
@@ -24,14 +24,14 @@ class MoveApi(http.Controller):
         if provided_token != expected_token:
             return Response(json.dumps({"error": "Unauthorized"}), status=401, content_type='application/json')
 
-        if mes == '1' or mes == '3' or mes == '5' or mes == '7' or mes == '8' or mes == '10' or mes == '12': 
+        if mes == 1 or mes == 3 or mes == 5 or mes == 7 or mes == 8 or mes == 10 or mes == 12: 
             domain = [
                 ('date', '>=', f'{anio}-{str(mes).zfill(2)}-01'),
                 ('date', '<=', f'{anio}-{str(mes).zfill(2)}-31'),
                 ('move_id.state', '=', 'posted')
             ]
 
-        elif mes == '4' or mes == '6' or mes == '9' or mes == '11':
+        elif mes == 4 or mes == 6 or mes == 9 or mes == 11:
 
             domain = [
                 ('date', '>=', f'{anio}-{str(mes).zfill(2)}-01'),
@@ -39,14 +39,14 @@ class MoveApi(http.Controller):
                 ('move_id.state', '=', 'posted')
             ]
 
-        elif (mes == '2' and anio == '2024') or (mes == '2' and anio == '2028'):
+        elif (mes == 2 and anio == '2024') or (mes == 2 and anio == '2028'):
             domain = [
                 ('date', '>=', f'{anio}-{str(mes).zfill(2)}-01'),
                 ('date', '<=', f'{anio}-{str(mes).zfill(2)}-29'),
                 ('move_id.state', '=', 'posted')
             ]
 
-        elif mes == '2':
+        elif mes == 2:
 
             domain = [
                 ('date', '>=', f'{anio}-{str(mes).zfill(2)}-01'),

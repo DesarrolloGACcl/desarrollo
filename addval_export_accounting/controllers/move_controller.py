@@ -61,7 +61,7 @@ class MoveApi(http.Controller):
         if not account_move_lines:
             return request.make_response('Movimientos no encontrados', status=404)
         
-        aml_data_list = []
+        aml_data_list = {}
 
         for aml in account_move_lines:
 
@@ -145,7 +145,7 @@ class MoveApi(http.Controller):
 
             # Constructing the json data structure
 
-            aml_data_list = ({
+            aml_data_list = {
                 'fecha': str(aml.date),
                 'tipo': tipo,
                 'documento': aml.move_id.name,
@@ -166,9 +166,9 @@ class MoveApi(http.Controller):
                 'nombre_cuenta': aml.account_id.name,
                 'raiz_de_cuenta': aml.account_root_id.name, 
                 'saldo':aml.balance 
-            })
+            }
             
-            aml_data_list.append(aml_data_list)
+            aml_data_list.update(aml_data_list)
 
         # Serialize the list to JSON
         aml_json = json.dumps(aml_data_list)

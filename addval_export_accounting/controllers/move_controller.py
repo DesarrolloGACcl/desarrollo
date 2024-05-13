@@ -145,7 +145,7 @@ class MoveApi(http.Controller):
 
             # Constructing the json data structure
 
-            aml_data_list = {
+            aml_data = {
                 'fecha': str(aml.date),
                 'tipo': tipo,
                 'documento': aml.move_id.name,
@@ -168,7 +168,7 @@ class MoveApi(http.Controller):
                 'saldo':aml.balance 
             }
             
-            aml_data_list.update(aml_data_list)
+            aml_data_list.update(aml_data)
 
         # Serialize the list to JSON
         aml_json = json.dumps(aml_data_list)

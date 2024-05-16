@@ -5,6 +5,9 @@
             <field name="inherit_id" ref="account_budget.view_account_analytic_account_form_inherit_budget"/>
             <field name="model">account.analytic.account</field>
             <field name="arch" type="xml">
+                <xpath expr="//header" position="inside">
+                    <field name="state" widget="statusbar" statusbar_visible="in_process,invoicing”,ended" attrs="{'invisible': [('analytic_plan_id', '!=', 1)]}"/>                
+                </xpath>
                 <xpath expr="//field[@name='code']" position="after">
                     <field name="identification_number"/>
                     <field name="parent_id"/>

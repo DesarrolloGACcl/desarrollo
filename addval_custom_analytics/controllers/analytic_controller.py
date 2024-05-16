@@ -27,7 +27,7 @@ class AnalyticApi(http.Controller):
         kw.get("project_code") #Código proyecto
         kw.get("status") #(posibles estados "in_process", "invoicing”, "ended")
 
-        project_analytic_plan = request.env['account.analytic.plan'].sudo().searhc([('id', '=', 1)])
+        project_analytic_plan = request.env['account.analytic.plan'].sudo().search([('id', '=', 1)])
 
         analytic_project = request.env['account.analytic.account'].sudo().search([('code', '=', kw.get("project_code")),
                                                                                   ('plan_id', '=', project_analytic_plan.id)])               

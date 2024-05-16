@@ -6,7 +6,8 @@
             <field name="model">account.analytic.account</field>
             <field name="arch" type="xml">
                 <xpath expr="//div[@name='button_box']" position="inside">
-                    <field name="status" widget="statusbar" statusbar_visible="in_process,invoicing”,ended" attrs="{'invisible': [('analytic_plan_id', '!=', 1)]}"/>                
+
+                    <field name="status" widget="statusbar" statusbar_visible="in_process,invoicing”,ended" attrs="{'invisible': [('plan_id', '!=', 1)]}"/>                
                 </xpath>
             </field>
         </record>

@@ -30,7 +30,7 @@ class AnalyticApi(http.Controller):
         project_analytic_plan = request.env['account.analytic.plan'].sudo().searhc([('id', '=', 1)])
 
         analytic_project = request.env['account.analytic.account'].sudo().search([('code', '=', kw.get("project_code")),
-                                                                                  ('analytic_plan_id', '=', project_analytic_plan.id)])               
+                                                                                  ('plan_id', '=', project_analytic_plan.id)])               
         
         if kw.get("status") == 'ended':
             analytic_project.status = kw.get("status")

@@ -23,7 +23,7 @@ class AccountAnalyticAccount(models.Model):
     status = fields.Selection(
         selection=[
             ('in_process', "En progreso"),
-            ('invoicing”', "Facturable"),
+            ('invoicing', "Facturable"),
             ('ended', "Finalizado"),
         ],
         string="Estado",

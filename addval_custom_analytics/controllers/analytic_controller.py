@@ -15,7 +15,7 @@ class AnalyticApi(http.Controller):
     @http.route('/api/project', type='json', auth='public', methods=['POST'])
     def change_project_status(self, **kw):
 
-        expected_token = 'gTRk73b95h6VuFQ'
+        expected_token = 'DLV86wKWGSjpsdhn'
         provided_token = request.httprequest.headers.get('Authorization')
 
         if not provided_token:

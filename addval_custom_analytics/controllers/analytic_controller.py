@@ -36,7 +36,7 @@ class AnalyticApi(http.Controller):
             analytic_project.status = kw.get("status")
             analytic_project.active = False
 
-            return 'El proyecto a sido cambiado archivado'
+            return 'El proyecto a sido archivado'
         else:
             analytic_project.status = kw.get("status")
             return 'El proyecto a sido cambiado al estado: '+analytic_project.status

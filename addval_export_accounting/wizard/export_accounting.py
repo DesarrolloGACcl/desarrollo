@@ -58,7 +58,7 @@ class ExportAccounting(models.TransientModel):
         worksheet = workbook.add_worksheet()
 
         # Add Excel file headers (based on your needs)
-        headers = ['Fecha', 'Tipo', 'Documento', 'Código Proyecto','Proyecto', 'Código Área', 'Área', 
+        headers = ['Fecha', 'Tipo', 'Documento', 'Empresa','RUT','Código Proyecto','Proyecto', 'Código Área', 'Área', 
                    'Código Actividad', 'Actividad', 'Código Tarea', 'Tarea', 
                    'Detalle (Etiqueta)', 'Debe', 'Haber', 'Código Cuenta Contable', 'Nombre Cuenta',
                    'Raíz de cuenta', 'Saldo']
@@ -88,6 +88,8 @@ class ExportAccounting(models.TransientModel):
             
             worksheet.write(row, 1, tipo)
             worksheet.write(row, 2, line.move_id.name)
+            worksheet.write(row, 3, line.partner_id.name)
+            worksheet.write(row, 4, line.partner_id.vat)
 
             if line.analytic_distribution:
                 distributions = line.analytic_distribution
@@ -98,14 +100,14 @@ class ExportAccounting(models.TransientModel):
                     # Fetch the analytic account name using the ID
                     analytic_account = self.env['account.analytic.account'].browse(int(account_id))
                     if analytic_account:
-                        formatted_project_analytic_info += f"{analytic_account.name}: {percentage}% "
-                        project_codes += f"{analytic_account.code}"
+                        formatted_project_analytic_info += f"{analytic_account.name}: {percentage}%; "
+                        project_codes += f"{analytic_account.code};"
             else:
                 formatted_project_analytic_info = 'No se especificó'
                 project_codes = 'No se especificó'
 
-            worksheet.write(row, 3, project_codes)
-            worksheet.write(row, 4, formatted_project_analytic_info)
+            worksheet.write(row, 5, project_codes)
+            worksheet.write(row, 6, formatted_project_analytic_info)
 
             if line.analytic_distribution_area:
                 distributions = line.analytic_distribution_area
@@ -116,14 +118,14 @@ class ExportAccounting(models.TransientModel):
                     # Fetch the analytic account name using the ID
                     analytic_account = self.env['account.analytic.account'].browse(int(account_id))                    
                     if analytic_account:
-                        formatted_area_analytic_info += f"{analytic_account.name}: {percentage}% "
-                        area_codes += f"{analytic_account.code}"
+                        formatted_area_analytic_info += f"{analytic_account.name}: {percentage}%; "
+                        area_codes += f"{analytic_account.code};"
             else:
                 formatted_area_analytic_info = 'No se especificó'
                 area_codes = 'No se especificó'
 
-            worksheet.write(row, 5, area_codes)
-            worksheet.write(row, 6, formatted_area_analytic_info)
+            worksheet.write(row, 7, area_codes)
+            worksheet.write(row, 8, formatted_area_analytic_info)
 
             if line.analytic_distribution_activity:
                 distributions = line.analytic_distribution_activity
@@ -134,14 +136,14 @@ class ExportAccounting(models.TransientModel):
                     # Fetch the analytic account name using the ID
                     analytic_account = self.env['account.analytic.account'].browse(int(account_id))                    
                     if analytic_account:
-                        formatted_activity_analytic_info += f"{analytic_account.name}: {percentage}%"
-                        activity_codes += f"{analytic_account.code}"
+                        formatted_activity_analytic_info += f"{analytic_account.name}: {percentage}%; "
+                        activity_codes += f"{analytic_account.code};"
             else:
                 formatted_activity_analytic_info = 'No se especificó'
                 activity_codes = 'No se especificó'
 
-            worksheet.write(row, 7, activity_codes)
-            worksheet.write(row, 8, formatted_activity_analytic_info)
+            worksheet.write(row, 9, activity_codes)
+            worksheet.write(row, 10, formatted_activity_analytic_info)
 
             if line.analytic_distribution_task:
                 distributions = line.analytic_distribution_task
@@ -152,23 +154,23 @@ class ExportAccounting(models.TransientModel):
                     # Fetch the analytic account name using the ID
                     analytic_account = self.env['account.analytic.account'].browse(int(account_id))                    
                     if analytic_account:
-                        formatted_task_analytic_info += f"{analytic_account.name}: {percentage}% "
-                        task_codes += f"{analytic_account.code}"
+                        formatted_task_analytic_info += f"{analytic_account.name}: {percentage}%; "
+                        task_codes += f"{analytic_account.code};"
             else:
                 formatted_task_analytic_info = 'No se especificó'
                 task_codes = 'No se especificó'
 
-            worksheet.write(row, 9, task_codes)
-            worksheet.write(row, 10, formatted_task_analytic_info)
+            worksheet.write(row, 11, task_codes)
+            worksheet.write(row, 12, formatted_task_analytic_info)
 
-            worksheet.write(row, 11, line.name)
-            worksheet.write(row, 12, line.debit)
-            worksheet.write(row, 13, line.credit)
-            worksheet.write(row, 14, line.account_id.code)
-            worksheet.write(row, 15, line.account_id.name)
-            worksheet.write(row, 16, line.account_root_id.name)
+            worksheet.write(row, 13, line.name)
+            worksheet.write(row, 14, line.debit)
+            worksheet.write(row, 15, line.credit)
+            worksheet.write(row, 16, line.account_id.code)
+            worksheet.write(row, 17, line.account_id.name)
+            worksheet.write(row, 18, line.account_root_id.name)
 
-            worksheet.write(row, 17, line.balance)
+            worksheet.write(row, 19, line.balance)
 
             row += 1
 

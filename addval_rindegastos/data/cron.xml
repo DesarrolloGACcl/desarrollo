@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="cron_auto_create_expenses" model="ir.cron">
+            <field name="name">Creación gastos desde RindeGastos</field>
+            <field name="model_id" ref="hr_expense.model_hr_expense"/>
+            <field name="state">code</field>
+            <field name="code">model.create_expense_from_rindegastos()</field>
+            <field name="interval_number">2</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+        </record>
+    </data>
+</odoo>

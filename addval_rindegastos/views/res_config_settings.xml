@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="res_config_settings_rindegastos" model="ir.ui.view">
+        <field name="name">res.config.settings.rindegastos</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="hr_expense.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//div[@class='app_settings_block']" position="inside">
+                <h2>Configuración RindeGastos</h2>
+                <div class="row mt16 o_settings_container">
+                    <div class="col-12 col-lg-6 o_setting_box">
+                        <div class="o_setting_left_pane"/>
+                        <div class="o_setting_right_pane">
+                            <span class="o_form_label">Cuenta de gastos</span>
+                            <span class="fa fa-lg fa-building-o" title="Values set here are company-specific." role="img" aria-label="Values set here are company-specific." groups="base.group_multi_company"/>
+                            <div class="row mt8">
+                                <field name="expense_account_id"/>
+                            </div>
+
+                            <span class="o_form_label">Cuenta de proveedor</span>
+                            <span class="fa fa-lg fa-building-o" title="Values set here are company-specific." role="img" aria-label="Values set here are company-specific." groups="base.group_multi_company"/>
+                            <div class="row mt8">
+                                <field name="account_vendor_id"/>
+                            </div>
+
+                            <span class="o_form_label">Diario de gastos</span>
+                            <span class="fa fa-lg fa-building-o" title="Values set here are company-specific." role="img" aria-label="Values set here are company-specific." groups="base.group_multi_company"/>
+                            <div class="row mt8">
+                                <field name="journal_id"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-6 o_setting_box">
+                        <div class="o_setting_left_pane"/>
+                        <div class="o_setting_right_pane">
+                            <span class="o_form_label">Token RindeGastos</span>
+                            <span class="fa fa-lg fa-building-o" title="Values set here are company-specific." role="img" aria-label="Values set here are company-specific." groups="base.group_multi_company"/>
+                            <div class="row mt8">
+                                <field name="rindegastos_token" password="True"/>
+                            </div>
+
+                            <span class="o_form_label">Dias actualizar</span>
+                            <span class="fa fa-lg fa-building-o" title="Values set here are company-specific." role="img" aria-label="Values set here are company-specific." groups="base.group_multi_company"/>
+                            <div class="text-muted">
+                                La cantidad de días hacia atrás que buscará gastos 
+                            </div>
+                            <div class="row mt8">
+                                <field name="days_update"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

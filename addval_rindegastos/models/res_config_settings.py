@@ -5,7 +5,7 @@ class ResConfigSettings(models.TransientModel):
     _inherit = "res.config.settings"
 
     rindegastos_expense_account_id = fields.Many2one(
-        'account.account',
+        comodel_name='account.account',
         related='company_id.rindegastos_expense_account_id',
         string = 'Cuenta de gastos',
         store = True,
@@ -13,7 +13,7 @@ class ResConfigSettings(models.TransientModel):
     )
 
     rindegastos_account_vendor_id = fields.Many2one(
-        'account.account',
+        comodel_name='account.account',
         related='company_id.rindegastos_account_vendor_id',
         string = 'Cuenta proveedor',
         store = True,
@@ -35,7 +35,7 @@ class ResConfigSettings(models.TransientModel):
     )
 
     rindegastos_journal_id = fields.Many2one(
-        'account.journal',
+        comodel_name='account.journal',
         related='company_id.rindegastos_journal_id',
         string = 'Diario RindeGastos',
         store = True,

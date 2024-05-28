@@ -4,14 +4,14 @@ class ResCompany(models.Model):
     _name = "res.company"
 
     rindegastos_expense_account_id = fields.Many2one(
-        'account.account',
+        comodel_name='account.account',
         string = 'Cuenta de gastos',
         store = True,
         readonly=False,
     )
 
     rindegastos_account_vendor_id = fields.Many2one(
-        'account.account',
+        comodel_name='account.account',
         string = 'Cuenta proveedor',
         store = True,
         readonly=False
@@ -30,7 +30,7 @@ class ResCompany(models.Model):
     )
 
     rindegastos_journal_id = fields.Many2one(
-        'account.journal',
+        comodel_name='account.journal',
         string = 'Diario RindeGastos',
         store = True,
         readonly=False

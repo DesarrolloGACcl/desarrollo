@@ -15,7 +15,7 @@
     "license": "Other proprietary",
     'version': '0.1',
 
-    'depends': ['base','account','hr_expense'],
+    'depends': ['base','hr_expense'],
 
     'data': [
         'data/cron.xml',

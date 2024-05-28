@@ -1,7 +1,7 @@
 from odoo import models, fields
 
 class ResCompany(models.Model):
-    _name = "res.company"
+    _inherit = "res.company"
 
     rindegastos_expense_account_id = fields.Many2one(
         comodel_name='account.account',

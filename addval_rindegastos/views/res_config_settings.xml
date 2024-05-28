@@ -14,19 +14,19 @@
                             <span class="o_form_label">Cuenta de gastos</span>
                             <span class="fa fa-lg fa-building-o" title="Values set here are company-specific." role="img" aria-label="Values set here are company-specific." groups="base.group_multi_company"/>
                             <div class="row mt8">
-                                <field name="expense_account_id"/>
+                                <field name="rindegastos_expense_account_id"/>
                             </div>
 
                             <span class="o_form_label">Cuenta de proveedor</span>
                             <span class="fa fa-lg fa-building-o" title="Values set here are company-specific." role="img" aria-label="Values set here are company-specific." groups="base.group_multi_company"/>
                             <div class="row mt8">
-                                <field name="account_vendor_id"/>
+                                <field name="rindegastos_account_vendor_id"/>
                             </div>
 
                             <span class="o_form_label">Diario de gastos</span>
                             <span class="fa fa-lg fa-building-o" title="Values set here are company-specific." role="img" aria-label="Values set here are company-specific." groups="base.group_multi_company"/>
                             <div class="row mt8">
-                                <field name="journal_id"/>
+                                <field name="rindegastos_journal_id"/>
                             </div>
                         </div>
                     </div>
@@ -45,7 +45,7 @@
                                 La cantidad de días hacia atrás que buscará gastos 
                             </div>
                             <div class="row mt8">
-                                <field name="days_update"/>
+                                <field name="rindegastos_days_update"/>
                             </div>
                         </div>
                     </div>

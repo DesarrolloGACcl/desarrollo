@@ -1,9 +1,13 @@
+# -*- coding: utf-8 -*-
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 import logging
+
 import collections
+
 import urllib3
+
 from zeep import Client
 from zeep.transports import Transport
-from markupsafe import Markup
 
 from odoo import _, models
 from odoo.tools import xml_utils
@@ -31,7 +35,7 @@ class L10nClEdiUtilMixin(models.AbstractModel):
         tag = tag_to_replace.get(xml_type)
         if tag is None:
             return super()._l10n_cl_append_sig(xml_type, sign, message)
-        return Markup(str(message).replace(tag, '%s%s' % (sign, tag)))
+        return message.replace(tag, '%s%s' % (sign, tag))
 
     def _xml_validator(self, xml_to_validate, validation_type, is_doc_type_voucher=False):
         validation_types = {

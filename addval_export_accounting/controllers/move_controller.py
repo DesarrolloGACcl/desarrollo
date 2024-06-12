@@ -15,14 +15,14 @@ class MoveApi(http.Controller):
     @http.route('/api/aml/<int:mes>/<string:anio>', type='http', auth='public', methods=['GET'])
     def send_aml_info(self, mes, anio):
 
-        expected_token = 'gTRk73b95h6VuFQq'
-        provided_token = request.httprequest.headers.get('Authorization')
+        # expected_token = 'gTRk73b95h6VuFQq'
+        # provided_token = request.httprequest.headers.get('Authorization')
 
-        if not provided_token:
-            return Response(json.dumps({"error": "Falta token"}), status=401, content_type='application/json')
+        # if not provided_token:
+        #     return Response(json.dumps({"error": "Falta token"}), status=401, content_type='application/json')
 
-        if provided_token != expected_token:
-            return Response(json.dumps({"error": "Unauthorized"}), status=401, content_type='application/json')
+        # if provided_token != expected_token:
+        #     return Response(json.dumps({"error": "Unauthorized"}), status=401, content_type='application/json')
 
         if mes == 1 or mes == 3 or mes == 5 or mes == 7 or mes == 8 or mes == 10 or mes == 12: 
             domain = [

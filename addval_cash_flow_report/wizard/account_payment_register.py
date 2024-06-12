@@ -15,10 +15,12 @@ class AccountPaymentRegister(models.TransientModel):
     secondary_account_id = fields.Many2one('secondary.account', string="Subcuenta", compute="compute_secondary_account_id", precompute=True)
 
     def _compute_principal_account_id(self):
-        self.principal_account_id = self.partner_id.principal_account_id
+        for apr in self:
+            apr.principal_account_id = apr.partner_id.principal_account_id
 
     def _compute_secondary_account_id(self):
-        self.secondary_account_id = self.partner_id.secondary_account_id
+        for apr in self:
+            apr.secondary_account_id = apr.partner_id.secondary_account_id
 
     def _post_payments(self, to_process, edit_mode=False):
         _logger.warning('ENTRO A LA FUNCION POST PAYMENT HEREDADA')

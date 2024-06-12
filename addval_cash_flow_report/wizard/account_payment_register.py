@@ -11,8 +11,8 @@ _logger = logging.getLogger(__name__)
 class AccountPaymentRegister(models.TransientModel):
     _inherit= 'account.payment.register'
 
-    principal_account_id = fields.Many2one('principal.account', string="Cuenta principal", related="partner_id.principal_account_id") #compute="_compute_principal_account_id"
-    secondary_account_id = fields.Many2one('secondary.account', string="Subcuenta", related="partner_id.secondary_account_id") #compute="compute_secondary_account_id"
+    principal_account_id = fields.Many2one('principal.account', string="Cuenta principal", compute="_compute_principal_account_id", precompute=True)
+    secondary_account_id = fields.Many2one('secondary.account', string="Subcuenta", compute="compute_secondary_account_id", precompute=True)
 
     def _compute_principal_account_id(self):
         self.principal_account_id = self.partner_id.principal_account_id

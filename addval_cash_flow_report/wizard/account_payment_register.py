@@ -11,8 +11,14 @@ _logger = logging.getLogger(__name__)
 class AccountPaymentRegister(models.TransientModel):
     _inherit= 'account.payment.register'
 
-    principal_account_id = fields.Many2one('principal.account', string="Cuenta principal", default="partner_id.principal_account_id")
-    secondary_account_id = fields.Many2one('secondary.account', string="Subcuenta", default="partner_id.secondary_account_id")
+    principal_account_id = fields.Many2one('principal.account', string="Cuenta principal", related="partner_id.principal_account_id") #compute="_compute_principal_account_id"
+    secondary_account_id = fields.Many2one('secondary.account', string="Subcuenta", related="partner_id.secondary_account_id") #compute="compute_secondary_account_id"
+
+    def _compute_principal_account_id(self):
+        self.principal_account_id = self.partner_id.principal_account_id
+
+    def _compute_secondary_account_id(self):
+        self.secondary_account_id = self.partner_id.secondary_account_id
 
     def _post_payments(self, to_process, edit_mode=False):
         _logger.warning('ENTRO A LA FUNCION POST PAYMENT HEREDADA')

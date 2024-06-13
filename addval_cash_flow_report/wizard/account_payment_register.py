@@ -11,25 +11,26 @@ _logger = logging.getLogger(__name__)
 class AccountPaymentRegister(models.TransientModel):
     _inherit= 'account.payment.register'
 
-    principal_account_id = fields.Many2one('principal.account', string="Cuenta principal", default=lambda self: self._get_default_principal_account())
-    secondary_account_id = fields.Many2one('secondary.account', string="Subcuenta", default=lambda self: self._get_default_secondary_account())
+    principal_account_id = fields.Many2one(
+        comodel_name='principal.account',
+        compute='_compute_principal_account_id',
+        store=True, readonly=False, precompute=True,
+        string="Cuenta principal")
+    secondary_account_id = fields.Many2one(
+        comodel_name='secondary.account',
+        compute='_compute_secondary_account_id',
+        store=True, readonly=False, precompute=True,
+        string="Subcuenta")
 
-    @api.model
-    def _get_default_principal_account(self):
-        _logger.warning('Entro a la funcion cuenta principal')
-        _logger.warning('Partner del account payment register: %s', self.partner_id)
-        partner = self.env['res.partner'].search([('id', '=', self.partner_id.id)])
-        _logger.warning('Partner encontrado: %s', partner)
-        _logger.warning('Cuenta: %s', partner.principal_account_id.id)
-        return partner.principal_account_id.id
+    @api.depends('can_edit_wizard')
+    def _compute_principal_account_id(self):
+        for wizard in self:
+            wizard.principal_account_id = wizard.partner_id.principal_account_id
     
-    @api.model
-    def _get_default_secondary_account(self):
-        _logger.warning('Entro a la funcion cuenta secundaria')        
-        partner = self.env['res.partner'].search([('id', '=', self.partner_id.id)])
-        _logger.warning('Partner encontrado: %s', partner)
-        _logger.warning('Cuenta: %s', partner.secondary_account_id.id)
-        return partner.secondary_account_id.id
+    @api.depends('can_edit_wizard')
+    def _compute_secondary_account_id(self):
+        for wizard in self:
+            wizard.secondary_account_id = wizard.partner_id.secondary_account_id
 
     def _post_payments(self, to_process, edit_mode=False):
         _logger.warning('ENTRO A LA FUNCION POST PAYMENT HEREDADA')

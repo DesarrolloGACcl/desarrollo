@@ -17,8 +17,9 @@ class AccountPaymentRegister(models.TransientModel):
     @api.model
     def _get_default_principal_account(self):
         _logger.warning('Entro a la funcion cuenta principal')
+        _logger.warning('Partner del account payment register: %s', self.partner_id)
         partner = self.env['res.partner'].search([('id', '=', self.partner_id.id)])
-        _logger.warning('Partner: %s', partner)
+        _logger.warning('Partner encontrado: %s', partner)
         _logger.warning('Cuenta: %s', partner.principal_account_id.id)
         return partner.principal_account_id.id
     
@@ -26,7 +27,7 @@ class AccountPaymentRegister(models.TransientModel):
     def _get_default_secondary_account(self):
         _logger.warning('Entro a la funcion cuenta secundaria')        
         partner = self.env['res.partner'].search([('id', '=', self.partner_id.id)])
-        _logger.warning('Partner: %s', partner)
+        _logger.warning('Partner encontrado: %s', partner)
         _logger.warning('Cuenta: %s', partner.secondary_account_id.id)
         return partner.secondary_account_id.id
 

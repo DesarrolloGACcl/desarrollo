@@ -20,7 +20,7 @@ class AccountPaymentRegister(models.TransientModel):
         return self.env['res.partner'].browse(self.partner_id.id).secondary_account_id.id
 
     principal_account_id = fields.Many2one('principal.account', string="Cuenta principal", default=_get_default_principal_account)
-    secondary_account_id = fields.Many2one('secondary.account', string="Subcuenta", default=_get_default_secondary_account())
+    secondary_account_id = fields.Many2one('secondary.account', string="Subcuenta", default=_get_default_secondary_account)
 
 
     def _post_payments(self, to_process, edit_mode=False):

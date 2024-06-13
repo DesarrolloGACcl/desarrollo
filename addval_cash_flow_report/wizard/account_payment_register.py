@@ -13,11 +13,13 @@ class AccountPaymentRegister(models.TransientModel):
 
     @api.model
     def _get_default_principal_account(self):
-        return self.env['res.partner'].browse(self.partner_id.id).principal_account_id.id
+        partner = self.env['res.partner'].search([('id', '=', self.partner_id.id)])
+        return partner.principal_account_id
     
     @api.model
     def _get_default_secondary_account(self):
-        return self.env['res.partner'].browse(self.partner_id.id).secondary_account_id.id
+        partner = self.env['res.partner'].search([('id', '=', self.partner_id.id)])
+        return partner.secondary_account_id
 
     principal_account_id = fields.Many2one('principal.account', string="Cuenta principal", default=_get_default_principal_account)
     secondary_account_id = fields.Many2one('secondary.account', string="Subcuenta", default=_get_default_secondary_account)

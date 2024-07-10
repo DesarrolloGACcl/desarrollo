@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="expense_rindegastos" model="ir.ui.view">
-        <field name='name'>expense.rindegastos</field>
-        <field name='model'>hr.expense</field>
-        <field name="inherit_id" ref="hr_expense.hr_expense_view_form"/>
+    <record id="rindegastos_fields" model="ir.ui.view">
+        <field name='name'>rindegastos.fields</field>
+        <field name='model'>account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_form"/>
         <field name='type'>form</field>
         <field name='arch' type='xml'>
-            <xpath expr="//field[@name='analytic_distribution']" position="after">
+            <xpath expr="//field[@name='journarl_id']" position="after">
                 <field name="rindegastos_expense_id"/>
+            </xpath>
+            <xpath expr="//field[@name='state']" position="before">
+                <field name="status" widget="statusbar" statusbar_visible="approved,paid" attrs="{'invisible': [('rindegastos_expense_id', '=', False)]}"/>
             </xpath>
         </field>
     </record>

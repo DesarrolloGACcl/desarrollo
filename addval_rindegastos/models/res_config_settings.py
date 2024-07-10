@@ -20,7 +20,7 @@ class ResConfigSettings(models.TransientModel):
         readonly=False
     )
 
-    rindegastos_token = fields.Text(
+    rindegastos_token = fields.Char(
         related='company_id.rindegastos_token',
         string = 'Token RindeGastos',
         store = True,

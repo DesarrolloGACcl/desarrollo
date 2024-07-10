@@ -17,7 +17,7 @@ class ResCompany(models.Model):
         readonly=False
     )
 
-    rindegastos_token = fields.Text(
+    rindegastos_token = fields.Char(
         string = 'Token RindeGastos',
         store = True,
         readonly=False

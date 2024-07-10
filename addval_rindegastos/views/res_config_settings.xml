@@ -17,11 +17,11 @@
                                 <field name="rindegastos_expense_account_id"/>
                             </div>
 
-                            <span class="o_form_label">Cuenta de proveedor</span>
+                            <!-- <span class="o_form_label">Cuenta de proveedor</span>
                             <span class="fa fa-lg fa-building-o" title="Values set here are company-specific." role="img" aria-label="Values set here are company-specific." groups="base.group_multi_company"/>
                             <div class="row mt8">
                                 <field name="rindegastos_account_vendor_id"/>
-                            </div>
+                            </div> -->
 
                             <span class="o_form_label">Diario de gastos</span>
                             <span class="fa fa-lg fa-building-o" title="Values set here are company-specific." role="img" aria-label="Values set here are company-specific." groups="base.group_multi_company"/>

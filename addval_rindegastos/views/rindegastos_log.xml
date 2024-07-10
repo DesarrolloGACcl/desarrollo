@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="rindegastos_log_tree" model="ir.ui.view">
+            <field name="name">rindegastos.log.tree</field>
+            <field name="model">rindegastos.log</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name" string=""/>
+                    <field name="expense_user_name" string="Usuario rendidor"/>
+                    <field name="expense_date" string="Fecha"/>
+                    <field name="expense_partner" string="Proveedor"/>
+                    <field name="expense_total" string="Total"/>
+                    <field name="state" string="Estado"/>
+                    <field name="company_id" string="Compañía"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="rindegastos_log_form" model="ir.ui.view">
+            <field name="name">rindegastos.log.form</field>
+            <field name="model">rindegastos.log</field>
+            <field name="arch" type="xml">
+                <form string="LOG DE RINDEGASTOS">
+                    <header>
+                        <button name="create_payment_from_log" type="object" data-hotkey="shift+g"
+                                string="Procesar manualmente" class="oe_highlight"
+                                attrs="{'invisible': [('state', 'in', ('done','not_done'))]}"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,done,not_done"/>
+                    </header>
+                    <sheet>     
+                        <h1><field name="name" string=""/></h1>                   
+                        <group>
+                            <group>
+                                <field name="partner_id" string="Usuario rendidor"/>
+                                <field name="expense_user_id" string="ID Usuario rendidor"/>
+                                <field name="expense_user_name" string="Nombre usuario rendidor"/>
+                                <field name="expense_status" string="Estado del gasto"/>
+                                <field name="expense_partner" string="Nombre Proveedor"/>
+                                <field name="expense_date" string="Fecha del gasto"/>
+                                <field name="expense_original_amount" string="Monto original del gasto"/>
+                                <field name="expense_retention_name" string="Retención"/>
+                                <field name="expense_retention_amount" string="Monto retención"/>
+                                <field name="expense_total" string="Total Gasto"/>
+                            </group>
+                            <group>                
+                                <field name="expense_id" string="ID Gasto en Rindegastos"/>            
+                                <field name="expense_currency" string="Moneda del gasto"/>
+                                <field name="expense_is_reimbursable" string="¿Es Reembolsable?"/>
+                                <field name="expense_category" string="Categoría"/>
+                                <field name="expense_category_code" string="Código categoría"/>
+                                <field name="expense_category_group" string="Grupo categoría"/>
+                                <field name="expense_category_group_code" string="Código Grupo categoría"/>
+                                <field name="expense_note" string="Nota"/>
+                                <field name="expense_area" string="Código Área"/>
+                                <field name="expense_project" string="Código Proyecto"/>
+                                <field name="company_id" string="Compañía"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_ids" widget="mail_thread"/>
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="rindegastos_log_act_window" model="ir.actions.act_window">
+            <field name="name">Logs de Rindegastos</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rindegastos.log</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}</field>
+            <field name="view_id" eval="False"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No hay registros creados
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="rindegastos_log_account_menu" name="Logs de Gastos" action="rindegastos_log_act_window"
+            parent="account.root_payment_menu" sequence="50"/>
+
+        <record id="action_create_payment" model="ir.actions.server">
+            <field name="name">Procesar Log</field>
+            <field name="model_id" ref="addval_rindegastos.model_rindegastos_log"/>
+            <field name="state">code</field>
+            <field name="code">
+                for record in records:
+                    record.create_payment_from_log()
+            </field>
+        </record>
+    </data>
+</odoo>

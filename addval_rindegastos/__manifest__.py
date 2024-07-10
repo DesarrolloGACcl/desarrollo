@@ -19,9 +19,10 @@
 
     'data': [
         'data/cron.xml',
+        'views/rindegastos_log.xml'
         'views/res_config_settings.xml',
-        'views/hr_expense.xml',
-        #'security/ir.model.access.csv',
+        'views/account_payment.xml',
+        'security/ir.model.access.csv',
     ],
     'installable': True,
     'application': True,

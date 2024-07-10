@@ -1,1 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+
+access_rindegastos_log,access_rindegastos_log,model_rindegastos_log,,1,1,1,1

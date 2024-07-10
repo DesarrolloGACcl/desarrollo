@@ -2,10 +2,21 @@
 <odoo>
     <data>
         <record id="cron_auto_create_expenses" model="ir.cron">
-            <field name="name">Creación gastos desde RindeGastos</field>
-            <field name="model_id" ref="hr_expense.model_hr_expense"/>
+            <field name="name">Creación logs desde RindeGastos</field>
+            <field name="model_id" ref="addval_rindegastos.model_rindegastos_log"/>
             <field name="state">code</field>
-            <field name="code">model.create_expense_from_rindegastos()</field>
+            <field name="code">model.create_log_from_rindegastos()</field>
+            <field name="interval_number">2</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+        </record>
+
+        <record id="cron_auto_create_expenses" model="ir.cron">
+            <field name="name">Creación pagos desde logs</field>
+            <field name="model_id" ref="addval_rindegastos.model_rindegastos_log"/>
+            <field name="state">code</field>
+            <field name="code">model.create_payment_from_log_cron()</field>
             <field name="interval_number">2</field>
             <field name="interval_type">days</field>
             <field name="numbercall">-1</field>

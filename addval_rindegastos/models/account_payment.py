@@ -23,4 +23,4 @@ class AccountPayment(models.Model):
         string="Estado",
         readonly=True, copy=False, index=True,
         tracking=3,
-        default='draft')
+        default=None)

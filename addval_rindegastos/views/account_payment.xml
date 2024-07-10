@@ -10,7 +10,7 @@
                 <field name="rindegastos_expense_id"/>
             </xpath>
             <xpath expr="//field[@name='state']" position="before">
-                <field name="status" widget="statusbar" statusbar_visible="approved,paid" attrs="{'invisible': [('rindegastos_expense_id', '=', False)]}"/>
+                <field name="rindegastos_state" widget="statusbar" statusbar_visible="approved,paid" attrs="{'invisible': [('rindegastos_expense_id', '=', False)]}"/>
             </xpath>
         </field>
     </record>

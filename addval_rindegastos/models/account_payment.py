@@ -15,7 +15,7 @@ class AccountPayment(models.Model):
         readonly=False
     )
 
-    state = fields.Selection(
+    rindegastos_state = fields.Selection(
         selection=[
             ('approved', "Aprobado"),
             ('paid', "Pagado"),

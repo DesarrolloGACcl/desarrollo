@@ -1,6 +1,7 @@
 from odoo import models, fields, _, http
 from odoo.http import request
-from datetime import datetime, timedelta
+import datetime
+from datetime import timedelta
 from odoo.exceptions import AccessError, MissingError, ValidationError
 import requests
 import json

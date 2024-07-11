@@ -198,9 +198,11 @@ class RindegastosLog(models.Model):
 
             response = requests.request('GET', url, headers=headers)
 
+            expenses_data = response.json()
+
             _logger.warning('response: %s', response.content)
-            _logger.warning('response: %s', response.content[0])
-            _logger.warning('response: %s', response.content[0]['Expenses'])
+            _logger.warning('expenses_data: %s', expenses_data)
+            _logger.warning('response: %s', expenses_data['Expenses'])
             _logger.warning('response: %s', response.content['Expenses'])
 
             for r in response.content['Expenses']:

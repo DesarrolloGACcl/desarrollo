@@ -272,8 +272,8 @@ class RindegastosLog(models.Model):
                 'journal_id': log.company_id.rindegastos_journal_id.id,
                 'date': log.expense_date,
                 'partner_id': log.partner_id.id,
-                'partner_type': 'customer',
-                'payment_type': 'inbound',
+                'partner_type': 'supplier',
+                'payment_type': 'outbound',
                 'company_id': log.company_id.id,
                 'ref': 'Gasto de '+ log.expense_user_name + ': '+ log.expense_note,
                 'rindegastos_state': 'approved'
@@ -291,8 +291,8 @@ class RindegastosLog(models.Model):
             'journal_id': self.company_id.rindegastos_journal_id.id,
             'date': self.expense_date,
             'partner_id': self.partner_id.id,
-            'partner_type': 'customer',
-            'payment_type': 'inbound',
+            'partner_type': 'supplier',
+            'payment_type': 'outbound',
             'company_id': self.company_id.id,
             'ref': 'Gasto de '+ self.expense_user_name + ': '+ self.expense_note,
             'rindegastos_state': 'approved'

@@ -207,7 +207,7 @@ class RindegastosLog(models.Model):
             #_logger.warning('response: %s', response.content['Expenses'])
 
             for r in expenses_data['Expenses']:
-                _logger.warinng('RESPONSE: %s', r)
+                _logger.warning('RESPONSE: %s', r)
 
                 #Se busca si ya existe el log por id del gasto en rindegastos
                 existing_expense = self.env['rindegastos.log'].sudo().search([('expense_id', '=', r['Id']), ('company_id', '=', company.id)], limit=1)

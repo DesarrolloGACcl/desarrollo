@@ -186,6 +186,10 @@ class RindegastosLog(models.Model):
 
             str_since = since.strftime("%Y-%m-%d")
 
+            _logger.warning('str_since: %s', str_since)
+
+            _logger.warning('str_now: %s', str_now)
+
             url = 'https://api.rindegastos.com/v1/getExpenses?Since='+str_since+'&Until='+str_now+'&ResultsPerPage=100&Status=1'
     
             headers = {
@@ -194,9 +198,9 @@ class RindegastosLog(models.Model):
 
             response = requests.request('GET', url, headers=headers)
 
-            _logger.warning('response: %s', response.content)
+            _logger.warning('response: %s', response.content['Expenses'])
 
-            for r in response['Expenses']:
+            for r in response.content['Expenses']:
                 _logger.warinng('RESPONSE: %s', r)
 
                 #Se busca si ya existe el log por id del gasto en rindegastos

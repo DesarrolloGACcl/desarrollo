@@ -251,9 +251,11 @@ class RindegastosLog(models.Model):
 
                     user_response = requests.request('GET', user_url, headers=headers)
 
-                    rinde_log.expense_user_name = user_response['FirstName']+' '+user_response['LastName']
+                    user_data = user_response.json()
 
-                    partner = self.env['res.partner'].sudo().search([('vat', '=', user_response['Identification'])], limit=1)
+                    rinde_log.expense_user_name = user_data['FirstName']+' '+user_data['LastName']
+
+                    partner = self.env['res.partner'].sudo().search([('vat', '=', user_data['Identification'])], limit=1)
 
                     if partner:
                         rinde_log.partner_id = partner.id                    

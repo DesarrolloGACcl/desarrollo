@@ -178,11 +178,15 @@ class RindegastosLog(models.Model):
 
         now = datetime.now()
 
+        str_now = now.strftime("%Y-%m-%d")
+
         for company in companies:
 
             since = now - timedelta(days=company.rindegastos_days_update)
 
-            url = 'https://api.rindegastos.com/v1/getExpenses?Since='+since+'&Until='+now+'&ResultsPerPage=100&Status=1'
+            str_since = since.strftime("%Y-%m-%d")
+
+            url = 'https://api.rindegastos.com/v1/getExpenses?Since='+str_since+'&Until='+str_now+'&ResultsPerPage=100&Status=1'
     
             headers = {
                 'Authorization': 'Bearer '+company.rindegastos_token

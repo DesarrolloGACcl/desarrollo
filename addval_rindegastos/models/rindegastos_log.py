@@ -247,7 +247,7 @@ class RindegastosLog(models.Model):
                         if e['Name'] == 'Proyecto':
                             rinde_log.expense_project = e['Code']
 
-                    user_url = 'https://api.rindegastos.com/v1/getUser?Id='+r['UserId']
+                    user_url = 'https://api.rindegastos.com/v1/getUser?Id='+str(r['UserId'])
 
                     user_response = requests.request('GET', user_url, headers=headers)
 

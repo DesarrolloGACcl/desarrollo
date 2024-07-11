@@ -276,7 +276,7 @@ class RindegastosLog(models.Model):
                 'payment_type': 'inbound',
                 'company_id': log.company_id.id,
                 'ref': 'Gasto de '+ log.expense_user_name + ': '+ log.expense_note,
-                'state': 'approved'
+                'rindegastos_state': 'approved'
             })
                     
 
@@ -293,5 +293,5 @@ class RindegastosLog(models.Model):
             'payment_type': 'inbound',
             'company_id': self.company_id.id,
             'ref': 'Gasto de '+ self.expense_user_name + ': '+ self.expense_note,
-            'state': 'approved'
+            'rindegastos_state': 'approved'
         })

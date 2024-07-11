@@ -194,7 +194,7 @@ class RindegastosLog(models.Model):
 
             response = requests.request('GET', url, headers=headers)
 
-            _logger.warning('response: %s', response)
+            _logger.warning('response: %s', response.content)
 
             for r in response['Expenses']:
                 _logger.warinng('RESPONSE: %s', r)

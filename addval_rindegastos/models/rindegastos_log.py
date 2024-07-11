@@ -218,7 +218,7 @@ class RindegastosLog(models.Model):
                 else:
                     #Se debe crear los gastos en base a la data recibida
                     rinde_log = self.env['rindegastos.log'].sudo().create({
-                        'name': 'Gasto: '+r['Id'],
+                        'name': 'Gasto: '+str(r['Id']),
                         'state': 'draft',
                         'company_id': company.id,
                         'expense_status': r['Status'],

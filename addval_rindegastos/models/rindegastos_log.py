@@ -221,7 +221,7 @@ class RindegastosLog(models.Model):
                         'name': 'Gasto: '+str(r['Id']),
                         'state': 'draft',
                         'company_id': company.id,
-                        'expense_status': r['Status'],
+                        'expense_status': str(r['Status']),
                         'expense_partner': r['Supplier'],
                         'expense_date': r['IssueDate'],
                         'expense_original_amount': r['OriginalAmount'],

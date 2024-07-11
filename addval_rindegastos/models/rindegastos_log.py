@@ -1,7 +1,6 @@
 from odoo import models, fields, _, http
 from odoo.http import request
-import datetime
-from datetime import timedelta
+from datetime import datetime, timedelta
 from odoo.exceptions import AccessError, MissingError, ValidationError
 import requests
 import json
@@ -177,7 +176,7 @@ class RindegastosLog(models.Model):
 
         _logger.warning('Compañias: %s', companies)
 
-        now = datetime.datetime.now()
+        now = datetime.now()
 
         for company in companies:
 

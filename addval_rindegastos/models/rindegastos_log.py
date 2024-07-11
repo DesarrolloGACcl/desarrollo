@@ -203,9 +203,10 @@ class RindegastosLog(models.Model):
             _logger.warning('response: %s', response.content)
             _logger.warning('expenses_data: %s', expenses_data)
             _logger.warning('response: %s', expenses_data['Expenses'])
-            _logger.warning('response: %s', response.content['Expenses'])
+            #log se usa para que arroje error (punto debug) 
+            #_logger.warning('response: %s', response.content['Expenses'])
 
-            for r in response.content['Expenses']:
+            for r in expenses_data['Expenses']:
                 _logger.warinng('RESPONSE: %s', r)
 
                 #Se busca si ya existe el log por id del gasto en rindegastos

@@ -278,6 +278,8 @@ class RindegastosLog(models.Model):
                 'ref': 'Gasto de '+ log.expense_user_name + ': '+ log.expense_note,
                 'rindegastos_state': 'approved'
             })
+
+            log.state = 'done'
                     
 
     def create_payment_from_log(self):
@@ -295,3 +297,5 @@ class RindegastosLog(models.Model):
             'ref': 'Gasto de '+ self.expense_user_name + ': '+ self.expense_note,
             'rindegastos_state': 'approved'
         })
+
+        self.state = 'done'

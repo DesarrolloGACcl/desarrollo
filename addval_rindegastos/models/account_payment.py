@@ -15,6 +15,13 @@ class AccountPayment(models.Model):
         readonly=False
     )
 
+    rindegastos_log_id = fields.Many2one(
+        'rindegastos.log',
+        string = 'Log de origen',
+        store = True,
+        readonly=False
+    )
+
     rindegastos_state = fields.Selection(
         selection=[
             ('approved', "Aprobado"),

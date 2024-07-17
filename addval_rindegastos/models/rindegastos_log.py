@@ -168,6 +168,8 @@ class RindegastosLog(models.Model):
     company_id = fields.Many2one('res.company', string="Compañía")
     partner_id = fields.Many2one('res.partner', string="Cliente")
 
+    payment_id = fields.Many2one('account.payment', string="Pago")
+
 
     def create_log_from_rindegastos(self):
 
@@ -214,7 +216,7 @@ class RindegastosLog(models.Model):
                 
                 #Si el id de rindegastos ya esta en esta compañia entonces no se debe crear
                 if existing_expense:
-                    raise ValidationError (_('No fue posible crear la orden de venta por error desconocido'))
+                    raise ValidationError (_('No fue posible crear la orden de venta por que el gasto ya esta registrado en Odoo'))
                 else:
                     #Se debe crear los gastos en base a la data recibida
                     rinde_log = self.env['rindegastos.log'].sudo().create({
@@ -276,11 +278,40 @@ class RindegastosLog(models.Model):
                 'payment_type': 'outbound',
                 'company_id': log.company_id.id,
                 'ref': 'Gasto de '+ log.expense_user_name + ': '+ log.expense_note,
-                'rindegastos_state': 'approved'
+                'rindegastos_state': 'approved',
+                'rindegastos_log_id' : log.id
             })
 
             log.state = 'done'
-                    
+            log.payment_id = payment.id
+
+            payment.move_id.line_ids[0].account_id = log.company_id.rindegastos_expense_account_id
+
+            for payment_aml in payment.move_id.line_ids:
+                payment_aml.name = 'Gasto de '+ log.expense_user_name + ': '+ log.expense_note
+
+            payment.action_post()
+
+            if log.expense_area:
+                area_distribution = {}
+                account = request.env['account.analytic.account'].sudo().search([('code', '=',log.expense_area)], limit=1)   
+                area_distribution.update({account.id : 100})
+            else:
+                area_distribution = None
+
+            if log.expense_project:
+                project_distribution = {}
+                account = request.env['account.analytic.account'].sudo().search([('code', '=',log.expense_project)], limit=1)   
+                project_distribution.update({account.id : 100})
+            else:
+                project_distribution = None
+
+            payment.move_id.line_ids[0].analytic_distribution = project_distribution
+            payment.move_id.line_ids[1].analytic_distribution = project_distribution
+            
+            payment.move_id.line_ids[0].analytic_distribution_area = area_distribution
+            payment.move_id.line_ids[1].analytic_distribution_area = area_distribution
+            
 
     def create_payment_from_log(self):
         payment_method = request.env['account.payment.method.line'].sudo().search([('journal_id', '=', self.company_id.rindegastos_journal_id.id), ('code', '=ilike', 'manual')], limit=1)
@@ -295,7 +326,36 @@ class RindegastosLog(models.Model):
             'payment_type': 'outbound',
             'company_id': self.company_id.id,
             'ref': 'Gasto de '+ self.expense_user_name + ': '+ self.expense_note,
-            'rindegastos_state': 'approved'
+            'rindegastos_state': 'approved',
+            'rindegastos_log_id': self.id
         })
 
         self.state = 'done'
+        self.payment_id = payment.id
+
+        payment.move_id.line_ids[0].account_id = self.company_id.rindegastos_expense_account_id
+
+        for payment_aml in payment.move_id.line_ids:
+            payment_aml.name = 'Gasto de '+ self.expense_user_name + ': '+ self.expense_note
+
+        payment.action_post()
+
+        if self.expense_area:
+            area_distribution = {}
+            account = request.env['account.analytic.account'].sudo().search([('code', '=',self.expense_area)], limit=1)   
+            area_distribution.update({account.id : 100})
+        else:
+            area_distribution = None
+
+        if self.expense_project:
+            project_distribution = {}
+            account = request.env['account.analytic.account'].sudo().search([('code', '=',self.expense_project)], limit=1)   
+            project_distribution.update({account.id : 100})
+        else:
+            project_distribution = None
+
+        payment.move_id.line_ids[0].analytic_distribution = project_distribution
+        payment.move_id.line_ids[1].analytic_distribution = project_distribution
+        
+        payment.move_id.line_ids[0].analytic_distribution_area = area_distribution
+        payment.move_id.line_ids[1].analytic_distribution_area = area_distribution

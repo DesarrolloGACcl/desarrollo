@@ -45,7 +45,8 @@
                                 <field name="expense_total" string="Total Gasto"/>
                             </group>
                             <group>                
-                                <field name="expense_id" string="ID Gasto en Rindegastos"/>            
+                                <field name="expense_id" string="ID Gasto en Rindegastos"/>
+                                <field name="payment_id" string="Pago"/>              
                                 <field name="expense_currency" string="Moneda del gasto"/>
                                 <field name="expense_is_reimbursable" string="¿Es Reembolsable?"/>
                                 <field name="expense_category" string="Categoría"/>

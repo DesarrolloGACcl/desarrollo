@@ -7,7 +7,7 @@
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='company_id']" position="before">
                     <header>
-                        <field name="status" widget="statusbar" statusbar_visible="in_process,invoicing,ended" attrs="{'invisible': [('plan_id', '!=', 1)]}"/>                
+                        <field name="status" widget="statusbar" statusbar_visible="in_process,invoicing,hibernation,ended" attrs="{'invisible': [('plan_id', '!=', 1)]}"/>                
                     </header>
                 </xpath>
             </field>

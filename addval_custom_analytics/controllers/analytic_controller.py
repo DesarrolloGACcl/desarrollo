@@ -37,7 +37,19 @@ class AnalyticApi(http.Controller):
         partner = request.env['res.partner'].sudo().search([('vat', '=', kw.get("partner_rut"))])
 
         if not partner:
-            partner_id = None
+
+            res_partner_categ = request.env["res.partner.category"].sudo().search([('name', '=ilike', 'Cliente' )],limit=1)
+            if not res_partner_categ:
+                res_partner_categ = request.env['res.partner.category'].sudo().create({
+                    'name': 'Cliente'
+                })
+
+            partner = request.env['res.partner'].sudo().create({
+                'name': kw.get("partner_name"),
+                'vat': kw.get("partner_rut"),
+                'category_id': [(4, res_partner_categ.id)]
+            })
+            partner_id = partner.id
         else: 
             partner_id = partner.id
 

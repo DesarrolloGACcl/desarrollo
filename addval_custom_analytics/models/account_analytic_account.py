@@ -20,6 +20,18 @@ class AccountAnalyticAccount(models.Model):
 
     child_ids = fields.One2many(comodel_name='account.analytic.account', inverse_name='parent_id', string="Cuentas hijas")
 
+    status = fields.Selection(
+        selection=[
+            ('in_process', "En marcha"),
+            ('invoicing', "Cerrado"),
+            ('hibernation', "Hibernación"),
+            ('ended', "Terminado"),
+        ],
+        string="Estado",
+        readonly=True, copy=False, index=True,
+        tracking=3,
+        default='in_process')
+
     def name_get(self):
         res = []
         for analytic in self:

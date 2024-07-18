@@ -31,9 +31,15 @@ class AnalyticApi(http.Controller):
 
         project_analytic_plan = request.env['account.analytic.plan'].sudo().search([('id', '=', 1)])
 
+                                                                        
         analytic_project = request.env['account.analytic.account'].sudo().search([('code', '=', kw.get("project_code")),
-                                                                                  ('plan_id', '=', project_analytic_plan.id)])
-        
+                                                                                    ('plan_id', '=', project_analytic_plan.id)])
+            
+        if not analytic_project:
+             analytic_project = request.env['account.analytic.account'].sudo().search([('code', '=', kw.get("project_code")),
+                                                                                  ('plan_id', '=', project_analytic_plan.id),
+                                                                                    ('active', '=', False)])
+
         partner = request.env['res.partner'].sudo().search([('vat', '=', kw.get("partner_rut"))])
 
         if not partner:

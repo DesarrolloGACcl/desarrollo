@@ -30,10 +30,6 @@ class SaleLog(models.Model):
     invoice_document_type = fields.Char(string="Tipo de documento")
     pre_invoice = fields.Char(string="Número pre-factura")
     order_date = fields.Datetime(string="Fecha pre-factura")
-    payment_method = fields.Char(string="Método de pago")
-    dues_qty = fields.Integer(string="Cantidad de cuotas")
-    card_type = fields.Char(string="Tipo de tarjeta")
-    authorization_code = fields.Char(string="Código único transacción")
     company_name = fields.Char(string="Razón social")
     error_message = fields.Text(string="Razón error")
 
@@ -127,12 +123,6 @@ class SaleLog(models.Model):
             'partner_id': self.partner_id.id,
             'channel_sale': self.channel_sale,
             'invoice_document_type': self.invoice_document_type,
-            'woocommerce_order': self.woocommerce_order,
-            'delivery_transient_code': self.delivery_transient_code,
-            'payment_method': self.payment_method,
-            'dues_qty': self.dues_qty,
-            'card_type': self.card_type,
-            'authorization_code': self.authorization_code,
             'company_id': company.id,
             'user_id': user_id
         })

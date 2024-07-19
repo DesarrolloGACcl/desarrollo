@@ -45,7 +45,7 @@ class SaleOrderApi(http.Controller):
         if not kw.get("pre_invoice"):        
             return 'Campo pre_invoice es obligatorio'
 
-        #BUSCA SI EXISTE EL PEDIDO POR COMPAÑÍA
+        #BUSCA SI EXISTE La pre-factura POR COMPAÑÍA
         existing_sale = request.env['sale.order'].sudo().search([('pre_invoice', '=', kw.get("pre_invoice")),
                                                                  ('company_id', '=', company.id)])
 
@@ -69,16 +69,11 @@ class SaleOrderApi(http.Controller):
                 log.partner_state = partner_dict['state']
                 log.partner_commune = partner_dict['commune']
                 log.partner_category = partner_dict['category']
-                log.channel_sale = kw.get("channel_sale")
                 log.invoice_document_type= kw.get("document_type")
                 log.pre_invoice= kw.get("pre_invoice")
-                log.payment_method= kw.get("payment_method")
-                log.dues_qty= kw.get("dues_qty")
-                log.card_type= kw.get("card_type")
-                log.authorization_code= kw.get("authorization_code")
                 log.company_name= kw.get("company_name")
                 log.company_id= company.id
-                log.error_message= 'El pedido no pudo ser creado: no existe cuenta contable configurada'
+                log.error_message= 'La pre-factura no pudo ser creado: no existe cuenta contable configurada'
                 for line in log.line_ids:
                     line.unlink()
             else:
@@ -94,16 +89,11 @@ class SaleOrderApi(http.Controller):
                     'partner_state': partner_dict['state'],
                     'partner_commune' : partner_dict['commune'],
                     'partner_category': partner_dict['category'],
-                    'channel_sale': kw.get("channel_sale"),
                     'invoice_document_type': kw.get("document_type"),
                     'pre_invoice': kw.get("pre_invoice"),
-                    'payment_method': kw.get("payment_method"),
-                    'dues_qty': kw.get("dues_qty"),
-                    'card_type': kw.get("card_type"),
-                    'authorization_code': kw.get("authorization_code"),
                     'company_name': kw.get("company_name"),
                     'company_id': company.id,
-                    'error_message': 'El pedido no pudo ser creado: no existe cuenta contable configurada',
+                    'error_message': 'La pre-factura no pudo ser creado: no existe cuenta contable configurada',
                     'state': 'draft',
                 })
 
@@ -172,7 +162,7 @@ class SaleOrderApi(http.Controller):
                         'analytic_distribution_task' :task_distribution
                     })
         
-            return 'El pedido no pudo ser creado: no existe cuenta contable configurada'
+            return 'La pre-factura no pudo ser creado: no existe cuenta contable configurada'
         
         #**VALIDACIONES PARTNER**
         
@@ -190,16 +180,11 @@ class SaleOrderApi(http.Controller):
                 log.partner_state = partner_dict['state']
                 log.partner_commune = partner_dict['commune']
                 log.partner_category = partner_dict['category']
-                log.channel_sale = kw.get("channel_sale")
                 log.invoice_document_type= kw.get("document_type")
                 log.pre_invoice= kw.get("pre_invoice")
-                log.payment_method= kw.get("payment_method")
-                log.dues_qty= kw.get("dues_qty")
-                log.card_type= kw.get("card_type")
-                log.authorization_code= kw.get("authorization_code")
                 log.company_name= kw.get("company_name")
                 log.company_id= company.id
-                log.error_message= 'El pedido no pudo ser creado: campo partner_name es obligatorio'
+                log.error_message= 'La pre-factura no pudo ser creado: campo partner_name es obligatorio'
                 for line in log.line_ids:
                     line.unlink()
             else:
@@ -214,16 +199,11 @@ class SaleOrderApi(http.Controller):
                     'partner_state': partner_dict['state'],
                     'partner_commune' : partner_dict['commune'],
                     'partner_category': partner_dict['category'],
-                    'channel_sale': kw.get("channel_sale"),
                     'invoice_document_type': kw.get("document_type"),
                     'pre_invoice': kw.get("pre_invoice"),
-                    'payment_method': kw.get("payment_method"),
-                    'dues_qty': kw.get("dues_qty"),
-                    'card_type': kw.get("card_type"),
-                    'authorization_code': kw.get("authorization_code"),
                     'company_name': kw.get("company_name"),
                     'company_id': company.id,
-                    'error_message': 'El pedido no pudo ser creado: campo partner_name es obligatorio',
+                    'error_message': 'La pre-factura no pudo ser creado: campo partner_name es obligatorio',
                     'state': 'draft'
                 })
 
@@ -292,7 +272,7 @@ class SaleOrderApi(http.Controller):
                         'analytic_distribution_task' :task_distribution
                     })
         
-            return 'El pedido no pudo ser creado: campo partner_name es obligatorio'
+            return 'La pre-factura no pudo ser creado: campo partner_name es obligatorio'
 
         #VALIDACIÓN QUE JSON VENGA CON DIRECCIÓN
         if not partner_dict['street']:
@@ -308,16 +288,11 @@ class SaleOrderApi(http.Controller):
                 log.partner_commune = partner_dict['commune']
                 log.partner_state = partner_dict['state']
                 log.partner_category = partner_dict['category']
-                log.channel_sale = kw.get("channel_sale")
                 log.invoice_document_type= kw.get("document_type")
                 log.pre_invoice= kw.get("pre_invoice")
-                log.payment_method= kw.get("payment_method")
-                log.dues_qty= kw.get("dues_qty")
-                log.card_type= kw.get("card_type")
-                log.authorization_code= kw.get("authorization_code")
                 log.company_name= kw.get("company_name")
                 log.company_id= company.id
-                log.error_message= 'El pedido no pudo ser creado: Campo street es obligatorio'
+                log.error_message= 'La pre-factura no pudo ser creado: Campo street es obligatorio'
                 for line in log.line_ids:
                     line.unlink()
             else:
@@ -332,16 +307,11 @@ class SaleOrderApi(http.Controller):
                     'partner_commune' : partner_dict['commune'],
                     'partner_state': partner_dict['state'],
                     'partner_category': partner_dict['category'],
-                    'channel_sale': kw.get("channel_sale"),
                     'invoice_document_type': kw.get("document_type"),
                     'pre_invoice': kw.get("pre_invoice"),
-                    'payment_method': kw.get("payment_method"),
-                    'dues_qty': kw.get("dues_qty"),
-                    'card_type': kw.get("card_type"),
-                    'authorization_code': kw.get("authorization_code"),
                     'company_name': kw.get("company_name"),
                     'company_id': company.id,
-                    'error_message': 'El pedido no pudo ser creado: Campo street es obligatorio',
+                    'error_message': 'La pre-factura no pudo ser creado: Campo street es obligatorio',
                     'state': 'draft',
                     'amount_total': kw.get("amount_total"),
                     'amount_with_discount': kw.get("amount_total_with_discount"),
@@ -413,7 +383,7 @@ class SaleOrderApi(http.Controller):
                         'analytic_distribution_task' :task_distribution
                     })
         
-            return 'El pedido no pudo ser creado: street es obligatorio'
+            return 'La pre-factura no pudo ser creado: street es obligatorio'
 
         #VALIDACIÓN QUE JSON VENGA CON REGIÓN
         if not partner_dict['state']:
@@ -429,16 +399,11 @@ class SaleOrderApi(http.Controller):
                 log.partner_street = partner_dict['street']
                 log.partner_commune = partner_dict['commune']
                 log.partner_category = partner_dict['category']
-                log.channel_sale = kw.get("channel_sale")
                 log.invoice_document_type= kw.get("document_type")
                 log.pre_invoice= kw.get("pre_invoice")
-                log.payment_method= kw.get("payment_method")
-                log.dues_qty= kw.get("dues_qty")
-                log.card_type= kw.get("card_type")
-                log.authorization_code= kw.get("authorization_code")
                 log.company_name= kw.get("company_name")
                 log.company_id= company.id
-                log.error_message= 'El pedido no pudo ser creado: Campo state es obligatorio'
+                log.error_message= 'La pre-factura no pudo ser creado: Campo state es obligatorio'
                 log.amount_total= kw.get("amount_total")
                 log.amount_with_discount= kw.get("amount_total_with_discount")
                 log.fixed_discount = round(kw.get("discount"))
@@ -456,16 +421,11 @@ class SaleOrderApi(http.Controller):
                     'partner_street' : partner_dict['street'],
                     'partner_commune' : partner_dict['commune'],
                     'partner_category': partner_dict['category'],
-                    'channel_sale': kw.get("channel_sale"),
                     'invoice_document_type': kw.get("document_type"),
                     'pre_invoice': kw.get("pre_invoice"),
-                    'payment_method': kw.get("payment_method"),
-                    'dues_qty': kw.get("dues_qty"),
-                    'card_type': kw.get("card_type"),
-                    'authorization_code': kw.get("authorization_code"),
                     'company_name': kw.get("company_name"),
                     'company_id': company.id,
-                    'error_message': 'El pedido no pudo ser creado: Campo state es obligatorio',
+                    'error_message': 'La pre-factura no pudo ser creado: Campo state es obligatorio',
                     'state': 'draft',
                 })
 
@@ -534,7 +494,7 @@ class SaleOrderApi(http.Controller):
                         'analytic_distribution_task' :task_distribution
                     })
         
-            return 'El pedido no pudo ser creado: state es obligatorio'
+            return 'La pre-factura no pudo ser creado: state es obligatorio'
 
         partner = request.env["res.partner"].sudo().search([('vat', '=ilike', partner_rut)],limit=1)
         country = request.env["res.country"].sudo().search([('code', '=', 'CL')],limit=1)
@@ -592,16 +552,11 @@ class SaleOrderApi(http.Controller):
                 log.partner_commune = partner_dict['commune']
                 log.partner_category = partner_dict['category']
                 log.partner_id = partner.id
-                log.channel_sale = kw.get("channel_sale")
                 log.invoice_document_type= kw.get("document_type")
                 log.pre_invoice= kw.get("pre_invoice")
-                log.payment_method= kw.get("payment_method")
-                log.dues_qty= kw.get("dues_qty")
-                log.card_type= kw.get("card_type")
-                log.authorization_code= kw.get("authorization_code")
                 log.company_name= kw.get("company_name")
                 log.company_id= company.id
-                log.error_message= 'El pedido no pudo ser creado: Campo order_date es obligatorio'
+                log.error_message= 'La pre-factura no pudo ser creado: Campo order_date es obligatorio'
                 for line in log.line_ids:
                     line.unlink()
             else:
@@ -618,16 +573,11 @@ class SaleOrderApi(http.Controller):
                     'partner_commune' : partner_dict['commune'],
                     'partner_category': partner_dict['category'],
                     'partner_id': partner.id,
-                    'channel_sale': kw.get("channel_sale"),
                     'invoice_document_type': kw.get("document_type"),
                     'pre_invoice': kw.get("pre_invoice"),
-                    'payment_method': kw.get("payment_method"),
-                    'dues_qty': kw.get("dues_qty"),
-                    'card_type': kw.get("card_type"),
-                    'authorization_code': kw.get("authorization_code"),
                     'company_name': kw.get("company_name"),
                     'company_id': company.id,
-                    'error_message': 'El pedido no pudo ser creado: Campo order_date es obligatorio',
+                    'error_message': 'La pre-factura no pudo ser creado: Campo order_date es obligatorio',
                     'state': 'draft',
                 })
 
@@ -696,7 +646,7 @@ class SaleOrderApi(http.Controller):
                         'analytic_distribution_task' :task_distribution
                     })
         
-            return 'El pedido no pudo ser creado: Campo order_date es obligatorio'
+            return 'La pre-factura no pudo ser creado: Campo order_date es obligatorio'
         
         #AJUSTES PARA PONER LA FECHA Y HORA CORRECTAS
         date_format = '%Y-%m-%d %H:%M:%S'
@@ -710,7 +660,7 @@ class SaleOrderApi(http.Controller):
         else:
             real_datetime = converted_date + timedelta(hours=3)
 
-        #BUSCAR Y VALIDAR EL USUARIO CONFIGURADO PARA LA CREACIÓN DEL PEDIDO
+        #BUSCAR Y VALIDAR EL USUARIO CONFIGURADO PARA LA CREACIÓN DLa pre-factura
         if company.api_user_id:
             user_id = company.api_user_id.id
         else:   
@@ -728,17 +678,12 @@ class SaleOrderApi(http.Controller):
                 log.partner_commune = partner_dict['commune']
                 log.partner_category = partner_dict['category']
                 log.partner_id = partner.id
-                log.channel_sale = kw.get("channel_sale")
                 log.invoice_document_type= kw.get("document_type")
                 log.pre_invoice= kw.get("pre_invoice")
                 log.order_date = real_datetime
-                log.payment_method= kw.get("payment_method")
-                log.dues_qty= kw.get("dues_qty")
-                log.card_type= kw.get("card_type")
-                log.authorization_code= kw.get("authorization_code")
                 log.company_name= kw.get("company_name")
                 log.company_id= company.id
-                log.error_message= 'El pedido no pudo ser creado: no existe usuario configurado'
+                log.error_message= 'La pre-factura no pudo ser creado: no existe usuario configurado'
                 for line in log.line_ids:
                     line.unlink()
             else:
@@ -755,17 +700,12 @@ class SaleOrderApi(http.Controller):
                     'partner_commune' : partner_dict['commune'],
                     'partner_category': partner_dict['category'],
                     'partner_id': partner.id,
-                    'channel_sale': kw.get("channel_sale"),
                     'invoice_document_type': kw.get("document_type"),
                     'pre_invoice': kw.get("pre_invoice"),
                     'order_date': real_datetime,
-                    'payment_method': kw.get("payment_method"),
-                    'dues_qty': kw.get("dues_qty"),
-                    'card_type': kw.get("card_type"),
-                    'authorization_code': kw.get("authorization_code"),
                     'company_name': kw.get("company_name"),
                     'company_id': company.id,
-                    'error_message': 'El pedido no pudo ser creado: no existe usuario configurado',
+                    'error_message': 'La pre-factura no pudo ser creado: no existe usuario configurado',
                     'state': 'draft',
                 })
 
@@ -834,20 +774,15 @@ class SaleOrderApi(http.Controller):
                         'analytic_distribution_task' :task_distribution
                     })
         
-            return 'El pedido no pudo ser creado: no existe usuario configurado'
+            return 'La pre-factura no pudo ser creado: no existe usuario configurado'
 
 
 
         #CREACION DE PEDIDO DE VENTA
         sale_order = request.env['sale.order'].sudo().create({
             'partner_id': partner.id,
-            'channel_sale': kw.get("channel_sale"),
             'invoice_document_type': kw.get("document_type"),
             'pre_invoice': kw.get("pre_invoice"),
-            'payment_method': kw.get("payment_method"),
-            'dues_qty': kw.get("dues_qty"),
-            'card_type': kw.get("card_type"),
-            'authorization_code': kw.get("authorization_code"),
             'company_id': company.id,
             'user_id': user_id
         })
@@ -906,14 +841,9 @@ class SaleOrderApi(http.Controller):
                     log.partner_commune = partner_dict['commune']
                     log.partner_category = partner_dict['category']
                     log.partner_id = partner.id
-                    log.channel_sale = kw.get("channel_sale")
                     log.invoice_document_type= kw.get("document_type")
                     log.pre_invoice= kw.get("pre_invoice")
                     log.order_date= real_datetime
-                    log.payment_method= kw.get("payment_method")
-                    log.dues_qty= kw.get("dues_qty")
-                    log.card_type= kw.get("card_type")
-                    log.authorization_code= kw.get("authorization_code")
                     log.company_name= kw.get("company_name")
                     log.company_id= company.id
                     log.error_message= 'No fue posible encontrar el producto'
@@ -933,17 +863,12 @@ class SaleOrderApi(http.Controller):
                         'partner_commune' : partner_dict['commune'],
                         'partner_category': partner_dict['category'],
                         'partner_id': partner.id,
-                        'channel_sale': kw.get("channel_sale"),
                         'invoice_document_type': kw.get("document_type"),
                         'pre_invoice': kw.get("pre_invoice"),
                         'order_date': real_datetime,
-                        'payment_method': kw.get("payment_method"),
-                        'dues_qty': kw.get("dues_qty"),
-                        'card_type': kw.get("card_type"),
-                        'authorization_code': kw.get("authorization_code"),
                         'company_name': kw.get("company_name"),
                         'company_id': company.id,
-                        'error_message': 'El pedido no pudo ser creado: No fue posible encontrar el producto',
+                        'error_message': 'La pre-factura no pudo ser creado: No fue posible encontrar el producto',
                         'state': 'draft',
                     })
 
@@ -997,14 +922,9 @@ class SaleOrderApi(http.Controller):
                     log.partner_commune = partner_dict['commune']
                     log.partner_category = partner_dict['category']
                     log.partner_id = partner.id
-                    log.channel_sale = kw.get("channel_sale")
                     log.invoice_document_type= kw.get("document_type")
                     log.pre_invoice= kw.get("pre_invoice")
                     log.order_date= real_datetime
-                    log.payment_method= kw.get("payment_method")
-                    log.dues_qty= kw.get("dues_qty")
-                    log.card_type= kw.get("card_type")
-                    log.authorization_code= kw.get("authorization_code")
                     log.company_name= kw.get("company_name")
                     log.company_id= company.id
                     log.error_message= 'No fue posible crear pedido: discordancia entre tipo documento e impuestos'
@@ -1024,14 +944,9 @@ class SaleOrderApi(http.Controller):
                         'partner_commune' : partner_dict['commune'],
                         'partner_category': partner_dict['category'],
                         'partner_id': partner.id,
-                        'channel_sale': kw.get("channel_sale"),
                         'invoice_document_type': kw.get("document_type"),
                         'pre_invoice': kw.get("pre_invoice"),
                         'order_date': real_datetime,
-                        'payment_method': kw.get("payment_method"),
-                        'dues_qty': kw.get("dues_qty"),
-                        'card_type': kw.get("card_type"),
-                        'authorization_code': kw.get("authorization_code"),
                         'company_name': kw.get("company_name"),
                         'company_id': company.id,
                         'error_message': 'No fue posible crear pedido: discordancia entre tipo documento e impuestos',
@@ -1104,14 +1019,9 @@ class SaleOrderApi(http.Controller):
                 log.partner_commune = partner_dict['commune']
                 log.partner_category = partner_dict['category']
                 log.partner_id = partner.id
-                log.channel_sale = kw.get("channel_sale")
                 log.invoice_document_type= kw.get("document_type")
                 log.pre_invoice= kw.get("pre_invoice")
                 log.order_date= real_datetime
-                log.payment_method= kw.get("payment_method")
-                log.dues_qty= kw.get("dues_qty")
-                log.card_type= kw.get("card_type")
-                log.authorization_code= kw.get("authorization_code")
                 log.company_name= kw.get("company_name")
                 log.company_id= company.id
                 log.error_message= 'Pedido re-procesado con exito via API'
@@ -1133,14 +1043,9 @@ class SaleOrderApi(http.Controller):
                     'partner_commune' : partner_dict['commune'],
                     'partner_category': partner_dict['category'],
                     'partner_id': partner.id,
-                    'channel_sale': kw.get("channel_sale"),
                     'invoice_document_type': kw.get("document_type"),
                     'pre_invoice': kw.get("pre_invoice"),
                     'order_date': real_datetime,
-                    'payment_method': kw.get("payment_method"),
-                    'dues_qty': kw.get("dues_qty"),
-                    'card_type': kw.get("card_type"),
-                    'authorization_code': kw.get("authorization_code"),
                     'company_name': kw.get("company_name"),
                     'company_id': company.id,
                     'error_message': 'Pedido creado vía API',

@@ -9,8 +9,7 @@
                 <tree>
                     <field name="name" string=""/>
                     <field name="partner_id" string="Cliente"/>
-                    <field name="order_name"/>
-                    <field name="channel_sale" string="Canal de venta"/>
+                    <field name="sale_order_id"/>
                     <field name="invoice_document_type" string="Tipo de documento"/>
                     <field name="pre_invoice" string="Pre-factura"/>
                     <field name="company_id" string="Compañía"/>
@@ -42,12 +41,8 @@
                                 <field name="invoice_document_type" string="Tipo de documento"/>
                                 <field name="pre_invoice" string="Pre-factura"/>
                                 <field name="order_date" string="Fecha pre-factura"/>
-                                <field name="payment_method" string="Método de pago"/>
-                                <field name="dues_qty" string="Cantidad cuotas"/>
                             </group>
                             <group>                            
-                                <field name="card_type" string="Tipo tarjeta"/>
-                                <field name="authorization_code" string="Código autorización"/>
                                 <field name="channel_sale" string="Canal de venta"/>
                                 <field name="company_name" string="Razón social"/>
                                 <field name="error_message" string="Razón error"/>

@@ -1008,6 +1008,7 @@ class SaleOrderApi(http.Controller):
             log = request.env['sale.log'].sudo().search([('pre_invoice', '=', kw.get("pre_invoice")),
                                                      ('company_id', '=', company.id)],limit=1)
             if log:
+                log.sale_order_id= sale_order.id
                 log.partner_rut = partner_rut
                 log.partner_city = partner_dict['city']
                 log.partner_name  = partner_dict['name']

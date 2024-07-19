@@ -78,7 +78,7 @@ class SaleOrderApi(http.Controller):
                     line.unlink()
             else:
                 log = request.env['sale.log'].sudo().create({
-                    'name': 'Registro venta',
+                    'name': 'Registro pre-factura: '+ kw.get("pre_invoice"),
                     'partner_rut': partner_rut,
                     'partner_city' : partner_dict['city'],
                     'partner_name'  : partner_dict['name'],
@@ -297,7 +297,7 @@ class SaleOrderApi(http.Controller):
                     line.unlink()
             else:
                 log = request.env['sale.log'].sudo().create({
-                    'name': 'Registro venta',
+                    'name': 'Registro pre-factura: '+ kw.get("pre_invoice"),
                     'partner_rut': partner_rut,
                     'partner_city' : partner_dict['city'],
                     'partner_name'  : partner_dict['name'],
@@ -411,7 +411,7 @@ class SaleOrderApi(http.Controller):
                     line.unlink()
             else:
                 log = request.env['sale.log'].sudo().create({
-                    'name': 'Registro venta',
+                    'name': 'Registro pre-factura: '+ kw.get("pre_invoice"),
                     'partner_rut': partner_rut,
                     'partner_city' : partner_dict['city'],
                     'partner_name'  : partner_dict['name'],
@@ -561,7 +561,7 @@ class SaleOrderApi(http.Controller):
                     line.unlink()
             else:
                 log = request.env['sale.log'].sudo().create({
-                    'name': 'Registro venta',
+                    'name': 'Registro pre-factura: '+ kw.get("pre_invoice"),
                     'partner_rut': partner_rut,
                     'partner_city' : partner_dict['city'],
                     'partner_name'  : partner_dict['name'],
@@ -688,7 +688,7 @@ class SaleOrderApi(http.Controller):
                     line.unlink()
             else:
                 log = request.env['sale.log'].sudo().create({
-                    'name': 'Registro venta',
+                    'name': 'Registro pre-factura: '+ kw.get("pre_invoice"),
                     'partner_rut': partner_rut,
                     'partner_city' : partner_dict['city'],
                     'partner_name'  : partner_dict['name'],
@@ -851,7 +851,7 @@ class SaleOrderApi(http.Controller):
                         line.unlink()
                 else:
                     log = request.env['sale.log'].sudo().create({
-                        'name': 'Registro venta',
+                        'name': 'Registro pre-factura: '+ kw.get("pre_invoice"),
                         'partner_rut': partner_rut,
                         'partner_city' : partner_dict['city'],
                         'partner_name'  : partner_dict['name'],
@@ -932,7 +932,7 @@ class SaleOrderApi(http.Controller):
                         line.unlink()
                 else:
                     log = request.env['sale.log'].sudo().create({
-                        'name': 'Registro venta',
+                        'name': 'Registro pre-factura: '+ kw.get("pre_invoice"),
                         'partner_rut': partner_rut,
                         'partner_city' : partner_dict['city'],
                         'partner_name'  : partner_dict['name'],
@@ -1031,7 +1031,7 @@ class SaleOrderApi(http.Controller):
                     line.unlink()
             else:
                 log = request.env['sale.log'].sudo().create({
-                    'name': 'Registro venta',
+                    'name': 'Registro pre-factura: '+ kw.get("pre_invoice"),
                     'sale_order_id': sale_order.id,
                     'partner_rut': partner_rut,
                     'partner_city' : partner_dict['city'],

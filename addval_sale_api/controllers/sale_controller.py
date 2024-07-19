@@ -112,7 +112,7 @@ class SaleOrderApi(http.Controller):
                     analytic_distribution = line['analytic_distribution']
                     distribution = {}
                     for project in analytic_distribution:
-                        account = request.env['account.analytic.account'].sudo().search([('name', '=ilike',project['name'])], limit=1)
+                        account = request.env['account.analytic.account'].sudo().search([('code', '=',project['code'])], limit=1)
                         distribution.update({account.id : project['percent']})
                 else:
                     analytic_distribution = None
@@ -121,7 +121,7 @@ class SaleOrderApi(http.Controller):
                     analytic_distribution_area = line['analytic_distribution_area']
                     area_distribution = {}
                     for area in analytic_distribution_area:
-                        account = request.env['account.analytic.account'].sudo().search([('name', '=ilike',area['name'])], limit=1)
+                        account = request.env['account.analytic.account'].sudo().search([('code', '=',area['code'])], limit=1)
                         area_distribution.update({account.id : area['percent']})
                 else:
                     area_distribution = None
@@ -130,7 +130,7 @@ class SaleOrderApi(http.Controller):
                     analytic_distribution_activity = line['analytic_distribution_activity']
                     activity_distribution = {}
                     for activity in analytic_distribution_activity:
-                        account = request.env['account.analytic.account'].sudo().search([('name', '=ilike',activity['name'])], limit=1)
+                        account = request.env['account.analytic.account'].sudo().search([('code', '=',activity['code'])], limit=1)
                         activity_distribution.update({account.id : activity['percent']})
                 else:
                     activity_distribution = None
@@ -139,7 +139,7 @@ class SaleOrderApi(http.Controller):
                     analytic_distribution_task = line['analytic_distribution_task']
                     task_distribution = {}
                     for task in analytic_distribution_task:
-                        account = request.env['account.analytic.account'].sudo().search([('name', '=ilike',task['name'])], limit=1)   
+                        account = request.env['account.analytic.account'].sudo().search([('code', '=',task['code'])], limit=1)   
                         task_distribution.update({account.id : task['percent']})
                 else:
                     task_distribution = None
@@ -232,7 +232,7 @@ class SaleOrderApi(http.Controller):
                     analytic_distribution = line['analytic_distribution']
                     distribution = {}
                     for project in analytic_distribution:
-                        account = request.env['account.analytic.account'].sudo().search([('name', '=ilike',project['name'])], limit=1)
+                        account = request.env['account.analytic.account'].sudo().search([('code', '=',project['code'])], limit=1)
                         distribution.update({account.id : project['percent']})
                 else:
                     analytic_distribution = None
@@ -241,7 +241,7 @@ class SaleOrderApi(http.Controller):
                     analytic_distribution_area = line['analytic_distribution_area']
                     area_distribution = {}
                     for area in analytic_distribution_area:
-                        account = request.env['account.analytic.account'].sudo().search([('name', '=ilike',area['name'])], limit=1)
+                        account = request.env['account.analytic.account'].sudo().search([('code', '=',area['code'])], limit=1)
                         area_distribution.update({account.id : area['percent']})
                 else:
                     area_distribution = None
@@ -250,7 +250,7 @@ class SaleOrderApi(http.Controller):
                     analytic_distribution_activity = line['analytic_distribution_activity']
                     activity_distribution = {}
                     for activity in analytic_distribution_activity:
-                        account = request.env['account.analytic.account'].sudo().search([('name', '=ilike',activity['name'])], limit=1)
+                        account = request.env['account.analytic.account'].sudo().search([('code', '=',activity['code'])], limit=1)
                         activity_distribution.update({account.id : activity['percent']})
                 else:
                     activity_distribution = None
@@ -259,7 +259,7 @@ class SaleOrderApi(http.Controller):
                     analytic_distribution_task = line['analytic_distribution_task']
                     task_distribution = {}
                     for task in analytic_distribution_task:
-                        account = request.env['account.analytic.account'].sudo().search([('name', '=ilike',task['name'])], limit=1)   
+                        account = request.env['account.analytic.account'].sudo().search([('code', '=',task['code'])], limit=1)   
                         task_distribution.update({account.id : task['percent']})
                 else:
                     task_distribution = None
@@ -353,7 +353,7 @@ class SaleOrderApi(http.Controller):
                     analytic_distribution = line['analytic_distribution']
                     distribution = {}
                     for project in analytic_distribution:
-                        account = request.env['account.analytic.account'].sudo().search([('name', '=ilike',project['name'])], limit=1)
+                        account = request.env['account.analytic.account'].sudo().search([('code', '=',project['code'])], limit=1)
                         distribution.update({account.id : project['percent']})
                 else:
                     analytic_distribution = None
@@ -362,7 +362,7 @@ class SaleOrderApi(http.Controller):
                     analytic_distribution_area = line['analytic_distribution_area']
                     area_distribution = {}
                     for area in analytic_distribution_area:
-                        account = request.env['account.analytic.account'].sudo().search([('name', '=ilike',area['name'])], limit=1)
+                        account = request.env['account.analytic.account'].sudo().search([('code', '=',area['code'])], limit=1)
                         area_distribution.update({account.id : area['percent']})
                 else:
                     area_distribution = None
@@ -371,7 +371,7 @@ class SaleOrderApi(http.Controller):
                     analytic_distribution_activity = line['analytic_distribution_activity']
                     activity_distribution = {}
                     for activity in analytic_distribution_activity:
-                        account = request.env['account.analytic.account'].sudo().search([('name', '=ilike',activity['name'])], limit=1)
+                        account = request.env['account.analytic.account'].sudo().search([('code', '=',activity['code'])], limit=1)
                         activity_distribution.update({account.id : activity['percent']})
                 else:
                     activity_distribution = None
@@ -380,7 +380,7 @@ class SaleOrderApi(http.Controller):
                     analytic_distribution_task = line['analytic_distribution_task']
                     task_distribution = {}
                     for task in analytic_distribution_task:
-                        account = request.env['account.analytic.account'].sudo().search([('name', '=ilike',task['name'])], limit=1)   
+                        account = request.env['account.analytic.account'].sudo().search([('code', '=',task['code'])], limit=1)   
                         task_distribution.update({account.id : task['percent']})
                 else:
                     task_distribution = None
@@ -474,7 +474,7 @@ class SaleOrderApi(http.Controller):
                     analytic_distribution = line['analytic_distribution']
                     distribution = {}
                     for project in analytic_distribution:
-                        account = request.env['account.analytic.account'].sudo().search([('name', '=ilike',project['name'])], limit=1)
+                        account = request.env['account.analytic.account'].sudo().search([('code', '=',project['code'])], limit=1)
                         distribution.update({account.id : project['percent']})
                 else:
                     analytic_distribution = None
@@ -483,7 +483,7 @@ class SaleOrderApi(http.Controller):
                     analytic_distribution_area = line['analytic_distribution_area']
                     area_distribution = {}
                     for area in analytic_distribution_area:
-                        account = request.env['account.analytic.account'].sudo().search([('name', '=ilike',area['name'])], limit=1)
+                        account = request.env['account.analytic.account'].sudo().search([('code', '=',area['code'])], limit=1)
                         area_distribution.update({account.id : area['percent']})
                 else:
                     area_distribution = None
@@ -492,7 +492,7 @@ class SaleOrderApi(http.Controller):
                     analytic_distribution_activity = line['analytic_distribution_activity']
                     activity_distribution = {}
                     for activity in analytic_distribution_activity:
-                        account = request.env['account.analytic.account'].sudo().search([('name', '=ilike',activity['name'])], limit=1)
+                        account = request.env['account.analytic.account'].sudo().search([('code', '=',activity['code'])], limit=1)
                         activity_distribution.update({account.id : activity['percent']})
                 else:
                     activity_distribution = None
@@ -501,7 +501,7 @@ class SaleOrderApi(http.Controller):
                     analytic_distribution_task = line['analytic_distribution_task']
                     task_distribution = {}
                     for task in analytic_distribution_task:
-                        account = request.env['account.analytic.account'].sudo().search([('name', '=ilike',task['name'])], limit=1)   
+                        account = request.env['account.analytic.account'].sudo().search([('code', '=',task['code'])], limit=1)   
                         task_distribution.update({account.id : task['percent']})
                 else:
                     task_distribution = None
@@ -636,7 +636,7 @@ class SaleOrderApi(http.Controller):
                     analytic_distribution = line['analytic_distribution']
                     distribution = {}
                     for project in analytic_distribution:
-                        account = request.env['account.analytic.account'].sudo().search([('name', '=ilike',project['name'])], limit=1)
+                        account = request.env['account.analytic.account'].sudo().search([('code', '=',project['code'])], limit=1)
                         distribution.update({account.id : project['percent']})
                 else:
                     analytic_distribution = None
@@ -645,7 +645,7 @@ class SaleOrderApi(http.Controller):
                     analytic_distribution_area = line['analytic_distribution_area']
                     area_distribution = {}
                     for area in analytic_distribution_area:
-                        account = request.env['account.analytic.account'].sudo().search([('name', '=ilike',area['name'])], limit=1)
+                        account = request.env['account.analytic.account'].sudo().search([('code', '=',area['code'])], limit=1)
                         area_distribution.update({account.id : area['percent']})
                 else:
                     area_distribution = None
@@ -654,7 +654,7 @@ class SaleOrderApi(http.Controller):
                     analytic_distribution_activity = line['analytic_distribution_activity']
                     activity_distribution = {}
                     for activity in analytic_distribution_activity:
-                        account = request.env['account.analytic.account'].sudo().search([('name', '=ilike',activity['name'])], limit=1)
+                        account = request.env['account.analytic.account'].sudo().search([('code', '=',activity['code'])], limit=1)
                         activity_distribution.update({account.id : activity['percent']})
                 else:
                     activity_distribution = None
@@ -663,7 +663,7 @@ class SaleOrderApi(http.Controller):
                     analytic_distribution_task = line['analytic_distribution_task']
                     task_distribution = {}
                     for task in analytic_distribution_task:
-                        account = request.env['account.analytic.account'].sudo().search([('name', '=ilike',task['name'])], limit=1)   
+                        account = request.env['account.analytic.account'].sudo().search([('code', '=',task['code'])], limit=1)   
                         task_distribution.update({account.id : task['percent']})
                 else:
                     task_distribution = None
@@ -774,7 +774,7 @@ class SaleOrderApi(http.Controller):
                     analytic_distribution = line['analytic_distribution']
                     distribution = {}
                     for project in analytic_distribution:
-                        account = request.env['account.analytic.account'].sudo().search([('name', '=ilike',project['name'])], limit=1)
+                        account = request.env['account.analytic.account'].sudo().search([('code', '=',project['code'])], limit=1)
                         distribution.update({account.id : project['percent']})
                 else:
                     analytic_distribution = None
@@ -783,7 +783,7 @@ class SaleOrderApi(http.Controller):
                     analytic_distribution_area = line['analytic_distribution_area']
                     area_distribution = {}
                     for area in analytic_distribution_area:
-                        account = request.env['account.analytic.account'].sudo().search([('name', '=ilike',area['name'])], limit=1)
+                        account = request.env['account.analytic.account'].sudo().search([('code', '=',area['code'])], limit=1)
                         area_distribution.update({account.id : area['percent']})
                 else:
                     area_distribution = None
@@ -792,7 +792,7 @@ class SaleOrderApi(http.Controller):
                     analytic_distribution_activity = line['analytic_distribution_activity']
                     activity_distribution = {}
                     for activity in analytic_distribution_activity:
-                        account = request.env['account.analytic.account'].sudo().search([('name', '=ilike',activity['name'])], limit=1)
+                        account = request.env['account.analytic.account'].sudo().search([('code', '=',activity['code'])], limit=1)
                         activity_distribution.update({account.id : activity['percent']})
                 else:
                     activity_distribution = None
@@ -801,7 +801,7 @@ class SaleOrderApi(http.Controller):
                     analytic_distribution_task = line['analytic_distribution_task']
                     task_distribution = {}
                     for task in analytic_distribution_task:
-                        account = request.env['account.analytic.account'].sudo().search([('name', '=ilike',task['name'])], limit=1)   
+                        account = request.env['account.analytic.account'].sudo().search([('code', '=',task['code'])], limit=1)   
                         task_distribution.update({account.id : task['percent']})
                 else:
                     task_distribution = None
@@ -859,7 +859,7 @@ class SaleOrderApi(http.Controller):
                 analytic_distribution = line['analytic_distribution']
                 distribution = {}
                 for project in analytic_distribution:
-                    account = request.env['account.analytic.account'].sudo().search([('name', '=ilike',project['name'])], limit=1)
+                    account = request.env['account.analytic.account'].sudo().search([('code', '=',project['code'])], limit=1)
                     distribution.update({account.id : project['percent']})
             else:
                 analytic_distribution = None
@@ -868,7 +868,7 @@ class SaleOrderApi(http.Controller):
                 analytic_distribution_area = line['analytic_distribution_area']
                 area_distribution = {}
                 for area in analytic_distribution_area:
-                    account = request.env['account.analytic.account'].sudo().search([('name', '=ilike',area['name'])], limit=1)
+                    account = request.env['account.analytic.account'].sudo().search([('code', '=',area['code'])], limit=1)
                     area_distribution.update({account.id : area['percent']})
             else:
                 area_distribution = None
@@ -877,7 +877,7 @@ class SaleOrderApi(http.Controller):
                 analytic_distribution_activity = line['analytic_distribution_activity']
                 activity_distribution = {}
                 for activity in analytic_distribution_activity:
-                    account = request.env['account.analytic.account'].sudo().search([('name', '=ilike',activity['name'])], limit=1)
+                    account = request.env['account.analytic.account'].sudo().search([('code', '=',activity['code'])], limit=1)
                     activity_distribution.update({account.id : activity['percent']})
             else:
                 activity_distribution = None
@@ -886,7 +886,7 @@ class SaleOrderApi(http.Controller):
                 analytic_distribution_task = line['analytic_distribution_task']
                 task_distribution = {}
                 for task in analytic_distribution_task:
-                    account = request.env['account.analytic.account'].sudo().search([('name', '=ilike',task['name'])], limit=1)   
+                    account = request.env['account.analytic.account'].sudo().search([('code', '=',task['code'])], limit=1)   
                     task_distribution.update({account.id : task['percent']})
             else:
                 task_distribution = None
@@ -1152,7 +1152,7 @@ class SaleOrderApi(http.Controller):
                     analytic_distribution = line['analytic_distribution']
                     distribution = {}
                     for project in analytic_distribution:
-                        account = request.env['account.analytic.account'].sudo().search([('name', '=ilike',project['name'])], limit=1)
+                        account = request.env['account.analytic.account'].sudo().search([('code', '=',project['code'])], limit=1)
                         distribution.update({account.id : project['percent']})
                 else:
                     analytic_distribution = None
@@ -1161,7 +1161,7 @@ class SaleOrderApi(http.Controller):
                     analytic_distribution_area = line['analytic_distribution_area']
                     area_distribution = {}
                     for area in analytic_distribution_area:
-                        account = request.env['account.analytic.account'].sudo().search([('name', '=ilike',area['name'])], limit=1)
+                        account = request.env['account.analytic.account'].sudo().search([('code', '=',area['code'])], limit=1)
                         area_distribution.update({account.id : area['percent']})
                 else:
                     area_distribution = None
@@ -1170,7 +1170,7 @@ class SaleOrderApi(http.Controller):
                     analytic_distribution_activity = line['analytic_distribution_activity']
                     activity_distribution = {}
                     for activity in analytic_distribution_activity:
-                        account = request.env['account.analytic.account'].sudo().search([('name', '=ilike',activity['name'])], limit=1)
+                        account = request.env['account.analytic.account'].sudo().search([('code', '=',activity['code'])], limit=1)
                         activity_distribution.update({account.id : activity['percent']})
                 else:
                     activity_distribution = None
@@ -1179,7 +1179,7 @@ class SaleOrderApi(http.Controller):
                     analytic_distribution_task = line['analytic_distribution_task']
                     task_distribution = {}
                     for task in analytic_distribution_task:
-                        account = request.env['account.analytic.account'].sudo().search([('name', '=ilike',task['name'])], limit=1)   
+                        account = request.env['account.analytic.account'].sudo().search([('code', '=',task['code'])], limit=1)   
                         task_distribution.update({account.id : task['percent']})
                 else:
                     task_distribution = None

@@ -22,6 +22,7 @@ Additionally, it marks the invoice as "yielded" in the payment state.
         "template/message_template.xml",
         "views/account_move_view.xml",
         "views/res_partner_view.xml",
+        "views/settings.xml",
         "wizard/l10n_cl_aec_generator_view.xml",
         "security/ir.model.access.csv",
         "data/cron.xml",

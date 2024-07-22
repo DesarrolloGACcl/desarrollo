@@ -124,10 +124,12 @@ class AccountMove(models.Model):
         digital_signature = factoring_values['company_id']._get_digital_signature(user_id=self.env.user.id)
         # The rut of the owner of the signature is used, the user name and email provisionally, but
         # it should be the same person data
+        if not factoring_values['company_id'].factoring_partner:
+            raise UserError(_('No se ha establecido Contacto para Cedibles en Ajustes'))
         signatory = {
             'vat': digital_signature.subject_serial_number,
-            'name': self.env.user.partner_id.name,
-            'email': self.env.user.partner_id.email,
+            'name': factoring_values['company_id'].factoring_partner.name,
+            'email': factoring_values['company_id'].factoring_partner.email,
         }
         assignee = {
             'vat': factoring_values['factoring_partner_id'].vat,

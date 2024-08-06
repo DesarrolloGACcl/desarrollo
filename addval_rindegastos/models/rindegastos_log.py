@@ -354,15 +354,15 @@ class RindegastosLog(models.Model):
             'rindegastos_log_id': self.id
         })
 
-        self.state = 'done'
-        self.payment_id = payment.id
-
         payment.move_id.line_ids[0].account_id = self.company_id.rindegastos_expense_account_id
 
         for payment_aml in payment.move_id.line_ids:
             payment_aml.name = 'Gasto de '+ self.expense_user_name + ': '+ self.expense_note
 
         payment.action_post()
+
+        self.state = 'done'
+        self.payment_id = payment.id
 
         if self.expense_area:
             area_distribution = {}

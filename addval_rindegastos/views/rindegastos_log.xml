@@ -33,30 +33,30 @@
                         <h1><field name="name" string=""/></h1>                   
                         <group>
                             <group>
-                                <field name="partner_id" string="Usuario rendidor"/>
-                                <field name="expense_user_id" string="ID Usuario rendidor"/>
-                                <field name="expense_user_name" string="Nombre usuario rendidor"/>
-                                <field name="expense_status" string="Estado del gasto"/>
-                                <field name="expense_partner" string="Nombre Proveedor"/>
-                                <field name="expense_date" string="Fecha del gasto"/>
-                                <field name="expense_original_amount" string="Monto original del gasto"/>
-                                <field name="expense_retention_name" string="Retención"/>
-                                <field name="expense_retention_amount" string="Monto retención"/>
-                                <field name="expense_total" string="Total Gasto"/>
+                                <field name="partner_id" string="Usuario rendidor" readonly="1"/>
+                                <field name="expense_user_id" string="ID Usuario rendidor" readonly="1"/>
+                                <field name="expense_user_name" string="Nombre usuario rendidor" readonly="1"/>
+                                <field name="expense_status" string="Estado del gasto" readonly="1"/>
+                                <field name="expense_partner" string="Nombre Proveedor" readonly="1"/>
+                                <field name="expense_date" string="Fecha del gasto" readonly="1"/>
+                                <field name="expense_original_amount" string="Monto original del gasto" readonly="1"/>
+                                <field name="expense_retention_name" string="Retención" readonly="1"/>
+                                <field name="expense_retention_amount" string="Monto retención" readonly="1"/>
+                                <field name="expense_total" string="Total Gasto" readonly="1"/>
                             </group>
                             <group>                
-                                <field name="expense_id" string="ID Gasto en Rindegastos"/>
-                                <field name="payment_id" string="Pago"/>              
-                                <field name="expense_currency" string="Moneda del gasto"/>
-                                <field name="expense_is_reimbursable" string="¿Es Reembolsable?"/>
-                                <field name="expense_category" string="Categoría"/>
-                                <field name="expense_category_code" string="Código categoría"/>
-                                <field name="expense_category_group" string="Grupo categoría"/>
-                                <field name="expense_category_group_code" string="Código Grupo categoría"/>
-                                <field name="expense_note" string="Nota"/>
-                                <field name="expense_area" string="Código Área"/>
-                                <field name="expense_project" string="Código Proyecto"/>
-                                <field name="company_id" string="Compañía"/>
+                                <field name="expense_id" string="ID Gasto en Rindegastos" readonly="1"/>
+                                <field name="payment_id" string="Pago" readonly="1"/>              
+                                <field name="expense_currency" string="Moneda del gasto" readonly="1"/>
+                                <field name="expense_is_reimbursable" string="¿Es Reembolsable?" readonly="1"/>
+                                <field name="expense_category" string="Categoría" readonly="1"/>
+                                <field name="expense_category_code" string="Código categoría" readonly="1"/>
+                                <field name="expense_category_group" string="Grupo categoría" readonly="1"/>
+                                <field name="expense_category_group_code" string="Código Grupo categoría" readonly="1"/>
+                                <field name="expense_note" string="Nota" readonly="1"/>
+                                <field name="expense_area" string="Código Área" readonly="1"/>
+                                <field name="expense_project" string="Código Proyecto" readonly="1"/>
+                                <field name="company_id" string="Compañía" readonly="1"/>
                             </group>
                         </group>
                         <notebook>
@@ -66,11 +66,11 @@
                                     mode="tree">
                                     <form>
                                         <group>
-                                            <field name="name"/>
-                                            <field name="value"/>
-                                            <field name="code"/>
-                                            <field name="expense_log_id"/>
-                                            <field name="company_id"/>
+                                            <field name="name" readonly="1"/>
+                                            <field name="value" readonly="1"/>
+                                            <field name="code" readonly="1"/>
+                                            <field name="expense_log_id" readonly="1"/>
+                                            <field name="company_id" readonly="1"/>
                                         </group>
                                     </form>
                                     <tree string="Campos extra">

@@ -59,6 +59,28 @@
                                 <field name="company_id" string="Compañía"/>
                             </group>
                         </group>
+                        <notebook>
+                            <page string="Campos extra" name="extra_field_ids">
+                                <field name="extra_field_ids"
+                                    widget="section_and_note_one2many"
+                                    mode="tree">
+                                    <form>
+                                        <group>
+                                            <field name="name"/>
+                                            <field name="value"/>
+                                            <field name="code"/>
+                                            <field name="expense_log_id"/>
+                                            <field name="company_id"/>
+                                        </group>
+                                    </form>
+                                    <tree string="Campos extra">
+                                        <field name="name"/>
+                                        <field name="value"/>
+                                        <field name="code"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook> 
                     </sheet>
                     <div class="oe_chatter">
                         <field name="message_ids" widget="mail_thread"/>

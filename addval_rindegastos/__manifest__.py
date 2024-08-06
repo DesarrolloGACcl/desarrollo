@@ -20,6 +20,7 @@
     'data': [
         'data/cron.xml',
         'views/rindegastos_log.xml',
+        'views/expense_extra_fields.xml',
         'views/res_config_settings.xml',
         'views/account_payment.xml',
         'security/ir.model.access.csv',

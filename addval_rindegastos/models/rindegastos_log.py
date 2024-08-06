@@ -169,7 +169,7 @@ class RindegastosLog(models.Model):
     partner_id = fields.Many2one('res.partner', string="Cliente")
 
     payment_id = fields.Many2one('account.payment', string="Pago")
-
+    extra_field_ids = fields.One2many('expense.extra.fields', 'expense_log_id', string='Campos extra')
 
     def create_log_from_rindegastos(self):
 
@@ -248,6 +248,15 @@ class RindegastosLog(models.Model):
                             rinde_log.expense_area = e['Code']
                         if e['Name'] == 'Proyecto':
                             rinde_log.expense_project = e['Code']
+                        
+                        request.env['expense.extra.fields'].sudo().create({
+                            'expense_log_id': rinde_log.id,
+                            'name': e['Name'],
+                            'value': e['Value'],
+                            'code': e['Code'],
+                            'company_id': company.id
+                        })
+                        
 
                     user_url = 'https://api.rindegastos.com/v1/getUser?Id='+str(r['UserId'])
 
@@ -260,7 +269,22 @@ class RindegastosLog(models.Model):
                     partner = self.env['res.partner'].sudo().search([('vat', '=', user_data['Identification'])], limit=1)
 
                     if partner:
-                        rinde_log.partner_id = partner.id                    
+                        rinde_log.partner_id = partner.id
+
+                    # integration_url = "https://api.rindegastos.com/v1/setExpenseIntegration"
+
+                    # data = {
+                    #     "Id": r['Id'],
+                    #     "IntegrationStatus": 1,
+                    #     "IntegrationCode": str(rinde_log.id),
+                    #     "IntegrationDate": str_now
+                    # }
+
+                    # response = requests.request('PUT', integration_url, headers=headers, json=data)
+
+                    # _logger.warning('RESPONSE CODE: %s', response.status_code)
+                    # _logger.warning('RESPONSE REASON: %s', response.reason)
+                    # _logger.warning('RESPONSE TEXT: %s', response.text)
 
     def create_payment_from_log_cron(self):
         rinde_logs = self.env['rindegastos.log'].sudo().search([('state', '=', 'draft')], limit=50)

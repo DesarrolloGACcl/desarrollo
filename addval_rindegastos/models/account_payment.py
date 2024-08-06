@@ -10,7 +10,7 @@ _logger = logging.getLogger(__name__)
 class AccountPayment(models.Model):
     _inherit = "account.payment"
 
-    rindegastos_expense_id = fields.Integer(
+    rindegastos_expense_id = fields.Char(
         string = 'ID del gasto en RindeGastos',
         store = True,
         readonly=False
@@ -35,7 +35,7 @@ class AccountPayment(models.Model):
 
 
     def cron_check_payment_is_paid(self):
-        payments = self.env['account.payment'].sudo().search([('rindegastos_expense_id', '>', 0), ('rindegastos_state', '=', 'approved'), ('is_reconciled', '=', True)], limit = 50)
+        payments = self.env['account.payment'].sudo().search([('rindegastos_log_id', '!=', False), ('rindegastos_state', '=', 'approved'), ('is_reconciled', '=', True)], limit = 50)
 
         for p in payments:
             p.rindegastos_state = 'paid'

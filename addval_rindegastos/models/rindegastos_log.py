@@ -303,7 +303,8 @@ class RindegastosLog(models.Model):
                 'company_id': log.company_id.id,
                 'ref': 'Gasto de '+ log.expense_user_name + ': '+ log.expense_note,
                 'rindegastos_state': 'approved',
-                'rindegastos_log_id' : log.id
+                'rindegastos_log_id' : log.id,
+                'rindegastos_expense_id': log.expense_id
             })
 
             log.state = 'done'
@@ -351,7 +352,8 @@ class RindegastosLog(models.Model):
             'company_id': self.company_id.id,
             'ref': 'Gasto de '+ self.expense_user_name + ': '+ self.expense_note,
             'rindegastos_state': 'approved',
-            'rindegastos_log_id': self.id
+            'rindegastos_log_id': self.id,
+            'rindegastos_expense_id': self.expense_id
         })
 
         payment.move_id.line_ids[0].account_id = self.company_id.rindegastos_expense_account_id

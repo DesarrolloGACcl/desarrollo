@@ -8,6 +8,7 @@
         <field name='arch' type='xml'>
             <field name="partner_shipping_id" position="after">
                 <field name="sale_id" string="Venta origen"/>
+                <field name="pre_invoice" string="Pre-Factura"/>
             </field>
         </field>
     </record>

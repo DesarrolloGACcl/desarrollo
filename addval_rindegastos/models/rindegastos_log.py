@@ -314,6 +314,7 @@ class RindegastosLog(models.Model):
 
             for payment_aml in payment.move_id.line_ids:
                 payment_aml.name = 'Gasto de '+ log.expense_user_name + ': '+ log.expense_note
+                payment_aml.from_rindegastos = True
 
             payment.action_post()
 
@@ -360,6 +361,7 @@ class RindegastosLog(models.Model):
 
         for payment_aml in payment.move_id.line_ids:
             payment_aml.name = 'Gasto de '+ self.expense_user_name + ': '+ self.expense_note
+            payment_aml.from_rindegastos = True
 
         payment.action_post()
 

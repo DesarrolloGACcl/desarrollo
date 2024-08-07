@@ -10,6 +10,7 @@ class AccountMove(models.Model):
 
     sale_id = fields.Many2one("sale.order", string="Venta origen", readonly=True)
     invoice_sent = fields.Boolean(string="Documento fue reportado", readonly=True, default=False)
+    pre_invoice = fields.Char(string="Número pre-factura")
 
     def send_invoice_notification(self):
         invoices_to_sent = self.search([

@@ -11,7 +11,7 @@ class SaleOrder(models.Model):
 
     channel_sale = fields.Integer(string="Canal de venta", readonly=True)
     invoice_document_type = fields.Char(string="Tipo de documento", readonly=True)
-    pre_invoice = fields.Char(string="Número pre-factura", readonly=True)
+    pre_invoice = fields.Char(string="Número pre-factura")
     payment_method = fields.Char(string="Método de pago", readonly=True)
     dues_qty = fields.Integer(string="Cantidad de cuotas", readonly=True)
     card_type = fields.Char(string="Tipo de tarjeta", readonly=True)
@@ -21,7 +21,7 @@ class SaleOrder(models.Model):
     @api.model
     def auto_invoice_sale_orders(self):
             # Fetch confirmed sale orders which are not invoiced yet
-            sale_orders = self.search([('state', '=', 'sale'), ('invoice_status', '=', 'to invoice'), ('channel_sale', '=', 1)], limit = 100)
+            sale_orders = self.search([('state', '=', 'sale'), ('invoice_status', '=', 'to invoice')], limit = 100)
 
             for order in sale_orders:
                 try:
@@ -33,6 +33,7 @@ class SaleOrder(models.Model):
                         raise ValidationError(('Hubo un error al intentar generar la factura.'))
                     invoice.l10n_latam_document_type_id = document_type.id
                     invoice.sale_id = order.id
+                    invoice.pre_invoice = order.pre_invoice
 
                     # Confirm invoice
                     if invoice:
@@ -41,6 +42,9 @@ class SaleOrder(models.Model):
                         user_timezone = timezone(user_tz)
                         order_datetime_user_tz = UTC.localize(order.date_order).astimezone(user_timezone)
                         invoice.invoice_date = order_datetime_user_tz.date()
+
+                        for aml in invoice.line_ids:
+                            aml.pre_invoice = invoice.pre_invoice
 
                         try:
                             invoice.action_post()

@@ -165,7 +165,8 @@ class MoveApi(http.Controller):
                 'codigo_cuenta_contable': aml.account_id.code, 
                 'nombre_cuenta': aml.account_id.name,
                 'raiz_de_cuenta': aml.account_root_id.name, 
-                'saldo':aml.balance 
+                'saldo':aml.balance,
+                'odoo_id': aml.id
             }
             
             aml_data_list.append(aml_data)

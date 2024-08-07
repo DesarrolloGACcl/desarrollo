@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="account_move_sale_origin">
+        <field name='name'>account.move.sale.origin</field>
+        <field name='model'>account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name='type'>form</field>
+        <field name='arch' type='xml'>
+            <field name="partner_shipping_id" position="after">
+                <field name="from_rindegastos" string="Pre-Factura"/>
+            </field>
+        </field>
+    </record>
+</odoo>

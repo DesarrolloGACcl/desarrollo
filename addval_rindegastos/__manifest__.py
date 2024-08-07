@@ -23,6 +23,7 @@
         'views/expense_extra_fields.xml',
         'views/res_config_settings.xml',
         'views/account_payment.xml',
+        'views/account_move.xml',
         'security/ir.model.access.csv',
     ],
     'installable': True,

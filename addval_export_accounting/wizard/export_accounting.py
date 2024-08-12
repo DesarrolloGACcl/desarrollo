@@ -61,7 +61,7 @@ class ExportAccounting(models.TransientModel):
         headers = ['Fecha', 'Tipo', 'Documento', 'Empresa','RUT','Código Proyecto','Proyecto', 'Código Área', 'Área', 
                    'Código Actividad', 'Actividad', 'Código Tarea', 'Tarea', 
                    'Detalle (Etiqueta)', 'Debe', 'Haber', 'Código Cuenta Contable', 'Nombre Cuenta',
-                   'Raíz de cuenta', 'Saldo']
+                   'Raíz de cuenta', 'Saldo', 'Odoo ID', 'Viene de Rindegastos', 'Pre-factura']
         worksheet.write_row(0, 0, headers)
 
         row = 1
@@ -171,6 +171,10 @@ class ExportAccounting(models.TransientModel):
             worksheet.write(row, 18, line.account_root_id.name)
 
             worksheet.write(row, 19, line.balance)
+
+            worksheet.write(row, 20, line.id)
+            worksheet.write(row, 21, line.from_rindegastos)
+            worksheet.write(row, 22, line.move_id.pre_invoice)
 
             row += 1
 

@@ -173,8 +173,8 @@ class ExportAccounting(models.TransientModel):
             worksheet.write(row, 19, line.balance)
 
             worksheet.write(row, 20, line.id)
-            worksheet.write(row, 21, line.from_rindegastos)
-            worksheet.write(row, 22, line.move_id.pre_invoice)
+            worksheet.write(row, 21, False)
+            worksheet.write(row, 22, False)
 
             row += 1
 

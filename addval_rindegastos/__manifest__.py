@@ -6,7 +6,8 @@
         Módulo que conecta Odoo con Rindegastos""",
 
     'description': """
-        Este módulo permite la conexion con Rindegastos para poder traer los gastos a Odoo
+        Este módulo permite la conexion con Rindegastos para poder traer los gastos a Odoo considerando los siguientes puntos:
+        - Primero se debe configurar la conexión
     """,
 
     "author": "Addval Connect",

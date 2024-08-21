@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="purchase_team_tree" model="ir.ui.view">
+            <field name="name">purchase.team.tree</field>
+            <field name="model">purchase.team</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="active" invisible="True"/>
+                    <field name="name"/>
+                    <field name="user_id"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="purchase_team_form" model="ir.ui.view">
+            <field name="name">purchase.team.form</field>
+            <field name="model">purchase.team</field>
+            <field name="arch" type="xml">
+                <form string="PO Team" class="o_purchase_team">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="user_id" domain="[('share', '=', False)]" widget="many2one_avatar_user"/>
+                            </group>
+                            <group>
+                                <field name="company_id" groups="base.group_multi_company"
+                                       options="{'no_create': True}"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="lock_amount_total"/>
+                            </group>
+                            <group></group>
+                        </group>
+                        <notebook>
+                            <page name="approvers" string="Approvers">
+                                <field name="approver_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="user_id"/>
+                                        <field name="role"/>
+                                        <field name="min_amount"/>
+                                        <field name="max_amount"/>
+                                        <field name="company_currency_id" invisible="True"/>
+                                        <field name="lock_amount_total"/>
+                                        <field name="custom_condition_code"/>
+                                    </tree>
+                                </field>
+                                <div class="clearfix"/>
+                                <group>
+                                    <group>
+                                        <p colspan="2">
+                                            Please ensure that each approver is at least purchase module user!
+                                            It is mandatory to avoid access issues.
+                                        </p>
+                                        <p colspan="2">
+                                            <ul>
+                                                <li>
+                                                    If <b>Minimum Amount</b> is not set,
+                                                    approver should approve each order.
+                                                </li>
+                                                <li>
+                                                    If <b>Minimum Amount</b> is set and
+                                                    <b>Total Amount</b>
+                                                    is less than <b>Minimum Amount</b>,
+                                                    then approver will be skipped.
+                                                </li>
+                                                <li>
+                                                    If <b>Maximum Amount</b> is set and
+                                                    <b>Total Amount</b>
+                                                    is greater than <b>Maximum Amount</b>,
+                                                    then the approver will be skipped.
+                                                </li>
+                                            </ul>
+                                        </p>
+                                    </group>
+                                    <group>
+                                        <p colspan="2">You can enter python expression to define custom condition to
+                                            include/exclude approver to/from PO approval
+                                            workflow.
+                                        </p>
+                                        <p colspan="2">Returned value have to be set in the variable 'result'.</p>
+                                        <p colspan="2">Keywords: Use the "<b>PO</b>" to get "purchase.order" object
+                                            properties,
+                                            and the "USER" keyword for current
+                                            user's "res.users" object.
+                                        </p>
+                                        <p colspan="2">
+                                            Examples:
+                                            <ul>
+                                                <li>
+                                                    If you want to include additional approver only for vendors from
+                                                    United
+                                                    States:
+                                                    <br/>
+                                                    <code>result = PO.partner_id.country_id.code == 'US'</code>
+                                                    <br/>
+                                                    ("code" is the ISO country code in two chars)
+                                                </li>
+                                                <li>
+                                                    Additional approver only for particular vendor:
+                                                    <br/>
+                                                    <code>result = PO.partner_id.name == 'Gemini Furniture'</code>
+                                                </li>
+                                                <li>
+                                                    Add additional approver only for particular period (using Order
+                                                    Date):
+                                                    <br/>
+                                                    <code>result = '2021-08-09' &lt;= str(PO.date_order) &lt;=
+                                                        '2021-08-15'
+                                                    </code>
+                                                </li>
+                                                <li>
+                                                    Add additional approver only for orders from particular company
+                                                    employee:
+                                                    <br/>
+                                                    <code>result = USER.company_id.name == 'YourCompany'</code>
+                                                </li>
+                                                <li>
+                                                    Add additional approver only for orders from particular department
+                                                    member:
+                                                    <br/>
+                                                    <code>result = USER.department_id.name == 'IT Department'</code>
+                                                    <br/>
+                                                    (Applicable only if HR module used)
+                                                </li>
+                                            </ul>
+                                        </p>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_purchase_order_filter_approver" model="ir.ui.view">
+            <field name="inherit_id" ref="purchase.view_purchase_order_filter"/>
+            <field name="name">view_purchase_order_filter_approver</field>
+            <field name="model">purchase.order</field>
+            <field name="arch" type="xml">
+                <filter name="approved" position="before">
+                    <filter name="waiting_for_approval" string="Waiting for Approval"
+                            domain="[('current_approver', '!=', False)]"/>
+                    <filter name="waiting_for_my_approval" string="Waiting for My Approval"
+                            domain="[('current_approver', '!=', False), ('current_approver.user_id', '=', uid)]"/>
+                    <separator/>
+                </filter>
+            </field>
+        </record>
+
+        <record id="purchase_team_act_window" model="ir.actions.act_window">
+            <field name="name">PO Teams</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">purchase.team</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}</field>
+            <field name="view_id" eval="False"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No team found. Let's create one!
+                </p>
+            </field>
+        </record>
+
+        <menuitem name="PO Teams" id="purchase_team_menu" action="purchase_team_act_window"
+                  parent="purchase.menu_purchase_config" sequence="50"/>
+
+
+        <record id="purchase_order_approval_form" model="ir.ui.view">
+            <field name="name">purchase.order.approval.form</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="model">purchase.order</field>
+            <field name="arch" type="xml">
+
+                <button name="button_approve" position="attributes">
+                    <attribute name="groups"></attribute>
+                    <attribute name="attrs">{'invisible':['|', ('is_current_approver', '=', False)]}</attribute>
+                </button>
+
+                <field name="currency_id" position="after">
+                    <field name="po_order_approval_route" invisible="True"/>
+                    <field name="team_id"
+                           attrs="{'invisible':[('po_order_approval_route', '=', 'no')], 'required':[('po_order_approval_route', '=', 'required')]}"/>
+                    <field name="approval_magnament" string="Gerencia"/>
+                </field>
+
+                <notebook position="inside">
+                    <page name="approval_route" string="Approval Route"
+                          attrs="{'invisible':['|', ('state', 'in', ['draft', 'sent']), ('team_id', '=', False)]}">
+                        <field name="approver_ids">
+                            <tree>
+                                <field name="user_id"/>
+                                <field name="role"/>
+                                <field name="state"/>
+                            </tree>
+                        </field>
+                        <field name="is_current_approver" invisible="True"/>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+
+    </data>
+</odoo>

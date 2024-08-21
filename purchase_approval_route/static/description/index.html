@@ -1,0 +1,197 @@
+<div class="container">
+    <!-- Title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="oe_slogan">
+                <h2 class="oe_slogan">Dynamic, Customizable and Flexible Approval Process for Purchase Orders</h2>
+                <div>
+                    Improve your purchase order process using multi-level approving and validating!<br/>
+                    This module helps to create multiple custom, flexible and dynamic approval cycle
+                    for purchase orders based on purchase team settings.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <h4>Key Features:</h4>
+            <ul>
+                <li>
+                    <i class="fa fa-check-circle"></i>
+                    <strong>Purchase Manager</strong> can configure unlimited dynamic approval process rules by creating
+                    <strong>Purchase Teams</strong>
+                </li>
+                <li>
+                    <i class="fa fa-check-circle"></i>
+                    <strong>Approval Cycle</strong> can be generated <u>dynamically</u> based on Total Amount of
+                    Purchase Order
+                </li>
+                <li>
+                    <i class="fa fa-check-circle"></i>
+                    <strong>Each Approver</strong> can be included to PO approval process depending on the settings of
+                    the
+                    Minimum or Maximum Amount fields
+                </li>
+                <li>
+                    <i class="fa fa-check-circle"></i>
+                    <strong>PO Multiple Approval Process</strong> can be used optionally or forcibly, depending on the module
+                    settings
+                </li>
+                <li>
+                    <i class="fa fa-check-circle"></i>
+                    Locking Total Amount of PO after approval from particular approver or after finishing
+                    approval route
+                </li>
+                <li>
+                    <i class="fa fa-check-circle"></i>
+                    Unlimited level of "step by step" approval process
+                </li>
+                <li>
+                    <i class="fa fa-check-circle"></i>
+                    Multi Company and Multi Currency features of Odoo System are supported
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <h3>How it works:</h3>
+            <h6>After module installation new settings block will be displayed:</h6>
+            <p><img class="oe_screenshot" src="po_module_config.png" alt="Purchase Module Config" width="100%"/></p>
+            <br/>
+            <ul>
+                <li>No - approval cycle functionality disabled.</li>
+                <li>Optional - PO approval workflow can be used based on initiator (Purchase Representative) choice.
+                </li>
+                <li>Required - purchase approval cycle is required. It means user should select PO Team on create RFQ.
+                </li>
+            </ul>
+            <hr>
+            <h6>Each Administrator of the Purchase Module has access to create and manage own Purchase Team.</h6>
+            <img class="oe_screenshot" src="po_create_way.png" alt="PO Team Create Way" width="100%"/>
+            <hr>
+            <p>
+                The form looks like in the screenshot below: <br/>
+                Enter name of the team, select team leader and add approvers.
+                Optionally you can set Minimum or Maximum Amount for each person.
+            </p>
+            <p>
+                Also you can enter python expression to define custom condition
+                to include/exclude approver to/from PO approval workflow.
+            </p>
+            <p>
+                <img class="oe_screenshot" src="po_team_form.png" alt="PO Team Form" width="100%"/>
+            </p>
+            <hr/>
+            <h4>Fields information</h4>
+            <p>
+                <b>Team Leader</b> is the Purchase Module Administrator who is allowed to manage own purchase team.
+                <br/>
+                If <b>Lock Amount Total</b> checkbox is enabled the system prevents updating order lines after
+                confirming
+                order. <br/><br/>
+
+                As <b>Approver</b> can be selected any <u>User of the Purchase Module</u>. Also, you should enter <b>Role/Position</b>
+                of the Approver. If information is available, system will try to set approver`s Job Title or Job
+                Position
+                in this field. <br/><br/>
+                The system generates multi-level approval route using Total Amount value of PO and Minimum/Maximum Amount for
+                Approver.
+            </p>
+            <ul>
+                <li>
+                    If <b>Minimum Amount</b> is not set,
+                    approver should approve each order.
+                </li>
+                <li>
+                    If <b>Minimum Amount</b> is set and
+                    <b>Total Amount</b>
+                    is less than <b>Minimum Amount</b>,
+                    then approver will be skipped.
+                </li>
+                <li>
+                    If <b>Maximum Amount</b> is set and
+                    <b>Total Amount</b>
+                    is greater than <b>Maximum Amount</b>,
+                    then the approver will be skipped.
+                </li>
+            </ul>
+            <p>
+                Also you can enable the option <b>Lock Amount Total</b>.
+                If this checkbox is enabled user can not update order lines after approval.
+                An error will be triggered if the system detects a change in the Total.
+                <img class="oe_screenshot" src="user_error.png" alt="User Error" width="100%"/>
+            </p>
+            <hr>
+            <h6>Purchase Order Form:</h6>
+            <p><img class="oe_screenshot" src="po_new.png" alt="New PO" width="100%"/></p>
+            <p>After creating PO user clicks the "Confirm" button. After that a request to approve to the first
+                approver will be sent:
+            </p>
+            <p><img class="oe_screenshot" src="po_sent_to_approve.png" alt="PO sent to approve" width="100%"/></p>
+            <p>Pending - is the status for current approver</p>
+            <hr/>
+            <h6>Only current approver can see the "Approve" button:</h6>
+            <p><img class="oe_screenshot" src="po_for_approver.png" alt="PO Form for Approver" width="100%"/></p>
+            <hr/>
+            <p>Each approver will be requested to approve PO step by step. After the last approval PO is moving to
+                the "Purchase Order" state and approval process is closing.
+            </p>
+            <p><img class="oe_screenshot" src="po_approved.png" alt="PO Approved" width="100%"/></p>
+            <hr/>
+            <h6>Video: 2 cases of using dynamic PO approval process to purchase PC accessories:</h6>
+            <ul>
+                <li>case 1: purchase order for a small amount</li>
+                <li>case 2: purchase order for a large amount</li>
+            </ul>
+            <p><a href="https://youtu.be/l7IZkGBw1Mk">Watch Video</a></p>
+        </div>
+    </div>
+<!--ToDo Uncomment Later -->
+<!--    <div class="row">-->
+<!--        <div class="col-12 oe_spaced">-->
+<!--            <hr/>-->
+<!--            <p>-->
+<!--                If you want to display detailed dashboard based on all purchase orders, please look that module:-->
+<!--                <a href="https://apps.odoo.com/apps/modules/15.0/xf_purchase_dashboard/">-->
+<!--                    Purchase Dashboard-->
+<!--                </a>-->
+<!--            </p>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="row">-->
+<!--        <div class="col-12 oe_spaced">-->
+<!--            <hr/>-->
+<!--            <p>-->
+<!--                Please note that to send email notifications to approvers-->
+<!--                an outgoing email server should be configured.-->
+<!--            </p>-->
+<!--            <p>-->
+<!--                If your Mail Transfer Agent (MTA) supports SRS (Sender Rewriting Scheme), your users can send and receive notification.-->
+<!--                However, that is more complex and requires more technical knowledge.-->
+<!--            </p>-->
+<!--            <p>-->
+<!--                Instead, you can install additional module to-->
+<!--                <a href="https://apps.odoo.com/apps/modules/15.0/xf_replace_email_params/">Replace "Email From" and "Reply To" parameters</a>-->
+<!--                of outgoing emails.-->
+<!--            </p>-->
+<!--        </div>-->
+<!--    </div>-->
+
+    <!-- Contacts -->
+    <div class="row">
+        <div class="col-12 oe_spaced">
+            <div class="text-center">
+                <img src="https://erp.xfanis.dev/web/logo/purchase_approval_route/16" alt="Logo" width="200">
+            </div>
+            <div class="oe_slogan text-center">
+                Contact me for Support, Customization, Implementation:<br/>
+                <b>Email</b>: <a href="mailto:odoo@xfanis.dev">odoo@xfanis.dev</a><br/>
+                <b>Telegram</b>: https://t.me/xfanis<br/>
+                <b>Twitter</b>: https://twitter.com/XFanis_Dev<br/>
+            </div>
+        </div>
+    </div>
+</div>

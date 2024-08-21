@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <template id="request_to_approve">
+            <p>
+                Estimado/a
+                <t t-esc="object.sudo().current_approver.user_id.name"/>,
+            </p>
+            <p>
+                Se le solicita aprobar la orden de compra:
+                <t t-esc="object.name"/>.
+            </p>
+            <p>
+                <a t-att-href="'/mail/view?model=%s&amp;res_id=%s' % (object._name, object.id)">
+                    Ver orden de compra
+                </a>
+            </p>
+            <p>Saluda Cordialmente.</p>
+            <p>Addval.</p>
+        </template>
+
+        <template id="order_approval">
+            <p>
+                Estimado/a
+                <t t-esc="object.user_id.sudo().name if object.user_id else object.create_uid.sudo().name"/>,
+            </p>
+            <p>
+                La orden de compra "<t t-esc="object.name"/>" ha sido aprobada.
+            </p>
+            <p>
+                <a t-att-href="'/mail/view?model=%s&amp;res_id=%s' % (object._name, object.id)">
+                    Ver orden de compra
+                </a>
+            </p>
+            <p>Saluda Cordialmente.</p>
+            <p>Addval.</p>
+        </template>
+
+
+        <record id="request_to_approve_template" model="mail.template">
+            <field name="name">Solicitud de Aprobación Orden de Compra</field>
+            <field name="model_id" ref="purchase.model_purchase_order"/>
+            <field name="subject">Aprobación {{ object.name }}</field>
+            <!-- <field name="email_from">{{ user.email_formatted }}</field> -->
+            <field name="email_to">{{ object.sudo().current_approver.user_id.email }}</field>
+            <field name="body_html" type="html">
+<p>
+    Estimado/a
+    <t t-esc="object.sudo().current_approver.user_id.name"/>,
+</p>
+<p>
+    Se le solicita aprobar la orden de compra:
+    <t t-esc="object.name"/>.
+</p>
+<p>
+    <a t-att-href="'/mail/view?model=%s&amp;res_id=%s' % (object._name, object.id)">
+        Ver orden de compra
+    </a>
+</p>
+<p>Saluda Cordialmente.</p>
+<p>Addval.</p>
+            </field>
+            <!-- <field name="lang">{{ object.employee_id.address_home_id.lang }}</field> -->
+            <field name="auto_delete" eval="False"/>
+        </record>
+
+        <record id="order_approval_template" model="mail.template">
+            <field name="name">Confirmación de Aprobación Orden de Compra</field>
+            <field name="model_id" ref="purchase.model_purchase_order"/>
+            <field name="subject">Confirmación Aprobación {{ object.name }}</field>
+            <!-- <field name="email_from">{{ user.email_formatted }}</field> -->
+            <field name="email_to">{{ object.sudo().current_approver.user_id.email }}</field>
+            <field name="body_html" type="html">
+<p>
+    Estimado/a
+    <t t-esc="object.user_id.sudo().name if object.user_id else object.create_uid.sudo().name"/>,
+</p>
+<p>
+    La orden de compra "<t t-esc="object.name"/>" ha sido aprobada.
+</p>
+<p>
+    <a t-att-href="'/mail/view?model=%s&amp;res_id=%s' % (object._name, object.id)">
+        Ver orden de compra
+    </a>
+</p>
+<p>Saluda Cordialmente.</p>
+<p>Addval.</p>
+            </field>
+            <!-- <field name="lang">{{ object.employee_id.address_home_id.lang }}</field> -->
+            <field name="auto_delete" eval="False"/>
+        </record>
+    </data>
+</odoo>

@@ -7,15 +7,31 @@ class ResConfigSettings(models.TransientModel):
     rindegastos_expense_account_id = fields.Many2one(
         comodel_name='account.account',
         related='company_id.rindegastos_expense_account_id',
-        string = 'Cuenta de gastos',
+        string = 'Primera cuenta en gasto',
         store = True,
         readonly=False,
     )
 
-    rindegastos_account_vendor_id = fields.Many2one(
+    rindegastos_expense_second_account_id = fields.Many2one(
         comodel_name='account.account',
-        related='company_id.rindegastos_account_vendor_id',
-        string = 'Cuenta proveedor',
+        related='company_id.rindegastos_expense_second_account_id',
+        string = 'Segunda cuenta en gasto',
+        store = True,
+        readonly=False
+    )
+
+    rinde_fund_first_account_id = fields.Many2one(
+        comodel_name='account.account',
+        related='company_id.rinde_fund_first_account_id',
+        string = 'Primera cuenta de fondo',
+        store = True,
+        readonly=False
+    )
+
+    rinde_fund_second_account_id = fields.Many2one(
+        comodel_name='account.account',
+        related='company_id.rinde_fund_second_account_id',
+        string = 'Segunda cuenta de fondo',
         store = True,
         readonly=False
     )

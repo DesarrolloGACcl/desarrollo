@@ -5,18 +5,32 @@ class ResCompany(models.Model):
 
     rindegastos_expense_account_id = fields.Many2one(
         comodel_name='account.account',
-        string = 'Cuenta de gastos',
+        string = 'Primera cuenta en gasto',
         store = True,
         readonly=False,
     )
 
-    rindegastos_account_vendor_id = fields.Many2one(
+    rindegastos_expense_second_account_id = fields.Many2one(
         comodel_name='account.account',
-        string = 'Cuenta proveedor',
+        string = 'Segunda cuenta en gasto',
         store = True,
         readonly=False
     )
 
+    rinde_fund_first_account_id = fields.Many2one(
+        comodel_name='account.account',
+        string = 'Primera cuenta de fondo',
+        store = True,
+        readonly=False
+    )
+
+    rinde_fund_second_account_id = fields.Many2one(
+        comodel_name='account.account',
+        string = 'Segunda cuenta de fondo',
+        store = True,
+        readonly=False
+    )
+    
     rindegastos_token = fields.Char(
         string = 'Token RindeGastos',
         store = True,

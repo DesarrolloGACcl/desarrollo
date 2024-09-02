@@ -67,7 +67,7 @@ class RindegastosExpenseReport(models.Model):
 
     fund_id = fields.Many2one('rindegastos.fund', string='Fondo', readonly=False)
 
-    report_extra_field_ids = fields.One2many('expense.report.extra.fields', 'expense_log_id', string='Campos extra')
+    report_extra_field_ids = fields.One2many('expense.report.extra.fields', 'expense_report_log_id', string='Campos extra')
     report_expense_ids = fields.One2many('rindegastos.log', 'report_id', string='Gastos')
 
     partner_id = fields.Many2one('res.partner', string="Rendidor")

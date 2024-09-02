@@ -2,3 +2,8 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 
 access_rindegastos_log,access_rindegastos_log,model_rindegastos_log,,1,1,1,1
 access_expense_extra_fields,access_expense_extra_fields,model_expense_extra_fields,,1,1,1,1
+
+access_rindegastos_expense_report,access_rindegastos_expense_report,model_rindegastos_expense_report,,1,1,1,1
+access_expense_report_extra_fields,access_expense_report_extra_fields,model_expense_report_extra_fields,,1,1,1,1
+
+access_rindegastos_fund,access_rindegastos_fund,model_rindegastos_fund,,1,1,1,1

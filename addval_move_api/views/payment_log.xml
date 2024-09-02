@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="payment_log_tree" model="ir.ui.view">
+            <field name="name">payment.log.tree</field>
+            <field name="model">payment.log</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name" string=""/>
+                    <field name="partner_id" string="Contacto"/>
+                    <field name="payment_date" string="Fecha pago"/>
+                    <field name="document_number" string="Folio"/>
+                    <field name="invoice_document_type" string="Tipo de documento"/>
+                    <field name="payment_type" string="Tipo pago"/>
+                    <field name="amount_total" string="Monto total"/>
+                    <field name="company_id" string="Compañía"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="payment_log_form" model="ir.ui.view">
+            <field name="name">payment.log.form</field>
+            <field name="model">payment.log</field>
+            <field name="arch" type="xml">
+                <form string="LOG DE VENTA">
+                    <header>
+                        <button name="reprocess_payment" type="object" data-hotkey="shift+g"
+                                string="Re-procesar pago" class="oe_highlight"
+                                invisible="state in ('done','not_done')"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,done,not_done"/>
+                    </header>
+                    <sheet>     
+                        <h1><field name="name" string=""/></h1>                   
+                        <group>
+                            <group>
+                                <field name="partner_id" string="Contacto"/>
+                                <field name="payment_date" string="Fecha pago"/>
+                                <field name="document_number" string="Folio"/>
+                                <field name="invoice_document_type" string="Código de documento"/>
+                            </group>
+                            <group>                            
+                                <field name="document_type_id" string="Tipo de documento"/>
+                                <field name="payment_type" string="Tipo pago"/>
+                                <field name="amount_total" string="Monto total"/>
+                                <field name="company_id" string="Compañía"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_ids" widget="mail_thread"/>
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="payment_log_act_window" model="ir.actions.act_window">
+            <field name="name">Logs de pagos</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">payment.log</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}</field>
+            <field name="view_id" eval="False"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No hay registros creados
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="payment_log_payment_menu" name="Logs de pagos" action="payment_log_act_window"
+            parent="account.menu_account_config" sequence="50"/>
+    </data>
+</odoo>

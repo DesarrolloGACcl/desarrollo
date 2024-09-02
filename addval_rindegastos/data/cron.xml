@@ -12,12 +12,34 @@
             <field name="doall" eval="False"/>
         </record>
 
+        <record id="cron_auto_create_funds_rinde" model="ir.cron">
+            <field name="name">Creación fondos desde RindeGastos</field>
+            <field name="model_id" ref="addval_rindegastos.model_rindegastos_fund"/>
+            <field name="state">code</field>
+            <field name="code">model.create_fund_from_rindegastos()</field>
+            <field name="interval_number">2</field>
+            <field name="interval_type">hours</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+        </record>
+
         <record id="cron_auto_create_payment_from_log" model="ir.cron">
             <field name="name">Creación pagos desde logs</field>
             <field name="model_id" ref="addval_rindegastos.model_rindegastos_log"/>
             <field name="state">code</field>
             <field name="code">model.create_payment_from_log_cron()</field>
             <field name="interval_number">3</field>
+            <field name="interval_type">hours</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+        </record>
+
+        <record id="cron_auto_create_payment_from_log" model="ir.cron">
+            <field name="name">Creación asiento desde fondo</field>
+            <field name="model_id" ref="addval_rindegastos.model_rindegastos_fund"/>
+            <field name="state">code</field>
+            <field name="code">model.create_move_from_fund_cron()</field>
+            <field name="interval_number">5</field>
             <field name="interval_type">hours</field>
             <field name="numbercall">-1</field>
             <field name="doall" eval="False"/>

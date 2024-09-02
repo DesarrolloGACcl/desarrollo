@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="rindegastos_fund_tree" model="ir.ui.view">
+            <field name="name">rindegastos.fund.tree</field>
+            <field name="model">rindegastos.fund</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name" string=""/>
+                    <field name="fund_id" string="ID del Fondo"/>
+                    <field name="fund_title" string="Titulo del fondo"/>
+                    <field name="code" string="Proveedor"/>
+                    <field name="balance" string="Total"/>
+                    <field name="state" string="Estado"/>
+                    <field name="company_id" string="Compañía"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="rindegastos_fund_form" model="ir.ui.view">
+            <field name="name">rindegastos.fund.form</field>
+            <field name="model">rindegastos.fund</field>
+            <field name="arch" type="xml">
+                <form string="Fondos de Rindegastos">
+                    <header>
+                        <button name="create_move_from_fund" type="object" data-hotkey="shift+g"
+                                string="Procesar manualmente" class="oe_highlight"
+                                attrs="{'invisible': [('state', 'in', ('done','not_done'))]}"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,done,not_done"/>
+                    </header>
+                    <sheet>     
+                        <h1><field name="name" string=""/></h1>                   
+                        <group>
+                            <group>
+                                <field name="partner_id" string="Usuario rendidor" readonly="1"/>
+                                <field name="fund_status" string="Estado en Rindegastos" readonly="1"/>
+                                <field name="fund_id" string="ID en Rindegastos" readonly="1"/>
+                                <field name="fund_title" string="Titulo" readonly="1"/>
+                                <field name="code" string="Código" readonly="1"/>
+                                <field name="currency" string="Moneda" readonly="1"/>
+                                <field name="created_date" string="Fecha creación" readonly="1"/>
+                                <field name="expiration_date" string="Fecha expiración" readonly="1"/>
+                            </group>
+                            <group>                
+                                <field name="id_assing_to" string="ID del usuario asignado" readonly="1"/>
+                                <field name="id_creator" string="ID del creador del fondo" readonly="1"/>              
+                                <field name="deposits" string="Depositos" readonly="1"/>
+                                <field name="withdrawals" string="Retiros" readonly="1"/>
+                                <field name="balance" string="Balance" readonly="1"/>
+                                <field name="flexible_fund" string="Fondo felxible" readonly="1"/>
+                                <field name="manual_deposit" string="Deposito manual" readonly="1"/>
+                                <field name="automatic_block" string="Bloqueo automático" readonly="1"/>
+                                <field name="company_id" string="Compañía" readonly="1"/>
+                            </group>
+                        </group> 
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_ids" widget="mail_thread"/>
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="rindegastos_fund_act_window" model="ir.actions.act_window">
+            <field name="name">Fondos de Rindegastos</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rindegastos.fund</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}</field>
+            <field name="view_id" eval="False"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No hay registros creados
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="rindegastos_fund_account_menu" name="Fondos" action="rindegastos_fund_act_window"
+            parent="account.root_payment_menu" sequence="50"/>
+
+        <record id="action_create_move" model="ir.actions.server">
+            <field name="name">Procesar Fondo</field>
+            <field name="model_id" ref="addval_rindegastos.model_rindegastos_fund"/>
+            <field name="state">code</field>
+            <field name="code">
+                for record in records:
+                    record.create_move_from_fund()
+            </field>
+        </record>
+    </data>
+</odoo>

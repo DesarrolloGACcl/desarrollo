@@ -39,6 +39,8 @@
                                 <field name="expense_status" string="Estado del gasto" readonly="1"/>
                                 <field name="expense_partner" string="Nombre Proveedor" readonly="1"/>
                                 <field name="expense_date" string="Fecha del gasto" readonly="1"/>
+                                <field name="expense_report_id" string="ID del informe de gastos" readonly="1"/>
+                                <field name="report_id" string="Informe de gastos" readonly="1"/>
                                 <field name="expense_original_amount" string="Monto original del gasto" readonly="1"/>
                                 <field name="expense_retention_name" string="Retención" readonly="1"/>
                                 <field name="expense_retention_amount" string="Monto retención" readonly="1"/>

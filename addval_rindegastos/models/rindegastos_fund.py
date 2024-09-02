@@ -52,7 +52,7 @@ class RindegastosFund(models.Model):
     expiration_date = fields.Datetime(string="Fecha de vencimiento") #"ExpirationDate": "",
     flexible_fund = fields.Char(string="Fondo felxible ") #"FlexibleFund": "1",
     manual_deposit = fields.Boolean(string="Deposito manual") #"ManualDeposit": false,
-    automatic_block = fields.Boolean(string="Bloqueoa automático") #"AutomaticBlock": false
+    automatic_block = fields.Boolean(string="Bloqueo automático") #"AutomaticBlock": false
 
     partner_id = fields.Many2one('res.partner', string="Rendidor")
 
@@ -159,103 +159,67 @@ class RindegastosFund(models.Model):
 
     #TO DO: Make the function to create the account move
     def create_move_from_fund_cron(self):
-        rinde_logs = self.env['rindegastos.log'].sudo().search([('state', '=', 'draft')], limit=50)
+        funds = self.env['rindegastos.fund'].sudo().search([('state', '=', 'draft')], limit=50)
         
-        for log in rinde_logs:
-            payment_method = request.env['account.payment.method.line'].sudo().search([('journal_id', '=', log.company_id.rindegastos_journal_id.id), ('code', '=ilike', 'manual')], limit=1)
+        for f in funds:
 
-            payment = self.env['account.payment'].sudo().create({
-                'amount': log.expense_total,
-                'payment_method_line_id': payment_method.id,
-                'journal_id': log.company_id.rindegastos_journal_id.id,
-                'date': log.expense_date,
-                'partner_id': log.partner_id.id,
-                'partner_type': 'supplier',
-                'payment_type': 'outbound',
-                'company_id': log.company_id.id,
-                'ref': 'Gasto de '+ log.expense_user_name + ': '+ log.expense_note,
-                'rindegastos_state': 'approved',
-                'rindegastos_log_id' : log.id,
-                'rindegastos_expense_id': log.expense_id
-            })
+            lines = [
+                {
+                'account_id': f.company_id.rinde_fund_first_account_id,
+                'partner_id': f.partner_id,
+                'name': f.fund_title,
+                'debit': f.balance
+                },
+                {
+                'account_id': f.company_id.rinde_fund_second_account_id,
+                'partner_id': f.partner_id,
+                'name': f.fund_title,
+                'credit': f.balance
+                }
+            ]  
 
-            log.state = 'done'
-            log.payment_id = payment.id
+            move_vals = {
+                'partner_id': f.partner_id,
+                'date':f.created_date,
+                'ref': f.fund_title,
+                'journal_id': f.company_id.rindegastos_journal_id,
+                'company_id': f.company_id,
+                'line_ids': [(0, 0, line) for line in lines],
+            }
+        
+            move = request.env['account.move'].sudo().create(move_vals)
 
-            payment.move_id.line_ids[0].account_id = log.company_id.rindegastos_expense_account_id
+            move.action_post() 
 
-            for payment_aml in payment.move_id.line_ids:
-                payment_aml.name = 'Gasto de '+ log.expense_user_name + ': '+ log.expense_note
-                payment_aml.from_rindegastos = True
 
-            payment.action_post()
-
-            if log.expense_area:
-                area_distribution = {}
-                account = request.env['account.analytic.account'].sudo().search([('code', '=',log.expense_area)], limit=1)   
-                area_distribution.update({account.id : 100})
-            else:
-                area_distribution = None
-
-            if log.expense_project:
-                project_distribution = {}
-                account = request.env['account.analytic.account'].sudo().search([('code', '=',log.expense_project)], limit=1)   
-                project_distribution.update({account.id : 100})
-            else:
-                project_distribution = None
-
-            payment.move_id.line_ids[0].analytic_distribution = project_distribution
-            payment.move_id.line_ids[1].analytic_distribution = project_distribution
-            
-            payment.move_id.line_ids[0].analytic_distribution_area = area_distribution
-            payment.move_id.line_ids[1].analytic_distribution_area = area_distribution
             
     #TO DO: Make the function to create the account move 
     def create_move_from_fund(self):
-        payment_method = request.env['account.payment.method.line'].sudo().search([('journal_id', '=', self.company_id.rindegastos_journal_id.id), ('code', '=ilike', 'manual')], limit=1)
+        lines = [
+            {
+            'account_id': self.company_id.rinde_fund_first_account_id,
+            'partner_id': self.partner_id,
+            'name': self.fund_title,
+            'debit': self.balance
+            },
+            {
+            'account_id': self.company_id.rinde_fund_second_account_id,
+            'partner_id': self.partner_id,
+            'name': self.fund_title,
+            'credit': self.balance
+            }
+        ]  
 
-        payment = self.env['account.payment'].sudo().create({
-            'amount': self.expense_total,
-            'payment_method_line_id': payment_method.id,
-            'journal_id': self.company_id.rindegastos_journal_id.id,
-            'date': self.expense_date,
-            'partner_id': self.partner_id.id,
-            'partner_type': 'supplier',
-            'payment_type': 'outbound',
-            'company_id': self.company_id.id,
-            'ref': 'Gasto de '+ self.expense_user_name + ': '+ self.expense_note,
-            'rindegastos_state': 'approved',
-            'rindegastos_log_id': self.id,
-            'rindegastos_expense_id': self.expense_id
-        })
+        move_vals = {
+            'partner_id': self.partner_id,
+            'date':self.created_date,
+            'ref': self.fund_title,
+            'journal_id': self.company_id.rindegastos_journal_id,
+            'company_id': self.company_id,
+            'line_ids': [(0, 0, line) for line in lines],
+            'from_rindegastos': True
+        }
+    
+        move = request.env['account.move'].sudo().create(move_vals)
 
-        payment.move_id.line_ids[0].account_id = self.company_id.rindegastos_expense_account_id
-
-        for payment_aml in payment.move_id.line_ids:
-            payment_aml.name = 'Gasto de '+ self.expense_user_name + ': '+ self.expense_note
-            payment_aml.from_rindegastos = True
-
-        payment.action_post()
-
-        self.state = 'done'
-        self.payment_id = payment.id
-
-        if self.expense_area:
-            area_distribution = {}
-            account = request.env['account.analytic.account'].sudo().search([('code', '=',self.expense_area)], limit=1)   
-            area_distribution.update({account.id : 100})
-        else:
-            area_distribution = None
-
-        if self.expense_project:
-            project_distribution = {}
-            account = request.env['account.analytic.account'].sudo().search([('code', '=',self.expense_project)], limit=1)   
-            project_distribution.update({account.id : 100})
-        else:
-            project_distribution = None
-
-        payment.move_id.line_ids[0].analytic_distribution = project_distribution
-        payment.move_id.line_ids[1].analytic_distribution = project_distribution
-        
-        payment.move_id.line_ids[0].analytic_distribution_area = area_distribution
-        payment.move_id.line_ids[1].analytic_distribution_area = area_distribution
+        move.action_post() 

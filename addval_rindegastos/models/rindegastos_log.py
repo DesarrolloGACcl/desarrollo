@@ -136,6 +136,18 @@ class RindegastosLog(models.Model):
         readonly=False
     )
 
+    expense_report_id = fields.Char(
+        string = 'Informe de gastos',
+        store = True,
+        readonly=False
+    )
+
+    report_id = fields.Many2one(
+        'rindegastos.expense.report',
+        string ='Informe de gastos',
+        readonly=True
+    )
+
     expense_note = fields.Char(
         string = 'Nota',
         store = True,
@@ -239,6 +251,7 @@ class RindegastosLog(models.Model):
                         'integration_date': r['IntegrationDate'],
                         'integration_external_code': r['IntegrationExternalCode'],
                         'expense_user_id': r['UserId'],
+                        'expense_report_id': r['ReportId'],
                         'expense_id': r['Id'],
                         'expense_note': r['Note'],
                     })
@@ -270,6 +283,120 @@ class RindegastosLog(models.Model):
 
                     if partner:
                         rinde_log.partner_id = partner.id
+
+                    expense_report = self.env['rindegastos.expense.report'].sudo().search([('report_id', '=', rinde_log.expense_report_id)], limit=1)
+                    expense_report_url = 'https://api.rindegastos.com/v1/getExpense?Id=1'+rinde_log.expense_report_id
+                    report_response = requests.request('GET', expense_report_url, headers=headers)
+
+                    report_data = report_response.json()
+
+                    _logger.warning('response: %s', report_response.content)
+                    _logger.warning('funds_data: %s', report_data)
+                    _logger.warning('response: %s', report_data['ExpenseReports'])     
+
+                    if not expense_report:
+
+                        expense_report = self.env['rindegastos.expense.report'].sudo().create({
+                            'name': 'Informe de gasto: '+str(report_data['Id']),
+                            'state': 'done',
+                            'company_id': company.id,
+                            'expense_report_status': str(report_data['Status']),
+                            'report_id' : report_data['Id'],
+                            'report_title' : report_data['Title'],
+                            'report_number' : report_data['ReportNumber'],
+                            'send_date' : report_data['SendDate'],
+                            'close_date' : report_data['CloseDate'],
+                            'employee_id' : report_data['EmployeeId'],
+                            'employee_name' : report_data['EmployeeName'],
+                            'employee_identification' : report_data['EmployeeIdentification'],
+                            'approver_id' : report_data['ApproverId'],
+                            'approve_name' : report_data['ApproverName'],
+                            'policy_id' : report_data['PolicyId'],
+                            'policy_name' : report_data['PolicyName'],
+                            'custom_status' : report_data['CustomStatus'],
+                            'expense_report_fund_id' : report_data['FundId'],
+                            'fund_name' : report_data['FundName'],
+                            'report_total' : report_data['ReportTotal'],
+                            'report_total_approved' : report_data['ReportTotalApproved'],
+                            'currency' : report_data['Currency'],
+                            'note' : report_data['Note'],
+                            'integrated' : report_data['Integrated'],
+                            'integration_date' : report_data['IntegrationDate'],
+                            'integration_external_code' : report_data['IntegrationExternalCode'],
+                            'integration_internal_code' : report_data['IntegrationInternalCode'],
+                            'expenses_qty' : report_data['NbrExpenses'],
+                            'approved_expenses_qty' : report_data['NbrApprovedExpenses'],
+                            'rejected_expenses_qty' : report_data['NbrRejectedExpenses'],
+                        })
+
+                        for e in report_data['ExtraFields']:
+                            
+                            request.env['expense.extra.fields'].sudo().create({
+                                'expense_report_log_id': expense_report.id,
+                                'name': e['Name'],
+                                'value': e['Value'],
+                                'code': e['Code'],
+                                'company_id': company.id
+                            })
+
+                        rinde_log.report_id = expense_report.id
+                        # integration_url = "https://api.rindegastos.com/v1/setExpenseReportIntegration"
+
+                        # data = {
+                        #     "Id": report_data['Id'],
+                        #     "IntegrationStatus": 1,
+                        #     "IntegrationCode": str(expense_report.id),
+                        #     "IntegrationDate": str_now
+                        # }
+
+                        # response = requests.request('PUT', integration_url, headers=headers, json=data)
+
+                        # _logger.warning('RESPONSE CODE: %s', response.status_code)
+                        # _logger.warning('RESPONSE REASON: %s', response.reason)
+                        # _logger.warning('RESPONSE TEXT: %s', response.text)
+
+                        fund = self.env['rindegastos.fund'].sudo().search([('fund_id', '=', expense_report.expense_report_fund_id)], limit=1)
+
+                        if not fund:
+                            fund_url = 'https://api.rindegastos.com/v1/getFund?Id='+expense_report.expense_report_fund_id
+
+                            fund_response = requests.request('GET', fund_url, headers=headers)
+
+                            f = fund_response.json()
+
+                            fund = self.env['rindegastos.fund'].sudo().create({
+                                'name': 'Gasto: '+str(f['Id']),
+                                'state': 'draft',
+                                'company_id': company.id,
+                                'fund_status': str(f['Status']),
+                                'fund_id' : f['Id'],
+                                'fund_title' : f['Title'],
+                                'code' : f['Code'],
+                                'currency' : f['Currency'],
+                                'id_assing_to' : f['IdAssignTo'],
+                                'id_creator' : f['IdCreator'],
+                                'deposits' : f['Deposits'],
+                                'withdrawals' : f['Withdrawals'],
+                                'balance' : f['Balance'],
+                                'created_date' : f['CreatedAt'],
+                                'expiration_date' : f['ExpirationDate'],
+                                'flexible_fund' : f['FlexibleFund'],
+                                'manual_deposit' : f['ManualDeposit'],
+                                'automatic_block' : f['AutomaticBlock']
+                            })
+
+                            expense_report.fund_id = fund.id
+                        else:
+                            expense_report.fund_id = fund.id
+                    else:
+
+                        expense_report.report_total = report_data['ReportTotal']
+                        expense_report.report_total_approved = report_data['ReportTotalApproved']
+                        expense_report.expenses_qty = report_data['NbrExpenses']
+                        expense_report.approved_expenses_qty = report_data['NbrApprovedExpenses']
+                        expense_report.rejected_expenses_qty = report_data['NbrRejectedExpenses']
+
+                        rinde_log.report_id = expense_report.id
 
                     # integration_url = "https://api.rindegastos.com/v1/setExpenseIntegration"
 
@@ -310,11 +437,14 @@ class RindegastosLog(models.Model):
 
             log.state = 'done'
             log.payment_id = payment.id
+            
+            payment.move_id.from_rindegastos = True
 
-            payment.move_id.line_ids[0].account_id = log.company_id.rindegastos_expense_account_id
+            payment.move_id.line_ids[0].account_id = log.company_id.rinde_fund_first_account_id
+            payment.move_id.line_ids[0].account_id = log.company_id.rinde_fund_second_account_id
 
             for payment_aml in payment.move_id.line_ids:
-                payment_aml.name = 'Gasto de '+ log.expense_user_name + ': '+ log.expense_note
+                payment_aml.name = 'Gasto del informe '+ log.report_id.report_title + ': '+ log.report_id.fund_id.fund_title
                 payment_aml.from_rindegastos = True
 
             payment.action_post()
@@ -358,7 +488,10 @@ class RindegastosLog(models.Model):
             'rindegastos_expense_id': self.expense_id
         })
 
-        payment.move_id.line_ids[0].account_id = self.company_id.rindegastos_expense_account_id
+        payment.move_id.from_rindegastos = True
+
+        payment.move_id.line_ids[0].account_id = self.company_id.rinde_fund_first_account_id
+        payment.move_id.line_ids[0].account_id = self.company_id.rinde_fund_second_account_id
 
         for payment_aml in payment.move_id.line_ids:
             payment_aml.name = 'Gasto de '+ self.expense_user_name + ': '+ self.expense_note

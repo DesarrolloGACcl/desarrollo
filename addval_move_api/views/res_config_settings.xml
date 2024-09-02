@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="account.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//block[@id='default_accounts']" position="after">
+                <h2>Configuraciones API</h2>
+                <div class="row mt16 o_settings_container" name="api_settings">
+                    <div class="col-12 col-lg-6 o_setting_box">
+                        <div class="o_setting_left_pane"/>
+                        <div class="o_setting_right_pane">
+                            <h3>Pagos</h3>
+                            <div>
+                                <label
+                                    string="Primera cuenta API"
+                                    for="primary_account_id"/>
+                                <div class="text-muted">
+                                    Primera cuenta API
+                                </div>
+                                <div class="content-group mt16">
+                                    <field
+                                        name="primary_account_id"
+                                        colspan="4"
+                                        nolabel="1"
+                                        options="{'no_create': True, 'no_create_edit':True}"
+                                    />
+                                </div>
+                                <label
+                                    string="Primera cuenta anticipo API"
+                                    for="advance_primary_account_id"/>
+                                <div class="text-muted">
+                                    Primera cuenta anticipo API
+                                </div>
+                                <div class="content-group mt16">
+                                    <field
+                                        name="advance_primary_account_id"
+                                        colspan="4"
+                                        nolabel="1"
+                                        options="{'no_create': True, 'no_create_edit':True}"
+                                    />
+                                </div>
+                                <label
+                                    string="Cuenta anticipo API"
+                                    for="advance_account_id"/>
+                                <div class="text-muted">
+                                    Cuenta anticipo API
+                                </div>
+                                <div class="content-group mt16">
+                                    <field
+                                        name="advance_account_id"
+                                        colspan="4"
+                                        nolabel="1"
+                                        options="{'no_create': True, 'no_create_edit':True}"
+                                    />
+                                </div>
+                                <label
+                                    string="Cuenta diferencia minima API"
+                                    for="difference_account_id"/>
+                                <div class="text-muted">
+                                    Cuenta diferencia minima API
+                                </div>
+                                <div class="content-group mt16">
+                                    <field
+                                        name="difference_account_id"
+                                        colspan="4"
+                                        nolabel="1"
+                                        options="{'no_create': True, 'no_create_edit':True}"
+                                    />
+                                </div>
+                                <label
+                                    string="Diario pagos API"
+                                    for="journal_api_id"/>
+                                <div class="text-muted">
+                                    Diario pagos API
+                                </div>
+                                <div class="content-group mt16">
+                                    <field
+                                        name="journal_api_id"
+                                        colspan="4"
+                                        nolabel="1"
+                                        options="{'no_create': True, 'no_create_edit':True}"
+                                    />
+                                </div>
+                                <label
+                                    string="Diferencia permitida"
+                                    for="allowed_difference"/>
+                                <div class="text-muted">
+                                    Diferencia permitida
+                                </div>
+                                <div class="content-group mt16">
+                                    <field
+                                        name="allowed_difference"
+                                        colspan="4"
+                                        nolabel="1"
+                                        options="{'no_create': True, 'no_create_edit':True}"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-6 o_setting_box">
+                        <div class="o_setting_left_pane"/>
+                        <div class="o_setting_right_pane">
+                            <h3>Asientos contables</h3>
+                            <div>
+                                <label
+                                    string="Primera cuenta API"
+                                    for="move_primary_account_api"/>
+                                <div class="text-muted">
+                                    Primera cuenta API
+                                </div>
+                                <div class="content-group mt16">
+                                    <field
+                                        name="move_primary_account_api"
+                                        colspan="4"
+                                        nolabel="1"
+                                        options="{'no_create': True, 'no_create_edit':True}"
+                                    />
+                                </div>
+                                <label
+                                    string="Segunda cuenta API"
+                                    for="move_secondary_account_pi"/>
+                                <div class="text-muted">
+                                    Segunda cuenta API
+                                </div>
+                                <div class="content-group mt16">
+                                    <field
+                                        name="move_secondary_account_pi"
+                                        colspan="4"
+                                        nolabel="1"
+                                        options="{'no_create': True, 'no_create_edit':True}"
+                                    />
+                                </div>
+                                <label
+                                    string="Diario asientos API"
+                                    for="move_default_journal_api"/>
+                                <div class="text-muted">
+                                    Diario API asientos contables
+                                </div>
+                                <div class="content-group mt16">
+                                    <field
+                                        name="move_default_journal_api"
+                                        colspan="4"
+                                        nolabel="1"
+                                        options="{'no_create': True, 'no_create_edit':True}"
+                                    />
+                                </div>
+                                <!-- <label
+                                    string="Cuenta por Cobrar Contacto"
+                                    for="move_partner_sale_account"/>
+                                <div class="text-muted">
+                                    Cuenta Por cobrar Contacto
+                                </div>
+                                <div class="content-group mt16">
+                                    <field
+                                        name="move_partner_sale_account"
+                                        colspan="4"
+                                        nolabel="1"
+                                        options="{'no_create': True, 'no_create_edit':True}"
+                                    />
+                                </div>
+                                <label
+                                    string="Cuenta por Pagar Contacto"
+                                    for="move_partner_purchase_account"/>
+                                <div class="text-muted">
+                                    Cuenta Por pagar Contacto
+                                </div>
+                                <div class="content-group mt16">
+                                    <field
+                                        name="move_partner_purchase_account"
+                                        colspan="4"
+                                        nolabel="1"
+                                        options="{'no_create': True, 'no_create_edit':True}"
+                                    />
+                                </div> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

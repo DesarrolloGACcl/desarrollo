@@ -7,7 +7,7 @@
         <field name='type'>form</field>
         <field name='arch' type='xml'>
             <field name="partner_shipping_id" position="after">
-                <field name="from_rindegastos" string="Pre-Factura"/>
+                <field name="from_rindegastos" string="¿Desde Rindegastos?"/>
             </field>
         </field>
     </record>

@@ -15,70 +15,63 @@ class PaymentApi(http.Controller):
     @http.route('/api/move', auth='public', type='json', methods=['POST'])
     def create_move_from_json(self, **kw):
 
-        expected_token = 'GtKJhw5c7frBr5Az6'
-        provided_token = request.httprequest.headers.get('Authorization')
+        # expected_token = 'GtKJhw5c7frBr5Az6'
+        # provided_token = request.httprequest.headers.get('Authorization')
 
-        if not provided_token:
-            return Response(json.dumps({"error": "Falta token"}), status=401, content_type='application/json')
+        # if not provided_token:
+        #     return Response(json.dumps({"error": "Falta token"}), status=401, content_type='application/json')
 
-        if provided_token != expected_token:
-            return Response(json.dumps({"error": "Unauthorized"}), status=401, content_type='application/json')
+        # if provided_token != expected_token:
+        #     return Response(json.dumps({"error": "Unauthorized"}), status=401, content_type='application/json')
         
         #OBTENER DATOS PARTNER DESDE JSON
         partner_dict = kw.get("partner")
 
         #VALIDACIÓN QUE TRAIGA EL RUT DEL PARTNER
-        if not partner_dict['rut']:        
-            return 'No se pudo crear pago: RUT de contacto es obligatorio'
+        #if not partner_dict['rut']:
+        #    return 'No se pudo crear pago: RUT de contacto es obligatorio'
         
-        partner_rut = str(partner_dict['rut'])
-
-        formatted_rut = partner_rut[:-1] + '-' + partner_rut[-1]
-
         admin_user = request.env['res.users'].sudo().search([('id', '=', 2)], limit=1)
 
         company = request.env["res.company"].sudo().search([('vat', '=ilike', kw.get("company_rut"))],limit=1)
 
-        partner = request.env["res.partner"].sudo().search([('vat', '=ilike', formatted_rut), ('company_id', '=', company.id)],limit=1)
-
         #VALIDACIÓN QUE EXISTA LA COMPAÑIA
         if not company:        
             return 'Compañía no encontrada'
+        
+        if not partner_dict['rut']:
+            parnter_id = None
+        else:
+            partner_rut = str(partner_dict['rut'])
 
-        #VALIDACIÓN QUE EXISTA PARTNER CONFIGURADO
-        if not partner:
+            formatted_rut = partner_rut[:-1] + '-' + partner_rut[-1]
+            partner = request.env["res.partner"].sudo().search([('vat', '=ilike', formatted_rut), ('company_id', '=', company.id)],limit=1)
 
-            account_receivable_id = company.move_partner_sale_account.id
-            account_payable_id = company.move_partner_purchase_account.id
+            #VALIDACIÓN QUE EXISTA PARTNER
+            if not partner: 
 
-            res_partner_categ = request.env["res.partner.category"].sudo().search([('name', '=ilike', 'Cliente')],limit=1)
-            if not res_partner_categ:
-                res_partner_categ = request.env['res.partner.category'].sudo().create({
-                    'name': 'Cliente'
+                partner = request.env['res.partner'].sudo().create({
+                    'name'  : partner_dict['name'],
+                    'vat': formatted_rut,
+                    'company_id': company.id,
+                })  
+
+                request.env['account.move.log'].sudo().create({
+                    'name': 'Log asiento contable',
+                    'partner_name'  : partner_dict['name'],
+                    'partner_rut': formatted_rut,
+                    'move_date': kw.get("date"),
+                    'amount_total': kw.get("amount_total"),
+                    'move_description': kw.get("glosa"),
+                    'company_rut': kw.get("company_rut"),
+                    'inbound_type': kw.get("tipo_de_ingreso"),
+                    'error_message': 'El asiento se creó con datos faltantes del contacto',
+                    'state': 'done',
+                    'partner_id': partner.id,
+                    'company_id': company.id
                 })
 
-            partner = request.env['res.partner'].sudo().create({
-                'name'  : partner_dict['name'],
-                'vat': formatted_rut,
-                'category_id': [(4, res_partner_categ.id)],
-                'company_id': company.id,
-            })  
-
-            request.env['account.move.log'].sudo().create({
-                'name': 'Log asiento contable',
-                'partner_name'  : partner_dict['name'],
-                'partner_rut': formatted_rut,
-                'move_date': kw.get("date"),
-                'amount_total': kw.get("amount_total"),
-                'move_description': kw.get("glosa"),
-                'company_rut': kw.get("company_rut"),
-                'inbound_type': kw.get("tipo_de_ingreso"),
-                'error_message': 'El asiento se creó con datos faltantes del contacto',
-                'state': 'done',
-                'partner_id': partner.id,
-                'company_id': company.id
-            })
-        
+            partner_id = partner.id
         
         #VALIDACIÓN QUE EXISTA DIARIO CONFIGURADO
         if company.move_default_journal_api:
@@ -232,29 +225,67 @@ class PaymentApi(http.Controller):
         month = date_object.strftime("%m")
         year = date_object.strftime("%Y")
 
+        lines_vals = []
+    
+        for line in kw.get("move_line"):
 
-        lines = [
-            {
-            'account_id': move_primary_account_api,
-            'partner_id': partner.id,
-            'name': kw.get("glosa"),
-            'debit': kw.get("amount_total")
-            },
-            {
-            'account_id': move_secondary_account_pi,
-            'partner_id': partner.id,
-            'name': kw.get("glosa"),
-            'credit': kw.get("amount_total")
-            }
-        ]  
+            if line['analytic_distribution']:
+                analytic_distribution = line['analytic_distribution']
+                distribution = {}
+                for project in analytic_distribution:
+                    account = request.env['account.analytic.account'].sudo().search([('code', '=',project['code'])], limit=1)
+                    distribution.update({account.id : project['percent']})
+            else:
+                analytic_distribution = None
+
+            if line['analytic_distribution_area']:
+                analytic_distribution_area = line['analytic_distribution_area']
+                area_distribution = {}
+                for area in analytic_distribution_area:
+                    account = request.env['account.analytic.account'].sudo().search([('code', '=',area['code'])], limit=1)
+                    area_distribution.update({account.id : area['percent']})
+            else:
+                area_distribution = None
+
+            if line['analytic_distribution_activity']:
+                analytic_distribution_activity = line['analytic_distribution_activity']
+                activity_distribution = {}
+                for activity in analytic_distribution_activity:
+                    account = request.env['account.analytic.account'].sudo().search([('code', '=',activity['code'])], limit=1)
+                    activity_distribution.update({account.id : activity['percent']})
+            else:
+                activity_distribution = None
+
+            if line['analytic_distribution_task']:
+                analytic_distribution_task = line['analytic_distribution_task']
+                task_distribution = {}
+                for task in analytic_distribution_task:
+                    account = request.env['account.analytic.account'].sudo().search([('code', '=',task['code'])], limit=1)   
+                    task_distribution.update({account.id : task['percent']})
+            else:
+                task_distribution = None
+
+            account_account = request.env['account.account'].sudo().search([('code', '=', kw.get("account_code"))], limit=1) 
+
+            lines_vals.append({
+                'account_id': account_account.id,
+                'partner_id': partner_id,
+                'name': kw.get("line_name"),
+                'debit': kw.get("debit"),
+                'credit': kw.get("credit"),
+                'analytic_distribution': analytic_distribution,
+                'analytic_distribution_area': area_distribution,
+                'analytic_distribution_activity': activity_distribution,
+                'analytic_distribution_task': task_distribution
+            })
 
         move_vals = {
-            'partner_id': partner.id,
+            'partner_id': partner_id,
             'date': kw.get("date"),
-            'ref': kw.get("glosa"),
+            'ref': kw.get("reference"),
             'journal_id': move_default_journal_api,
             'company_id': company.id,
-            'line_ids': [(0, 0, line) for line in lines],
+            'line_ids': [(0, 0, line) for line in lines_vals],
         }
         
         move = request.env['account.move'].sudo().create(move_vals)

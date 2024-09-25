@@ -14,12 +14,12 @@ class AccountPaymentRegister(models.TransientModel):
     principal_account_id = fields.Many2one(
         comodel_name='principal.account',
         compute='_compute_principal_account_id',
-        store=True, readonly=False, precompute=True,
+        store=True, readonly=False,
         string="Cuenta principal", required=True)
     secondary_account_id = fields.Many2one(
         comodel_name='secondary.account',
         compute='_compute_secondary_account_id',
-        store=True, readonly=False, precompute=True,
+        store=True, readonly=False,
         string="Subcuenta", required=True)
     third_account_id = fields.Many2one(
         comodel_name='third.account',

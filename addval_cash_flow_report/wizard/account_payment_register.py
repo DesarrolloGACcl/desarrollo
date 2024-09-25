@@ -24,7 +24,7 @@ class AccountPaymentRegister(models.TransientModel):
     third_account_id = fields.Many2one(
         comodel_name='third.account',
         compute='_compute_third_account_id',
-        store=True, readonly=False, precompute=True,
+        store=True, readonly=False,
         string="Cuenta terciaria", required=True)
 
     @api.depends('can_edit_wizard')

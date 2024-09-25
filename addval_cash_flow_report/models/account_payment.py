@@ -14,6 +14,7 @@ class AccountPayment(models.Model):
         self.principal_account_id = self.partner_id.principal_account_id
         self.secondary_account_id = self.partner_id.secondary_account_id
         self.third_account_id = self.partner_id.third_account_id
+        
     def write(self, vals):
         # OVERRIDE
         res = super().write(vals)            

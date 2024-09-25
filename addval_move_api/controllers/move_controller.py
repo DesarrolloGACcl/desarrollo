@@ -94,48 +94,7 @@ class PaymentApi(http.Controller):
         
             return 'El asiento no pudo ser creado: no existe un diario configurado'
         
-        
-        #VALIDACIÓN QUE EXISTA PRIMERA CUENTA CONFIGURADA
-        if company.move_primary_account_api:
-            move_primary_account_api = company.move_primary_account_api.id
-        else:   
-            request.env['account.move.log'].sudo().create({
-                'name': 'Log asiento contable',
-                'partner_name'  : partner_dict['name'],
-                'partner_rut': formatted_rut,
-                'move_date': kw.get("date"),
-                'amount_total': kw.get("amount_total"),
-                'move_description': kw.get("glosa"),
-                'company_rut': kw.get("company_rut"),
-                'inbound_type': kw.get("tipo_de_ingreso"),
-                'error_message': 'El asiento no pudo ser creado: no existe primera cuenta configurada',
-                'state': 'draft',
-                'partner_id': partner.id,
-                'company_id': company.id
-            })
-        
-            return 'El asiento no pudo ser creado: no existe primera cuenta configurada'
-        
-        #VALIDACIÓN QUE EXISTA SEGUNDA CUENTA CONFIGURADA
-        if company.move_secondary_account_pi:
-            move_secondary_account_pi = company.move_secondary_account_pi.id
-        else:   
-            request.env['account.move.log'].sudo().create({
-                'name': 'Log asiento contable',
-                'partner_name'  : partner_dict['name'],
-                'partner_rut': formatted_rut,
-                'move_date': kw.get("date"),
-                'amount_total': kw.get("amount_total"),
-                'move_description': kw.get("glosa"),
-                'company_rut': kw.get("company_rut"),
-                'inbound_type': kw.get("tipo_de_ingreso"),
-                'error_message': 'El asiento no pudo ser creado: no existe segunda cuenta configurada',
-                'state': 'draft',
-                'partner_id': partner.id,
-                'company_id': company.id
-            })
-        
-            return 'El asiento no pudo ser creado: no existe segunda cuenta configurada'
+    
         
                          
         #VALIDACIÓN FECHA
@@ -157,27 +116,8 @@ class PaymentApi(http.Controller):
         
             return 'El asiento no pudo ser creado: el campo date es obligatorio'
         
-        #VALIDACIÓN MONTO TOTAL
-        if not kw.get("amount_total"):   
-            request.env['account.move.log'].sudo().create({
-                'name': 'Log asiento contable',
-                'partner_name'  : partner_dict['name'],
-                'partner_rut': formatted_rut,
-                'move_date': kw.get("date"),
-                'amount_total': None,
-                'move_description': kw.get("glosa"),
-                'company_rut': kw.get("company_rut"),
-                'inbound_type': kw.get("tipo_de_ingreso"),
-                'error_message': 'El asiento no pudo ser creado: el campo amount_total es obligatorio',
-                'state': 'draft',
-                'partner_id': partner.id,
-                'company_id': company.id
-            })
         
-            return 'El asiento no pudo ser creado: el campo amount_total es obligatorio'
-        
-        
-        #VALIDACIÓN GLOSA 
+        #VALIDACIÓN reference 
         if not kw.get("glosa"):   
             request.env['account.move.log'].sudo().create({
                 'name': 'Log asiento contable',
@@ -194,26 +134,9 @@ class PaymentApi(http.Controller):
                 'company_id': company.id
             })
         
-            return 'El asiento no pudo ser creado: el campo glosa es obligatorio'
+            return 'El asiento no pudo ser creado: el campo reference es obligatorio'
         
-        #VALIDACIÓN TIPO INGRESO
-        if not kw.get("tipo_de_ingreso"):   
-            request.env['account.move.log'].sudo().create({
-                'name': 'Log asiento contable',
-                'partner_name'  : partner_dict['name'],
-                'partner_rut': formatted_rut,
-                'move_date': kw.get("date"),
-                'amount_total': kw.get("amount_total"),
-                'move_description': kw.get("glosa"),
-                'company_rut': kw.get("company_rut"),
-                'inbound_type': kw.get("tipo_de_ingreso"),
-                'error_message': 'El asiento no pudo ser creado: el campo tipo de ingreso es obligatorio',
-                'state': 'draft',
-                'partner_id': partner.id,
-                'company_id': company.id
-            })
-        
-            return 'El asiento no pudo ser creado: el campo tipo de ingreso es obligatorio'
+
 
         #Create, asociate and confirm account move    
         date_string = kw.get("date")

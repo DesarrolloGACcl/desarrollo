@@ -1,4 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 
-access_payment_log,access_payment_log,model_payment_log,,1,1,1,1
 access_account_move_log,access_account_move_log,model_account_move_log,,1,1,1,1

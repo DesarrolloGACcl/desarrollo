@@ -27,7 +27,8 @@
         'views/res_partner.xml',
         'views/secondary_account.xml',
         'views/account_move_line.xml',
-        'wizard/account_payment_register.xml'
+        'wizard/account_payment_register.xml',
+        'views/account_move.xml'
     ],
     'installable': True,
     'application': True,

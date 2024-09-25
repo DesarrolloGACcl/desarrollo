@@ -18,7 +18,7 @@
             <field name="name">third.account.form</field>
             <field name="model">third.account</field>
             <field name="arch" type="xml">
-                <form string="Subcuentas">
+                <form string="Cuentas terciarias">
                     <sheet>
                         <group>
                             <field name="name" string="Nombre"/>
@@ -31,7 +31,7 @@
         </record>
 
         <record id="third_account_act_window" model="ir.actions.act_window">
-            <field name="name">Subcuentas</field>
+            <field name="name">Cuentas terciarias</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">third.account</field>
             <field name="view_mode">tree,form</field>

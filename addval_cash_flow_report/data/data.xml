@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data noupdate="1">
+    <data>
         <record model="principal.account"><field name="name">Flujo de caja de actividades operativas</field></record>
         <record model="principal.account"><field name="name">Flujo de caja actividades de inversion</field></record>
         <record model="principal.account"><field name="name">Flujo de caja financiero</field></record>

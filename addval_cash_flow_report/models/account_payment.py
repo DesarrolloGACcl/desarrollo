@@ -5,8 +5,8 @@ from odoo import models, fields, api
 class AccountPayment(models.Model):
     _inherit = 'account.payment'
 
-    principal_account_id = fields.Many2one('principal.account', string="Cuenta principal")
-    secondary_account_id = fields.Many2one('secondary.account',string="Subcuenta")
+    principal_account_id = fields.Many2one('principal.account', string="Cuenta principal", required=True)
+    secondary_account_id = fields.Many2one('secondary.account',string="Subcuenta", required=True)
 
     @api.onchange('partner_id')
     def _onchange_partner_id(self):

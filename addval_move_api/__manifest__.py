@@ -1,16 +1,12 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "API Creación de pagos",
+    'name': "API Creación de asientos contables",
 
     'summary': """
-        Módulo que crea pagos desde JSON recibido por API""",
+        Módulo que crea asientos contables desde JSON recibido por API""",
 
     'description': """
-        Este módulo permite la habilitación de un endpoint para recibir datos en formato JSON, con la finalida de:
-         - Crear un pago
-         - Confirmar pago
-         - Asocia factura
-         - Maneja las diferencias de las recaudaciones
+        Este módulo permite la habilitación de un endpoint para recibir datos en formato JSON, con la finalida de crear un asiento contable.
     """,
 
     "author": "Addval Connect",
@@ -23,7 +19,6 @@
 
     'data': [
         'views/res_config_settings.xml',
-        'views/payment_log.xml',
         'views/account_move_log.xml',
         'security/ir.model.access.csv',
     ],

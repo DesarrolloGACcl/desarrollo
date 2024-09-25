@@ -13,7 +13,7 @@
     "website": "http://www.addval.cl",
     "category": "Product",
     "license": "Other proprietary",
-    'version': '0.1',
+    'version': '1.0',
 
     'depends': ['base', 'account'],
 

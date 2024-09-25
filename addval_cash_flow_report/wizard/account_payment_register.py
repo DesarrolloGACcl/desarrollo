@@ -25,7 +25,7 @@ class AccountPaymentRegister(models.TransientModel):
         comodel_name='third.account',
         compute='_compute_third_account_id',
         store=True, readonly=False,
-        string="Cuenta terciaria", required=True)
+        string="Cuenta terciaria")
 
     @api.depends('can_edit_wizard')
     def _compute_principal_account_id(self):

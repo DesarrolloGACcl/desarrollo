@@ -7,7 +7,7 @@ class AccountPayment(models.Model):
 
     principal_account_id = fields.Many2one('principal.account', string="Cuenta principal", required=True)
     secondary_account_id = fields.Many2one('secondary.account',string="Subcuenta", required=True)
-    third_account_id = fields.Many2one('third.account',string="Cuenta terciaria", required=True)
+    third_account_id = fields.Many2one('third.account',string="Cuenta terciaria")
 
     @api.onchange('partner_id')
     def _onchange_partner_id(self):

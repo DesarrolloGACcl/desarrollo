@@ -8,6 +8,7 @@
                 <xpath expr="//page[@id='aml_tab']//field[@name='name']" position="after">
                     <field name="principal_account_id" string="Cuenta principal" options="{'no_create': True, 'no_create_edit':True}" optional="show"/>
                     <field name="secondary_account_id" domain="[('parent_id', '=', principal_account_id)]" string="Subcuenta" options="{'no_create': True, 'no_create_edit':True}" optional="show"/>
+                    <field name="third_account_id" domain="[('parent_id', '=', secondary_account_id)]" string="Cuenta terciaria" options="{'no_create': True, 'no_create_edit':True}" optional="show"/>
                 </xpath>
             </field>
         </record>

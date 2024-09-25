@@ -21,6 +21,11 @@ class AccountPaymentRegister(models.TransientModel):
         compute='_compute_secondary_account_id',
         store=True, readonly=False, precompute=True,
         string="Subcuenta", required=True)
+    third_account_id = fields.Many2one(
+        comodel_name='third.account',
+        compute='_compute_third_account_id',
+        store=True, readonly=False, precompute=True,
+        string="Cuenta terciaria", required=True)
 
     @api.depends('can_edit_wizard')
     def _compute_principal_account_id(self):
@@ -31,6 +36,11 @@ class AccountPaymentRegister(models.TransientModel):
     def _compute_secondary_account_id(self):
         for wizard in self:
             wizard.secondary_account_id = wizard.partner_id.secondary_account_id
+
+    @api.depends('can_edit_wizard')
+    def _compute_third_account_id(self):
+        for wizard in self:
+            wizard.third_account_id = wizard.partner_id.third_account_id
 
     def _post_payments(self, to_process, edit_mode=False):
         _logger.warning('ENTRO A LA FUNCION POST PAYMENT HEREDADA')
@@ -50,11 +60,14 @@ class AccountPaymentRegister(models.TransientModel):
         for payment in payments:
             payment.principal_account_id = self.principal_account_id
             payment.secondary_account_id = self.secondary_account_id
-            
+            payment.third_account_id = self.third_account_id
+
             payment.move_id.principal_account_id = payment.principal_account_id
             payment.move_id.secondary_account_id = payment.secondary_account_id
+            payment.move_id.third_account_id = payment.third_account_id
 
             payment.move_id.line_ids[0].principal_account_id = payment.principal_account_id
             payment.move_id.line_ids[0].secondary_account_id = payment.secondary_account_id
+            payment.move_id.line_ids[0].third_account_id = payment.third_account_id
 
         payments.action_post()

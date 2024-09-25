@@ -9,3 +9,4 @@ class AccountMove(models.Model):
 
     principal_account_id = fields.Many2one('principal.account', string="Cuenta principal")
     secondary_account_id = fields.Many2one('secondary.account',string="Subcuenta")
+    third_account_id = fields.Many2one('third.account',string="Cuenta terciaria")

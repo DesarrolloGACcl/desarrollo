@@ -1,0 +1,32 @@
+<odoo>
+    <data>
+        <record model="third.account"><field name="name">Cliente</field><field name="parent_id">1</field></record>
+        <record model="third.account"><field name="name">Remuneración</field><field name="parent_id">1</field></record>
+        <record model="third.account"><field name="name">Previsión Social</field><field name="parent_id">1</field></record>
+        <record model="third.account"><field name="name">Proveedores Oficina</field><field name="parent_id">1</field></record>
+        <record model="third.account"><field name="name">Gastos Bancarios</field><field name="parent_id">1</field></record>
+        <record model="third.account"><field name="name">Mantenciones</field><field name="parent_id">1</field></record>
+        <record model="third.account"><field name="name">Arriendos</field><field name="parent_id">1</field></record>
+        <record model="third.account"><field name="name">Proveedores Proyectos</field><field name="parent_id">2</field></record>
+        <record model="third.account"><field name="name">Boletas de Honorarios</field><field name="parent_id">2</field></record>
+        <record model="third.account"><field name="name">Fondo por Rendir</field><field name="parent_id">2</field></record>
+        <record model="third.account"><field name="name">Personas</field><field name="parent_id">2</field></record>
+        <record model="third.account"><field name="name">Seguridad</field><field name="parent_id">2</field></record>
+        <record model="third.account"><field name="name">IVA</field><field name="parent_id">2</field></record>
+        <record model="third.account"><field name="name">Finiquitos</field><field name="parent_id">2</field></record>
+        <record model="third.account"><field name="name">Cumpleaños</field><field name="parent_id">2</field></record>
+        <record model="third.account"><field name="name">Venta de activo fijo</field><field name="parent_id">3</field></record>
+        <record model="third.account"><field name="name">Proveedores activos fijos</field><field name="parent_id">3</field></record>
+        <record model="third.account"><field name="name">Depositos crédito</field><field name="parent_id">4</field></record>
+        <record model="third.account"><field name="name">Pago cuota crédito</field><field name="parent_id">4</field></record>
+        <record model="third.account"><field name="name">Depositos línea de crédito</field><field name="parent_id">5</field></record>
+        <record model="third.account"><field name="name">Depositos de CTP</field><field name="parent_id">5</field></record>
+        <record model="third.account"><field name="name">Pago línea de crédito</field><field name="parent_id">5</field></record>
+        <record model="third.account"><field name="name">Pago CPT</field><field name="parent_id">5</field></record>
+        <record model="third.account"><field name="name">Intereses línea, CPT, Crédito, factoring</field><field name="parent_id">5</field></record>
+        <record model="third.account"><field name="name">Boleta de Garantía</field><field name="parent_id">5</field></record>
+        <record model="third.account"><field name="name">Tarjeta</field><field name="parent_id">5</field></record>
+        <record model="third.account"><field name="name">Gasto Financiero</field><field name="parent_id">5</field></record>
+        <record model="third.account"><field name="name">Dividendos</field><field name="parent_id">6</field></record>
+    </data>
+</odoo>

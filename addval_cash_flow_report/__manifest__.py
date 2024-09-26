@@ -19,6 +19,7 @@
 
     'data': [
         'data/data.xml',
+        'data/third_account_data.xml',
         #'data/custom_cash_flow_report.xml',
         #'data/account_report_actions.xml',
         'security/ir.model.access.csv',

@@ -15,17 +15,17 @@ class AccountPaymentRegister(models.TransientModel):
         comodel_name='principal.account',
         compute='_compute_principal_account_id',
         store=True, readonly=False, precompute=True,
-        string="Cuenta principal", required=True)
+        string="Cuenta principal")
     secondary_account_id = fields.Many2one(
         comodel_name='secondary.account',
         compute='_compute_secondary_account_id',
         store=True, readonly=False, precompute=True,
-        string="Subcuenta", required=True)
+        string="Subcuenta")
     third_account_id = fields.Many2one(
         comodel_name='third.account',
         compute='_compute_third_account_id',
         store=True, readonly=False, precompute=True,
-        string="Cuenta terciaria", required=True)
+        string="Cuenta terciaria")
 
     @api.depends('can_edit_wizard')
     def _compute_principal_account_id(self):

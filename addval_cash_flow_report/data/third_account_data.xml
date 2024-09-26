@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
         <record model="third.account"><field name="name">Cliente</field><field name="parent_id">1</field></record>

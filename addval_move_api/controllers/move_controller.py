@@ -40,7 +40,7 @@ class PaymentApi(http.Controller):
             return 'Compañía no encontrada'
         
         if not partner_dict['rut']:
-            parnter_id = None
+            partner_id = None
         else:
             partner_rut = str(partner_dict['rut'])
 
@@ -93,9 +93,6 @@ class PaymentApi(http.Controller):
             })
         
             return 'El asiento no pudo ser creado: no existe un diario configurado'
-        
-    
-        
                          
         #VALIDACIÓN FECHA
         if not kw.get("date"):   
@@ -136,7 +133,6 @@ class PaymentApi(http.Controller):
         
             return 'El asiento no pudo ser creado: el campo reference es obligatorio'
         
-
 
         #Create, asociate and confirm account move    
         date_string = kw.get("date")
@@ -196,7 +192,7 @@ class PaymentApi(http.Controller):
                 'name': line['line_name'],
                 'debit': line['debit'],
                 'credit': line['credit'],
-                'analytic_distribution': analytic_distribution,
+                'analytic_distribution': distribution,
                 'analytic_distribution_area': area_distribution,
                 'analytic_distribution_activity': activity_distribution,
                 'analytic_distribution_task': task_distribution

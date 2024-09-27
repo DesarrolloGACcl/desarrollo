@@ -202,6 +202,8 @@ class PaymentApi(http.Controller):
                 'analytic_distribution_task': task_distribution
             })
 
+        _logger.warning('LINES VALS: %s', lines_vals)
+
         move_vals = {
             'partner_id': partner_id,
             'date': kw.get("date"),

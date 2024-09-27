@@ -188,14 +188,14 @@ class PaymentApi(http.Controller):
             else:
                 task_distribution = None
 
-            account_account = request.env['account.account'].sudo().search([('code', '=', kw.get("account_code"))], limit=1) 
+            account_account = request.env['account.account'].sudo().search([('code', '=', line['account_code'])], limit=1) 
 
             lines_vals.append({
                 'account_id': account_account.id,
                 'partner_id': partner_id,
-                'name': kw.get("line_name"),
-                'debit': kw.get("debit"),
-                'credit': kw.get("credit"),
+                'name': line['line_name'],
+                'debit': line['debit'],
+                'credit': line['credit'],
                 'analytic_distribution': analytic_distribution,
                 'analytic_distribution_area': area_distribution,
                 'analytic_distribution_activity': activity_distribution,

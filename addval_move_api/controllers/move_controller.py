@@ -118,7 +118,7 @@ class PaymentApi(http.Controller):
         
         
         #VALIDACIÓN reference 
-        if not kw.get("glosa"):   
+        if not kw.get("reference"):   
             request.env['account.move.log'].sudo().create({
                 'name': 'Log asiento contable',
                 'partner_name'  : partner_dict['name'],

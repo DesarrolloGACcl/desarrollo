@@ -159,7 +159,7 @@ class PaymentApi(http.Controller):
                     account = request.env['account.analytic.account'].sudo().search([('code', '=',project['code'])], limit=1)
                     distribution.update({account.id : project['percent']})
             else:
-                analytic_distribution = None
+                distribution = None
 
             if line['analytic_distribution_area']:
                 analytic_distribution_area = line['analytic_distribution_area']

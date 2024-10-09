@@ -24,7 +24,7 @@ class PruchaseOrderLine(models.Model):
                     distribution.update({account.name : percent_str})
             else:
                 distribution = ' '
-                record['analytic_distribution_view'] = str(distribution)
+            record['analytic_distribution_view'] = str(distribution)
     
     @api.depends("analytic_distribution_area")
     def _compute_area(self):
@@ -38,7 +38,7 @@ class PruchaseOrderLine(models.Model):
                     area_distribution.update({account.name : percent_str})
             else:
                 area_distribution = ' '
-                record['analytic_distribution_area_view'] = str(area_distribution)
+            record['analytic_distribution_area_view'] = str(area_distribution)
     
     @api.depends("analytic_distribution_activity")
     def _compute_activity(self):
@@ -52,7 +52,7 @@ class PruchaseOrderLine(models.Model):
                     activity_distribution.update({account.name : percent_str})
             else:
                 activity_distribution = ' '
-                record['analytic_distribution_activity_view'] = str(activity_distribution)
+            record['analytic_distribution_activity_view'] = str(activity_distribution)
 
     @api.depends("analytic_distribution_task")
     def _compute_task(self):
@@ -66,7 +66,7 @@ class PruchaseOrderLine(models.Model):
                     task_distribution.update({account.name : percent_str})
             else:
                 task_distribution = ' '
-                record['analytic_distribution_task_view'] = str(task_distribution)
+            record['analytic_distribution_task_view'] = str(task_distribution)
 
     @api.depends('product_id', 'order_id.partner_id')
     def _compute_analytic_distribution_area(self):

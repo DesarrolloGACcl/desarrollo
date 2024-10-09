@@ -13,7 +13,7 @@
     "website": "http://www.addval.cl",
     "category": "Product",
     "license": "Other proprietary",
-    'version': '0.1',
+    'version': '1.1',
 
     'depends': ['base', 'account', 'account_accountant'],
 
@@ -26,7 +26,10 @@
         'views/principal_account.xml',
         'views/res_partner.xml',
         'views/secondary_account.xml',
-        'views/account_move_line.xml'
+        'views/third_account.xml',
+        'views/account_move_line.xml',
+        'wizard/account_payment_register.xml',
+        'views/account_move.xml'
     ],
     'installable': True,
     'application': True,

@@ -1,0 +1,16 @@
+<odoo>
+    <data>
+        <record id="move_group_account_types" model="ir.ui.view">
+            <field name="name">move.group.account.types</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="model">account.move</field>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@id='aml_tab']//field[@name='name']" position="after">
+                    <field name="principal_account_id" string="Cuenta principal" options="{'no_create': True, 'no_create_edit':True}" optional="show"/>
+                    <field name="secondary_account_id" domain="[('parent_id', '=', principal_account_id)]" string="Subcuenta" options="{'no_create': True, 'no_create_edit':True}" optional="show"/>
+                    <field name="third_account_id" domain="[('parent_id', '=', secondary_account_id)]" string="Cuenta terciaria" options="{'no_create': True, 'no_create_edit':True}" optional="show"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -339,6 +339,11 @@ class RindegastosLog(models.Model):
                         else:
                             close_date = report_data['CloseDate']
 
+                        if report_data['IntegrationDate'] == "":
+                            integration_date = None
+                        else: 
+                            integration_date = report_data['IntegrationDate']
+
                         expense_report = self.env['rindegastos.expense.report'].sudo().create({
                             'name': 'Informe de gasto: '+str(report_data['Id']),
                             'state': 'done',
@@ -364,7 +369,7 @@ class RindegastosLog(models.Model):
                             'currency' : report_data['Currency'],
                             'note' : report_data['Note'],
                             'integrated' : report_data['Integrated'],
-                            'integration_date' : report_data['IntegrationDate'],
+                            'integration_date' : integration_date,
                             'integration_external_code' : report_data['IntegrationExternalCode'],
                             'integration_internal_code' : report_data['IntegrationInternalCode'],
                             'expenses_qty' : report_data['NbrExpenses'],

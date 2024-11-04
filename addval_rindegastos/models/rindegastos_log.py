@@ -328,7 +328,7 @@ class RindegastosLog(models.Model):
                         rinde_log.partner_id = partner.id
 
                     expense_report = self.env['rindegastos.expense.report'].sudo().search([('report_id', '=', rinde_log.expense_report_id)], limit=1)   
-                    expense_report_url = 'https://api.rindegastos.com/v1/getExpense?Id='+rinde_log.expense_report_id
+                    expense_report_url = 'https://api.rindegastos.com/v1/getExpenseReport?Id='+rinde_log.expense_report_id
                     report_response = requests.request('GET', expense_report_url, headers=headers)
                     report_data = report_response.json()
 

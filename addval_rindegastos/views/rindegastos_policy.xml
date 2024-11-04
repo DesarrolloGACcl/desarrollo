@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="rindegastos_policy_tree" model="ir.ui.view">
+            <field name="name">rindegastos.policy.tree</field>
+            <field name="model">rindegastos.policy</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name" string=""/>
+                    <field name="rg_policy_id"/>
+                    <field name="rg_code"/>
+                    <field name="description"/>
+                    <field name="currency"/>
+                    <field name="is_active"/>
+                    <field name="total_employees"/>
+                    <field name="total_approvers" />     
+                    <field name="rg_revision_levels" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="rindegastos_policy_form" model="ir.ui.view">
+            <field name="name">rindegastos.policy.form</field>
+            <field name="model">rindegastos.policy</field>
+            <field name="arch" type="xml">
+                <form string="POLÍTICAS DE RINDEGASTOS">
+                    <sheet>     
+                        <h1><field name="name" string=""/></h1>                   
+                        <group>
+                            <group>
+                                <field name="name" readonly="1"/>
+                                <field name="rg_policy_id" readonly="1"/>
+                                <field name="rg_code" readonly="1"/>
+                                <field name="description" readonly="1"/>
+                                <field name="currency" readonly="1"/>
+                                <field name="is_active" readonly="1"/>
+                                <field name="total_employees" readonly="1"/>
+                                <field name="total_approvers" readonly="1"/>     
+                                <field name="rg_revision_levels" readonly="1"/>                            </group>
+                            <group> 
+
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Flujos" name="workflow_ids">
+                                <field name="workflow_ids"
+                                    widget="section_and_note_one2many"
+                                    mode="tree">
+                                    <form>
+                                        <group>
+                                            <field name="name" readonly="1"/>
+                                            <field name="rg_level" readonly="1"/>
+                                            <field name="rg_approver_id" readonly="1"/>
+                                            <field name="rg_approver_name" readonly="1"/>
+                                            <field name="rg_approver_email" readonly="1"/>
+                                            <field name="rg_amount_restriction" readonly="1"/>
+                                            <field name="rg_restriction_report_amount" readonly="1"/>
+                                            <field name="rg_restriction_extra_approver_id" readonly="1"/>
+                                            <field name="rg_restriction_extra_approver_email" readonly="1"/>
+                                            <field name="approver_id" readonly="1"/>
+                                        </group>
+                                    </form>
+                                    <tree string="Campos extra">
+                                        <field name="name"/>
+                                        <field name="rg_level" readonly="1"/>
+                                        <field name="rg_approver_id" readonly="1"/>
+                                        <field name="rg_approver_name" readonly="1"/>
+                                        <field name="rg_approver_email" readonly="1"/>
+                                        <field name="rg_amount_restriction" readonly="1"/>
+                                        <field name="rg_restriction_report_amount" readonly="1"/>
+                                        <field name="rg_restriction_extra_approver_id" readonly="1"/>
+                                        <field name="rg_restriction_extra_approver_email" readonly="1"/>
+                                        <field name="approver_id" readonly="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook> 
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_ids" widget="mail_thread"/>
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="rindegastos_policy_act_window" model="ir.actions.act_window">
+            <field name="name">Políticas de Rindegastos</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rindegastos.policy</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{}</field>
+            <field name="view_id" eval="False"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No hay registros creados
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="rindegastos_policy_account_menu" name="Políticas de Gastos" action="rindegastos_policy_act_window"
+            parent="account.root_payment_menu" sequence="50"/>
+
+    </data>
+</odoo>

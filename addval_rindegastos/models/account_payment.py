@@ -33,6 +33,12 @@ class AccountPayment(models.Model):
         tracking=3,
         default=None)
 
+    from_rindegastos = fields.Boolean(string="¿Desde Rindegastos?", defult=False, readonly=True)
+    rg_expense = fields.Char(stirng="Gasto asociado")
+    rg_approvers = fields.Char(stirng="Aprobadores")
+    rg_policy = fields.Char(string="Política de gastos")
+    rg_policy_description = fields.Char(string="Descripción política") 
+
 
     def cron_check_payment_is_paid(self):
         payments = self.env['account.payment'].sudo().search([('rindegastos_log_id', '!=', False), ('rindegastos_state', '=', 'approved'), ('is_reconciled', '=', True)], limit = 50)

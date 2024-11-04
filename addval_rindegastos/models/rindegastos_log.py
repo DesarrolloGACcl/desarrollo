@@ -142,6 +142,18 @@ class RindegastosLog(models.Model):
         readonly=False
     )
 
+    expense_policy_id = fields.Char(
+        string = 'Política de gastos',
+        store = True,
+        readonly=False
+    )
+
+    policy_id = fields.Many2one(
+        'rindegastos.policy',
+        string ='Pólitica de gastos',
+        readonly=True
+    )
+
     report_id = fields.Many2one(
         'rindegastos.expense.report',
         string ='Informe de gastos',
@@ -162,6 +174,30 @@ class RindegastosLog(models.Model):
 
     expense_project = fields.Char(
         string = 'Proyecto',
+        store = True,
+        readonly=False
+    )
+
+    expense_supplier_vat = fields.Char(
+        string = 'RUT Proveedor',
+        store = True,
+        readonly=False
+    )
+
+    expense_document_type = fields.Char(
+        string = 'Tipo De Documento',
+        store = True,
+        readonly=False
+    )
+
+    expense_document_name = fields.Char(
+        string = 'Nombre Tipo De Documento',
+        store = True,
+        readonly=False
+    )
+
+    expense_document_number = fields.Char(
+        string = 'Número De Documento',
         store = True,
         readonly=False
     )
@@ -252,6 +288,7 @@ class RindegastosLog(models.Model):
                         'integration_external_code': r['IntegrationExternalCode'],
                         'expense_user_id': r['UserId'],
                         'expense_report_id': r['ReportId'],
+                        'expense_policy_id': r['ExpensePolicyId'],
                         'expense_id': r['Id'],
                         'expense_note': r['Note'],
                     })
@@ -261,6 +298,14 @@ class RindegastosLog(models.Model):
                             rinde_log.expense_area = e['Code']
                         if e['Name'] == 'Proyecto':
                             rinde_log.expense_project = e['Code']
+                        if e['Name'] == 'RUT Proveedor':
+                            rinde_log.expense_supplier_vat = e['Value']
+                        if e['Name'] == 'Tipo De Documento':
+                            rinde_log.expense_document_name = e['Value']
+                        if e['Name'] == 'Tipo De Documento':
+                            rinde_log.expense_document_type = e['Code']
+                        if e['Name'] == 'Número De Documento':
+                            rinde_log.expense_document_number = e['Value']
                         
                         request.env['expense.extra.fields'].sudo().create({
                             'expense_log_id': rinde_log.id,
@@ -272,9 +317,7 @@ class RindegastosLog(models.Model):
                         
 
                     user_url = 'https://api.rindegastos.com/v1/getUser?Id='+str(r['UserId'])
-
                     user_response = requests.request('GET', user_url, headers=headers)
-
                     user_data = user_response.json()
 
                     rinde_log.expense_user_name = user_data['FirstName']+' '+user_data['LastName']
@@ -284,15 +327,10 @@ class RindegastosLog(models.Model):
                     if partner:
                         rinde_log.partner_id = partner.id
 
-                    expense_report = self.env['rindegastos.expense.report'].sudo().search([('report_id', '=', rinde_log.expense_report_id)], limit=1)
-                    expense_report_url = 'https://api.rindegastos.com/v1/getExpense?Id=1'+rinde_log.expense_report_id
+                    expense_report = self.env['rindegastos.expense.report'].sudo().search([('report_id', '=', rinde_log.expense_report_id)], limit=1)   
+                    expense_report_url = 'https://api.rindegastos.com/v1/getExpense?Id='+rinde_log.expense_report_id
                     report_response = requests.request('GET', expense_report_url, headers=headers)
-
                     report_data = report_response.json()
-
-                    _logger.warning('response: %s', report_response.content)
-                    _logger.warning('funds_data: %s', report_data)
-                    _logger.warning('response: %s', report_data['ExpenseReports'])     
 
                     if not expense_report:
 
@@ -331,7 +369,7 @@ class RindegastosLog(models.Model):
 
                         for e in report_data['ExtraFields']:
                             
-                            request.env['expense.extra.fields'].sudo().create({
+                            request.env['expense.report.extra.fields'].sudo().create({
                                 'expense_report_log_id': expense_report.id,
                                 'name': e['Name'],
                                 'value': e['Value'],
@@ -359,9 +397,7 @@ class RindegastosLog(models.Model):
 
                         if not fund:
                             fund_url = 'https://api.rindegastos.com/v1/getFund?Id='+expense_report.expense_report_fund_id
-
                             fund_response = requests.request('GET', fund_url, headers=headers)
-
                             f = fund_response.json()
 
                             fund = self.env['rindegastos.fund'].sudo().create({
@@ -396,7 +432,7 @@ class RindegastosLog(models.Model):
                         expense_report.approved_expenses_qty = report_data['NbrApprovedExpenses']
                         expense_report.rejected_expenses_qty = report_data['NbrRejectedExpenses']
 
-                        rinde_log.report_id = expense_report.id
+                        rinde_log.report_id = expense_report.id               
 
                     # integration_url = "https://api.rindegastos.com/v1/setExpenseIntegration"
 
@@ -413,61 +449,287 @@ class RindegastosLog(models.Model):
                     # _logger.warning('RESPONSE REASON: %s', response.reason)
                     # _logger.warning('RESPONSE TEXT: %s', response.text)
 
+                    policy = self.env['rindegastos.policy'].sudo().search([('rg_policy_id', '=', rinde_log.expense_policy_id)], limit=1)
+                    policy_url = 'https://api.rindegastos.com/v1/getExpensePolicy?Id='+rinde_log.expense_policy_id
+                    policy_response = requests.request('GET', policy_url, headers=headers)
+                    policy_data = policy_response.json()
+
+                    policy_workflow_url = 'https://api.rindegastos.com/v1/getExpensePolicyWorkflow?IdPolicy='+rinde_log.expense_policy_id
+                    policy_workflow_response = requests.request('GET', policy_workflow_url, headers=headers)
+                    policy_workflow_data = policy_workflow_response.json()
+                    
+                    if not policy:
+                        policy = self.env['rindegastos.policy'].sudo().create({
+                            'name' : policy_data['Name'],
+                            'rg_policy_id' : policy_data['Id'],
+                            'rg_code' : policy_data['Code'],
+                            'description' : policy_data['Description'],
+                            'is_active' : policy_data['IsActive'],
+                            'currency' : policy_data['Currency'],
+                            'total_employees' : policy_data['TotalEmployees'],
+                            'total_approvers' : policy_data['TotalApprovers']
+                        })
+
+                        rinde_log.policy_id = policy.id 
+
+                        policy.rg_revision_levels =  policy_workflow_data['RevisionLevels']
+
+                        for approver in policy_workflow_data['Approvers']:
+                            self.env['rindegastos.policy.workflow'].sudo().create({
+                                'name' : policy_workflow_data['PolicyName'],
+                                'policiy_id' : policy.id,
+                                'rg_policy_id' : policy_workflow_data['IdPolicy'],
+                                'rg_level' : approver['Level'],
+                                'rg_approver_id' : approver['ApproverId'],
+                                'rg_approver_name' : approver['ApproverName'],
+                                'rg_approver_email' : approver['ApproverEmail'],
+                                'rg_amount_restriction' : approver['AmmountRestriction'],
+                                'rg_restriction_report_amount' : approver['RestrictionReportAmount'],
+                                'rg_restriction_extra_approver_id' : approver['RestrictionExtraApproverId'],
+                                'rg_restriction_extra_approver_email' : approver['RestrictionExtraApproverEmail']
+                            })
+
+                    else:
+                        policy.description = policy_data['Description']
+                        policy.is_active = policy_data['IsActive']
+                        policy.total_employees = policy_data['TotalEmployees']
+                        policy.total_approvers = policy_data['TotalApprovers']
+
+                        rinde_log.policy_id = policy.id 
+
+                        policy.rg_revision_levels =  policy_workflow_data['RevisionLevels']
+
+                        policy.workflow_ids.unlink()
+
+                        for approver in policy_workflow_data['Approvers']:
+                            self.env['rindegastos.policy.workflow'].sudo().create({
+                                'name' : policy_workflow_data['PolicyName'],
+                                'policiy_id' : policy.id,
+                                'rg_policy_id' : policy_workflow_data['IdPolicy'],
+                                'rg_level' : approver['Level'],
+                                'rg_approver_id' : approver['ApproverId'],
+                                'rg_approver_name' : approver['ApproverName'],
+                                'rg_approver_email' : approver['ApproverEmail'],
+                                'rg_amount_restriction' : approver['AmmountRestriction'],
+                                'rg_restriction_report_amount' : approver['RestrictionReportAmount'],
+                                'rg_restriction_extra_approver_id' : approver['RestrictionExtraApproverId'],
+                                'rg_restriction_extra_approver_email' : approver['RestrictionExtraApproverEmail']
+                            })
+
+
     #TO DO: Add the validations when the document number is invoice or ticket 
     def create_payment_from_log_cron(self):
         rinde_logs = self.env['rindegastos.log'].sudo().search([('state', '=', 'draft')], limit=50)
-        
+
         for log in rinde_logs:
-            payment_method = request.env['account.payment.method.line'].sudo().search([('journal_id', '=', log.company_id.rindegastos_journal_id.id), ('code', '=ilike', 'manual')], limit=1)
 
-            payment = self.env['account.payment'].sudo().create({
-                'amount': log.expense_total,
-                'payment_method_line_id': payment_method.id,
-                'journal_id': log.company_id.rindegastos_journal_id.id,
-                'date': log.expense_date,
-                'partner_id': log.partner_id.id,
-                'partner_type': 'supplier',
-                'payment_type': 'outbound',
-                'company_id': log.company_id.id,
-                'ref': 'Gasto de '+ log.expense_user_name + ': '+ log.expense_note,
-                'rindegastos_state': 'approved',
-                'rindegastos_log_id' : log.id,
-                'rindegastos_expense_id': log.expense_id
-            })
+            if log.expense_document_type:
+                payment_method = self.env['account.payment.method.line'].sudo().search([('journal_id', '=', log.company_id.rindegastos_journal_id.id), ('code', '=ilike', 'manual')], limit=1)
 
-            log.state = 'done'
-            log.payment_id = payment.id
-            
-            payment.move_id.from_rindegastos = True
+                if log.expense_document_type == "AF" or log.expense_document_type == "BO":
+                    if log.expense_document_type == "AF":
+                        document_type = "33"
+                    else:
+                        document_type = "39"
+                    invoice = self.env['account.move'].sudo().search([('l10n_latam_document_type_id.code', '=', document_type), ('l10n_latam_document_number', '=', log.expense_document_number)], limit=1)
 
-            payment.move_id.line_ids[0].account_id = log.company_id.rinde_fund_first_account_id
-            payment.move_id.line_ids[0].account_id = log.company_id.rinde_fund_second_account_id
+                    payment_register = invoice.action_register_payment()
 
-            for payment_aml in payment.move_id.line_ids:
-                payment_aml.name = 'Gasto del informe '+ log.report_id.report_title + ': '+ log.report_id.fund_id.fund_title
-                payment_aml.from_rindegastos = True
+                    payment_register_data = request.env['account.payment.register'].sudo().with_context(payment_register['context']).create({
+                        'amount': log.expense_total,
+                        'payment_method_line_id': payment_method.id,
+                        'journal_id': log.company_id.rindegastos_journal_id.id,
+                        'payment_date': log.expense_date,
+                        'company_id': log.company_id.id
+                    })
 
-            payment.action_post()
+                    payment_dict_created = payment_register_data.action_create_payments()
 
-            if log.expense_area:
-                area_distribution = {}
-                account = request.env['account.analytic.account'].sudo().search([('code', '=',log.expense_area)], limit=1)   
-                area_distribution.update({account.id : 100})
+                    payment = request.env['account.payment'].sudo().search([('id', '=', payment_dict_created['res_id'])])
+
+                    payment.partner_id = log.partner_id.id,
+                    payment.partner_type = 'supplier'
+                    payment.payment_type = 'outbound'
+                    payment.ref = 'Gasto de '+ log.expense_user_name + ': '+ log.expense_note
+                    payment.rindegastos_state = 'approved'
+                    payment.rindegastos_log_id = log.id
+                    payment.rindegastos_expense_id = log.expense_id
+                    payment.from_rindegastos = True
+                    payment.rg_expense = log.name
+                    payment.rg_policy = log.policy_id.name
+                    payment.rg_policy_description = log.policy_id.description
+
+                    log.state = 'done'
+                    log.payment_id = payment.id
+
+                    for level in log.policy_id.workflow_ids:
+                        payment.rg_approvers = payment.rg_approvers+' - '+level.rg_approver_name
+                    
+                    payment.move_id.from_rindegastos = True
+                    payment.move_id.rg_approvers = payment.rg_approvers
+                    payment.move_id.rg_expense = payment.rg_expense
+                    payment.move_id.rg_policy = payment.rg_policy
+                    payment.move_id.rg_policy_description = payment.rg_policy_description
+
+                    payment.move_id.line_ids[0].account_id = log.company_id.rindegastos_expense_account_id
+                    payment.move_id.line_ids[0].account_id = log.company_id.rindegastos_expense_second_account_id
+
+                    for payment_aml in payment.move_id.line_ids:
+                        payment_aml.name = 'Gasto del informe '+ log.report_id.report_title + ': '+ log.report_id.fund_id.fund_title
+                        payment_aml.from_rindegastos = True
+                        payment_aml.rg_approvers = payment.rg_approvers
+                        payment_aml.rg_expense = payment.rg_expense
+                        payment_aml.rg_policy = payment.rg_policy
+                        payment_aml.rg_policy_description = payment.rg_policy_description
+
+                    if log.expense_area:
+                        area_distribution = {}
+                        account = request.env['account.analytic.account'].sudo().search([('code', '=',log.expense_area)], limit=1)   
+                        area_distribution.update({account.id : 100})
+                    else:
+                        area_distribution = None
+
+                    if log.expense_project:
+                        project_distribution = {}
+                        account = request.env['account.analytic.account'].sudo().search([('code', '=',log.expense_project)], limit=1)   
+                        project_distribution.update({account.id : 100})
+                    else:
+                        project_distribution = None
+
+                    payment.move_id.line_ids[0].analytic_distribution = project_distribution
+                    payment.move_id.line_ids[1].analytic_distribution = project_distribution
+                    
+                    payment.move_id.line_ids[0].analytic_distribution_area = area_distribution
+                    payment.move_id.line_ids[1].analytic_distribution_area = area_distribution
+                else:
+
+                    payment = self.env['account.payment'].sudo().create({
+                        'amount': log.expense_total,
+                        'payment_method_line_id': payment_method.id,
+                        'journal_id': log.company_id.rindegastos_journal_id.id,
+                        'date': log.expense_date,
+                        'partner_id': log.partner_id.id,
+                        'partner_type': 'supplier',
+                        'payment_type': 'outbound',
+                        'company_id': log.company_id.id,
+                        'ref': 'Gasto de '+ log.expense_user_name + ': '+ log.expense_note,
+                        'rindegastos_state': 'approved',
+                        'rindegastos_log_id' : log.id,
+                        'rindegastos_expense_id': log.expense_id,
+                        'from_rindegastos': True,
+                        'rg_expense' : log.name,
+                        'rg_policy' : log.policy_id.name,
+                        'rg_policy_description' : log.policy_id.description,
+                    })
+
+                    log.state = 'done'
+                    log.payment_id = payment.id
+
+                    for level in log.policy_id.workflow_ids:
+                        payment.rg_approvers = payment.rg_approvers+' - '+level.rg_approver_name
+                    
+                    payment.move_id.from_rindegastos = True
+                    payment.move_id.rg_approvers = payment.rg_approvers
+                    payment.move_id.rg_expense = payment.rg_expense
+                    payment.move_id.rg_policy = payment.rg_policy
+                    payment.move_id.rg_policy_description = payment.rg_policy_description
+
+                    payment.move_id.line_ids[0].account_id = log.company_id.rindegastos_expense_account_id
+                    payment.move_id.line_ids[0].account_id = log.company_id.rindegastos_expense_second_account_id
+
+                    for payment_aml in payment.move_id.line_ids:
+                        payment_aml.name = 'Gasto del informe '+ log.report_id.report_title + ': '+ log.report_id.fund_id.fund_title
+                        payment_aml.from_rindegastos = True
+                        payment_aml.rg_approvers = payment.rg_approvers
+                        payment_aml.rg_expense = payment.rg_expense
+                        payment_aml.rg_policy = payment.rg_policy
+                        payment_aml.rg_policy_description = payment.rg_policy_description
+
+                    payment.action_post()
+
+                    if log.expense_area:
+                        area_distribution = {}
+                        account = request.env['account.analytic.account'].sudo().search([('code', '=',log.expense_area)], limit=1)   
+                        area_distribution.update({account.id : 100})
+                    else:
+                        area_distribution = None
+
+                    if log.expense_project:
+                        project_distribution = {}
+                        account = request.env['account.analytic.account'].sudo().search([('code', '=',log.expense_project)], limit=1)   
+                        project_distribution.update({account.id : 100})
+                    else:
+                        project_distribution = None
+
+                    payment.move_id.line_ids[0].analytic_distribution = project_distribution
+                    payment.move_id.line_ids[1].analytic_distribution = project_distribution
+                    
+                    payment.move_id.line_ids[0].analytic_distribution_area = area_distribution
+                    payment.move_id.line_ids[1].analytic_distribution_area = area_distribution
             else:
-                area_distribution = None
+                for level in log.policy_id.workflow_ids:
+                    rg_approvers = payment.rg_approvers+' - '+level.rg_approver_name
 
-            if log.expense_project:
-                project_distribution = {}
-                account = request.env['account.analytic.account'].sudo().search([('code', '=',log.expense_project)], limit=1)   
-                project_distribution.update({account.id : 100})
-            else:
-                project_distribution = None
+                if log.expense_area:
+                    area_distribution = {}
+                    account = request.env['account.analytic.account'].sudo().search([('code', '=',log.expense_area)], limit=1)   
+                    area_distribution.update({account.id : 100})
+                else:
+                    area_distribution = None
 
-            payment.move_id.line_ids[0].analytic_distribution = project_distribution
-            payment.move_id.line_ids[1].analytic_distribution = project_distribution
+                if log.expense_project:
+                    project_distribution = {}
+                    account = request.env['account.analytic.account'].sudo().search([('code', '=',log.expense_project)], limit=1)   
+                    project_distribution.update({account.id : 100})
+                else:
+                    project_distribution = None
+
+                lines = [
+                    {
+                    'account_id': log.company_id.rindegastos_expense_account_id,
+                    'partner_id': log.partner_id,
+                    'name': log.name + '' +' del informe '+ log.report_id.report_title + ': '+ log.report_id.fund_id.fund_title,
+                    'debit': log.expense_total,
+                    'analytic_distribution' : project_distribution,
+                    'analytic_distribution_area' : area_distribution,
+                    'from_rindegastos' : True,
+                    'rg_approvers' : rg_approvers,
+                    'rg_expense' : log.name,
+                    'rg_policy' : log.policy_id.name,
+                    'rg_policy_description' : log.policy_id.description
+                    },
+                    {
+                    'account_id': log.company_id.rindegastos_expense_second_account_id,
+                    'partner_id': log.partner_id,
+                    'name': log.name + '' +' del informe '+ log.report_id.report_title + ': '+ log.report_id.fund_id.fund_title,
+                    'credit': log.expense_total,
+                    'analytic_distribution' : project_distribution,
+                    'analytic_distribution_area' : area_distribution,
+                    'from_rindegastos' : True,
+                    'rg_approvers' : rg_approvers,
+                    'rg_expense' : log.name,
+                    'rg_policy' : log.policy_id.name,
+                    'rg_policy_description' : log.policy_id.description
+                    }
+                ]  
+
+                move_vals = {
+                    'partner_id': log.partner_id,
+                    'date': log.created_date,
+                    'ref': log.name + '' +' del informe '+ log.report_id.report_title + ': '+ log.report_id.fund_id.fund_title,
+                    'journal_id': log.company_id.rindegastos_journal_id,
+                    'company_id': log.company_id,
+                    'line_ids': [(0, 0, line) for line in lines],
+                    'from_rindegastos' : True,
+                    'rg_approvers' : rg_approvers,
+                    'rg_expense' : log.name,
+                    'rg_policy' : log.policy_id.name,
+                    'rg_policy_description' : log.policy_id.description
+                }
             
-            payment.move_id.line_ids[0].analytic_distribution_area = area_distribution
-            payment.move_id.line_ids[1].analytic_distribution_area = area_distribution
+                move = request.env['account.move'].sudo().create(move_vals)
+
+                move.action_post() 
             
     #TO DO: Add the validations when the document number is invoice or ticket 
     def create_payment_from_log(self):
@@ -485,17 +747,36 @@ class RindegastosLog(models.Model):
             'ref': 'Gasto de '+ self.expense_user_name + ': '+ self.expense_note,
             'rindegastos_state': 'approved',
             'rindegastos_log_id': self.id,
-            'rindegastos_expense_id': self.expense_id
+            'rindegastos_expense_id': self.expense_id,
+            'from_rindegastos': True,
+            'rindegastos_expense_id': self.expense_id,
+            'from_rindegastos': True,
+            'rg_expense' : self.name,
+            'rg_policy' : self.policy_id.name,
+            'rg_policy_description' : self.policy_id.description,
         })
 
         payment.move_id.from_rindegastos = True
 
-        payment.move_id.line_ids[0].account_id = self.company_id.rinde_fund_first_account_id
-        payment.move_id.line_ids[0].account_id = self.company_id.rinde_fund_second_account_id
+        for level in self.policy_id.workflow_ids:
+            payment.rg_approvers = payment.rg_approvers+' - '+level.rg_approver_name
+            
+        payment.move_id.from_rindegastos = True
+        payment.move_id.rg_approvers = payment.rg_approvers
+        payment.move_id.rg_expense = payment.rg_expense
+        payment.move_id.rg_policy = payment.rg_policy
+        payment.move_id.rg_policy_description = payment.rg_policy_description
+
+        payment.move_id.line_ids[0].account_id = self.company_id.rindegastos_expense_account_id
+        payment.move_id.line_ids[0].account_id = self.company_id.rindegastos_expense_second_account_id
 
         for payment_aml in payment.move_id.line_ids:
             payment_aml.name = 'Gasto de '+ self.expense_user_name + ': '+ self.expense_note
             payment_aml.from_rindegastos = True
+            payment_aml.move_id.rg_approvers = payment.rg_approvers
+            payment_aml.move_id.rg_expense = payment.rg_expense
+            payment_aml.move_id.rg_policy = payment.rg_policy
+            payment_aml.move_id.rg_policy_description = payment.rg_policy_description
 
         payment.action_post()
 

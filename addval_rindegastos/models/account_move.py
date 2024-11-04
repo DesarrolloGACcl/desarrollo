@@ -9,3 +9,7 @@ class AccountMove(models.Model):
     _inherit = 'account.move'
 
     from_rindegastos = fields.Boolean(string="¿Desde Rindegastos?", defult=False, readonly=True)
+    rg_expense = fields.Char(stirng="Gasto asociado")
+    rg_approvers = fields.Char(stirng="Aprobadores")
+    rg_policy = fields.Char(string="Política de gastos")
+    rg_policy_description = fields.Char(string="Descripción política") 

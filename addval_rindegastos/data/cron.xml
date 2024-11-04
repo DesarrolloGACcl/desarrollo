@@ -34,7 +34,7 @@
             <field name="doall" eval="False"/>
         </record>
 
-        <record id="cron_auto_create_payment_from_log" model="ir.cron">
+        <record id="cron_auto_create_move_from_fund" model="ir.cron">
             <field name="name">Creación asiento desde fondo</field>
             <field name="model_id" ref="addval_rindegastos.model_rindegastos_fund"/>
             <field name="state">code</field>

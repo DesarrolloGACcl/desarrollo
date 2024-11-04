@@ -334,6 +334,11 @@ class RindegastosLog(models.Model):
 
                     if not expense_report:
 
+                        if report_data['CloseDate'] == "":
+                            close_date = None
+                        else:
+                            close_date = report_data['CloseDate']
+
                         expense_report = self.env['rindegastos.expense.report'].sudo().create({
                             'name': 'Informe de gasto: '+str(report_data['Id']),
                             'state': 'done',
@@ -343,7 +348,7 @@ class RindegastosLog(models.Model):
                             'report_title' : report_data['Title'],
                             'report_number' : report_data['ReportNumber'],
                             'send_date' : report_data['SendDate'],
-                            'close_date' : report_data['CloseDate'],
+                            'close_date' : close_date,
                             'employee_id' : report_data['EmployeeId'],
                             'employee_name' : report_data['EmployeeName'],
                             'employee_identification' : report_data['EmployeeIdentification'],

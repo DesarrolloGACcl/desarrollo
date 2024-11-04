@@ -422,7 +422,6 @@ class RindegastosLog(models.Model):
                                 'id_assing_to' : f['IdAssignTo'],
                                 'id_creator' : f['IdCreator'],
                                 'deposits' : f['Deposits'],
-                                'withdrawals' : f['Withdrawals'],
                                 'balance' : f['Balance'],
                                 'created_date' : f['CreatedAt'],
                                 'expiration_date' : f['ExpirationDate'],

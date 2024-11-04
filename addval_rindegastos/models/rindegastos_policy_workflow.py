@@ -25,4 +25,4 @@ class RindegastosPolicyWorkflow(models.Model):
     rg_restriction_extra_approver_email = fields.Char(string="Email aprobador extra restricción")
 
     approver_id = fields.Many2one('res.partner', string="Aprobador")
-    policiy_id = fields.Many2one('rindegastos.policy', string="Política de gasto")
+    policy_id = fields.Many2one('rindegastos.policy', string="Política de gasto")

@@ -65,6 +65,8 @@ class BankRecWidget(models.Model):
         )
         self.next_action_todo = {'type': 'reconcile_st_line'}
 
-        self.move_id.line_ids[0].principal_account_id = partner_id_to_set.principal_account_id.id
-        self.move_id.line_ids[0].secondary_account_id = partner_id_to_set.secondary_account_id.id
-        self.move_id.line_ids[0].third_account_id = partner_id_to_set.third_account_id.id
+        partner = self.env['res.partner'].search([('id', '=', partner_id_to_set)], limit =1)
+
+        self.move_id.line_ids[0].principal_account_id = partner.principal_account_id.id
+        self.move_id.line_ids[0].secondary_account_id = partner.secondary_account_id.id
+        self.move_id.line_ids[0].third_account_id = partner.third_account_id.id

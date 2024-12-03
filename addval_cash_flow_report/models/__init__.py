@@ -7,3 +7,4 @@ from . import third_account
 from . import account_payment
 from . import account_move
 from . import account_move_line
+from . import bank_rec_widget

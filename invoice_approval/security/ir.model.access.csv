@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+
+access_sale_log,access_sale_log,model_sale_log,,1,1,1,1
+access_sale_log_line,access_sale_log_line,model_sale_log_line,,1,1,1,1
+access_sale_log_warning_cron,access_sale_log_warning_cron,model_sale_log_warning_cron,,1,1,1,1

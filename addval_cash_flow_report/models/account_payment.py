@@ -17,13 +17,14 @@ class AccountPayment(models.Model):
         
     def write(self, vals):
         # OVERRIDE
-        res = super().write(vals)            
-        self.move_id.principal_account_id = self.principal_account_id
-        self.move_id.secondary_account_id = self.secondary_account_id
-        self.move_id.third_account_id = self.third_account_id
+        res = super().write(vals)     
+        for record in self:       
+            record.move_id.principal_account_id = record.principal_account_id
+            record.move_id.secondary_account_id = record.secondary_account_id
+            record.move_id.third_account_id = record.third_account_id
 
-        self.move_id.line_ids[0].principal_account_id = self.principal_account_id
-        self.move_id.line_ids[0].secondary_account_id = self.secondary_account_id
-        self.move_id.line_ids[0].third_account_id = self.third_account_id
-        self._synchronize_to_moves(set(vals.keys()))
+            record.move_id.line_ids[0].principal_account_id = record.principal_account_id
+            record.move_id.line_ids[0].secondary_account_id = record.secondary_account_id
+            record.move_id.line_ids[0].third_account_id = record.third_account_id
+            record._synchronize_to_moves(set(vals.keys()))
         return res

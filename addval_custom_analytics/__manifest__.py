@@ -25,7 +25,6 @@
         'web_domain_field',
         'account_reports',
         'account_budget',
-        'invoice_approval'
     ],
 
     'data': [

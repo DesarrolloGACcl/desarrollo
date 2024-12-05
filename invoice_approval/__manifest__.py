@@ -19,7 +19,7 @@
 
     'data': [
         #'data/data.xml',
-        #'security/ir.model.access.csv',
+        'security/ir.model.access.csv',
         'views/account_analytic_account.xml',
         'views/account_move.xml',
         'views/res_head.xml'

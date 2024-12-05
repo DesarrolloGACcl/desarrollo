@@ -31,7 +31,7 @@ class MoveApi(http.Controller):
                                                                                     ('plan_id', '=', project_analytic_plan.id)], limit =1)
             
 
-        invoices = request.env['account.move'].search([
+        invoices = request.env['account.move'].sudo().search([
             ('invoice_line_ids.analytic_distribution', '!=', False),
             ('invoice_line_ids.analytic_distribution', 'like', f'%{analytic_project.id}%'),
             ('move_type', 'in', ['out_invoice', 'in_invoice']),  # Facturas de cliente y proveedor

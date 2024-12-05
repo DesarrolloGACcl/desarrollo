@@ -6,7 +6,7 @@
       <field name="model">account.move</field>
       <field name="arch" type="xml">
         <xpath expr="//field[@name='partner_shipping_id']" position="after">
-          <field name="approver_id" string="Aporbador"/>
+          <field name="approver_id" string="Aprobador"/>
         </xpath>
       </field>
     </record>

@@ -20,8 +20,9 @@
     'data': [
         #'data/data.xml',
         #'security/ir.model.access.csv',
-        #'views/account_payment.xml',
-        #'views/account_move.xml'
+        'views/account_analytic_account.xml',
+        'views/account_move.xml',
+        'views/res_head.xml'
     ],
     'installable': True,
     'application': True,

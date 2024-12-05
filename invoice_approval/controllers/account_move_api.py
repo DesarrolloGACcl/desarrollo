@@ -31,15 +31,14 @@ class MoveApi(http.Controller):
                                                                                     ('plan_id', '=', project_analytic_plan.id)], limit =1)
             
 
-        query = request.env['account.move.line'].sudo().search([('move_id.move_type', 'in', request.env['account.move'].get_purchase_types())])
-        query.add_where('analytic_distribution ? %s', [str(analytic_project.id)])
-        query_string, query_param = query.select('DISTINCT account_move_line.move_id')
-        request._cr.execute(query_string, query_param)
-        move_ids = [line.get('move_id') for line in request._cr.dictfetchall()]
+        invoices = request.env['account.move'].search([
+            ('invoice_line_ids.analytic_distribution', '!=', False),
+            ('invoice_line_ids.analytic_distribution', 'like', f'%{analytic_project.id}%'),
+            ('move_type', 'in', ['out_invoice', 'in_invoice']),  # Facturas de cliente y proveedor
+            ('state', '=', 'posted')  # Solo facturas validadas
+        ])
 
-        _logger.warning('move_ids: %s', move_ids)
-
-        invoices = request.env["account.move"].sudo().search([('id', 'in', move_ids)])
+        _logger.warning('move_ids: %s', invoices)
 
         if not invoices:
             return request.make_response('Facturas no encontradas', status=404)

@@ -33,7 +33,7 @@ class MoveApi(http.Controller):
 
         invoices = request.env['account.move'].sudo().search([
             ('invoice_line_ids.analytic_distribution', '!=', False),
-            ('invoice_line_ids.analytic_distribution', 'ilike', f'"{analytic_project.id}"'),
+            ('invoice_line_ids.analytic_distribution', 'ilike', str(analytic_project.id)),
             ('move_type', '=', 'in_invoice')
         ])
 

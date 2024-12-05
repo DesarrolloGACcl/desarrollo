@@ -31,11 +31,15 @@ class MoveApi(http.Controller):
                                                                                     ('plan_id', '=', project_analytic_plan.id)], limit =1)
             
 
-        invoices = request.env['account.move'].sudo().search([
-            ('invoice_line_ids.analytic_distribution', '!=', False),
-            ('invoice_line_ids.analytic_distribution', 'ilike', str(analytic_project.id)),
-            ('move_type', '=', 'in_invoice')
-        ])
+        query = """
+            SELECT DISTINCT account_move_line.move_id
+            FROM account_move_line
+            WHERE account_move_line.analytic_distribution ? %s
+        """
+        request.env.cr.execute(query, [str(analytic_project.id)])
+        move_ids = [res['move_id'] for res in request.env.cr.dictfetchall()]
+
+        invoices = request.env['account.move'].sudo().browse(move_ids)
 
         _logger.warning('move_ids: %s', invoices)
 

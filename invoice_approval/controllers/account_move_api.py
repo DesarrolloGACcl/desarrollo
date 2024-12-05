@@ -24,39 +24,46 @@ class MoveApi(http.Controller):
         # if provided_token != expected_token:
         #     return Response(json.dumps({"error": "Unauthorized"}), status=401, content_type='application/json')
 
-        invoices = request.env["account.move"].sudo().search([()])
+        project_analytic_plan = request.env['account.analytic.plan'].sudo().search([('id', '=', 1)])
+
+                                                                        
+        analytic_project = request.env['account.analytic.account'].sudo().search([('code', '=', project_code),
+                                                                                    ('plan_id', '=', project_analytic_plan.id)], limit =1)
+            
+
+        query = request.env['account.move.line'].sudo().search([('move_id.move_type', 'in', request.env['account.move'].get_purchase_types())])
+        query.order = None
+        query.add_where('analytic_distribution ? %s', [str(analytic_project.id)])
+        query_string, query_param = query.select('DISTINCT account_move_line.move_id')
+        request._cr.execute(query_string, query_param)
+        move_ids = [line.get('move_id') for line in request._cr.dictfetchall()]
+
+        _logger.warning('move_ids: %s', move_ids)
+
+        invoices = request.env["account.move"].sudo().search([('id', 'in', move_ids)])
 
         if not invoices:
             return request.make_response('Facturas no encontradas', status=404)
         
         # Constructing the json data structure
-
         invoice_data_list = []
 
         for invoice in invoices:
 
             move_data = {
-                'fecha': str(invoice.date),
-                'documento': aml.move_id.name,
-                'empresa': aml.partner_id.name,
-                'rut': aml.partner_id.vat,
-                'codigo_proyecto': project_codes,
-                'proyecto': formatted_project_analytic_info, 
-                'codigo_area': area_codes, 
-                'area': formatted_area_analytic_info, 
-                'codigo_actividad': activity_codes, 
-                'actividad': formatted_activity_analytic_info, 
-                'codigo_tarea': task_codes, 
-                'tarea': formatted_task_analytic_info, 
-                'detalle_etiqueta': aml.name,
-                'debe': aml.debit, 
-                'haber': aml.credit, 
-                'codigo_cuenta_contable': aml.account_id.code, 
-                'nombre_cuenta': aml.account_id.name,
-                'raiz_de_cuenta': aml.account_root_id.name, 
-                'saldo':aml.balance,
+                'fecha_factura': str(invoice.invoice_date),
+                'fecha_contable': str(invoice.date),
+                'documento': invoice.name,
+                'empresa': invoice.partner_id.name,
+                'rut': invoice.partner_id.vat, 
+                'folio': invoice.l10n_latam_document_number,
+                'tipo_documento': invoice.l10n_latam_document_type_id.name, 
+                'total': invoice.amount_total, 
+                'monto_neto': invoice.amount_untaxed, 
+                'impuesto': invoice.amount_tax,
+                'id_aprobador': invoice.approver_id.managment_system_id,
+                'aprobador': invoice.approver_id.name +' '+invoice.approver_id.surname,
                 'odoo_invoice_id': invoice.id,
-                'from_rindegastos':aml.from_rindegastos,
             }
 
             invoice_data_list.append(move_data)

@@ -51,6 +51,18 @@ class MoveApi(http.Controller):
 
         for invoice in invoices:
 
+            if not invoice.approver_id:
+
+                id_aprobador = 'No tiene aprobador'
+
+                nombre_aprobador = 'No tiene aprobador'
+
+            else:
+                id_aprobador = invoice.approver_id.managment_system_id
+
+                nombre_aprobador = invoice.approver_id.name +' '+invoice.approver_id.surname
+
+
             move_data = {
                 'fecha_factura': str(invoice.invoice_date),
                 'fecha_contable': str(invoice.date),
@@ -62,8 +74,8 @@ class MoveApi(http.Controller):
                 'total': invoice.amount_total, 
                 'monto_neto': invoice.amount_untaxed, 
                 'impuesto': invoice.amount_tax,
-                'id_aprobador': invoice.approver_id.managment_system_id,
-                'aprobador': invoice.approver_id.name +' '+invoice.approver_id.surname,
+                'id_aprobador': id_aprobador,
+                'aprobador': nombre_aprobador,
                 'odoo_invoice_id': invoice.id,
             }
 

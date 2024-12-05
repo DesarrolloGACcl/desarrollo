@@ -32,7 +32,6 @@ class MoveApi(http.Controller):
             
 
         query = request.env['account.move.line'].sudo().search([('move_id.move_type', 'in', request.env['account.move'].get_purchase_types())])
-        query.order = None
         query.add_where('analytic_distribution ? %s', [str(analytic_project.id)])
         query_string, query_param = query.select('DISTINCT account_move_line.move_id')
         request._cr.execute(query_string, query_param)

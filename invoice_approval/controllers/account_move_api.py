@@ -34,8 +34,7 @@ class MoveApi(http.Controller):
         invoices = request.env['account.move'].sudo().search([
             ('invoice_line_ids.analytic_distribution', '!=', False),
             ('invoice_line_ids.analytic_distribution', 'like', f'%{analytic_project.id}%'),
-            ('move_type', 'in', ['out_invoice', 'in_invoice']),  # Facturas de cliente y proveedor
-            ('state', '=', 'posted')  # Solo facturas validadas
+            ('move_type', 'in', ['in_invoice'])
         ])
 
         _logger.warning('move_ids: %s', invoices)

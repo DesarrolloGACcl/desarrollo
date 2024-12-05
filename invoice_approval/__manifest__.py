@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "",
+    'name': "Aprobación facturas",
 
     'summary': """
         """,
@@ -9,8 +9,8 @@
         
     """,
 
-    "author": "Addval Connect",
-    "website": "http://www.addval.cl",
+    "author": "",
+    "website": "",
     "category": "Product",
     "license": "Other proprietary",
     'version': '0.1',

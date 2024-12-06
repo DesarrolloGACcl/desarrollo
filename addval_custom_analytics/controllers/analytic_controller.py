@@ -67,7 +67,7 @@ class AnalyticApi(http.Controller):
                 'name': kw.get("name"),
                 'surname': kw.get("surname"),
                 'second_surname': kw.get("second_surname"),
-                'managment_system_id': kw.get("id"),
+                'managment_system_id': kw.get("managment_system_id"),
                 'position': kw.get("position"),
                 'email': kw.get("email")
             })

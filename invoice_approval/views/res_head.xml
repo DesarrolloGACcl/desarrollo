@@ -11,6 +11,8 @@
                     <field name="surname"/>
                     <field name="second_surname"/>
                     <field name="managment_system_id"/>
+                    <field name="position"/>
+                    <field name="email"/>
                 </tree>
             </field>
         </record>
@@ -26,6 +28,8 @@
                             <field name="surname"/>
                             <field name="second_surname"/>
                             <field name="managment_system_id"/>
+                            <field name="position"/>
+                            <field name="email"/>
                         </group>
                     </sheet>
                 </form>

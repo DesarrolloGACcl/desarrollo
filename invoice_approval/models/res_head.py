@@ -14,3 +14,5 @@ class ResHead(models.Model):
     surname = fields.Char(string='Apellido')
     second_surname = fields.Char(string='Segundo Apellido')
     managment_system_id = fields.Integer(string='ID en sistema de gestión')
+    position = fields.Char(string="Cargo")
+    email = fields.Char(string="e-mail")

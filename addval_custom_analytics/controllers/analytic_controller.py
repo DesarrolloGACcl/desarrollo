@@ -67,8 +67,16 @@ class AnalyticApi(http.Controller):
                 'name': kw.get("name"),
                 'surname': kw.get("surname"),
                 'second_surname': kw.get("second_surname"),
-                'managment_system_id': kw.get("id")
+                'managment_system_id': kw.get("id"),
+                'position': kw.get("position"),
+                'email': kw.get("email")
             })
+        else:
+            head.name = kw.get("name")
+            head.surname = kw.get("surname")
+            head.second_surname = kw.get("second_surname")
+            head.position = kw.get("position")
+            head.email = kw.get("email")
 
         if not analytic_project:
 
@@ -88,7 +96,6 @@ class AnalyticApi(http.Controller):
                 analytic_project.active = False
                 analytic_project.partner_id = partner_id
                 analytic_project.head_id = head.id
-
                 return 'El proyecto a sido archivado'
             else:                
                 analytic_project.status = kw.get("status")

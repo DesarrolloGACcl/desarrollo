@@ -59,7 +59,7 @@ class AnalyticApi(http.Controller):
         else: 
             partner_id = partner.id
 
-        head = request.env['res.head'].sudo().search([('managment_system_id', '=', kw.get("id"))])
+        head = request.env['res.head'].sudo().search([('managment_system_id', '=', kw.get("managment_system_id"))])
 
         if not head:
 

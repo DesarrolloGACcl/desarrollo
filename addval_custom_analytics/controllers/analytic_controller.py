@@ -59,13 +59,34 @@ class AnalyticApi(http.Controller):
         else: 
             partner_id = partner.id
 
+        head = request.env['res.head'].sudo().search([('managment_system_id', '=', kw.get("managment_system_id"))])
+
+        if not head:
+
+            head = request.env['res.head'].sudo().create({
+                'name': kw.get("name"),
+                'surname': kw.get("surname"),
+                'second_surname': kw.get("second_surname"),
+                'managment_system_id': kw.get("managment_system_id"),
+                'position': kw.get("position"),
+                'email': kw.get("email")
+            })
+        else:
+            head.name = kw.get("name")
+            head.surname = kw.get("surname")
+            head.second_surname = kw.get("second_surname")
+            head.position = kw.get("position")
+            head.email = kw.get("email")
+
         if not analytic_project:
+
             project = request.env['account.analytic.account'].sudo().create({
                 'code': kw.get("project_code"),
                 'name': kw.get("project_name"),
                 'partner_id': partner_id,
                 'plan_id': project_analytic_plan.id,
-                'status': kw.get("status") 
+                'status': kw.get("status"), 
+                'head_id': head.id
             })
 
             return 'Proyecto '+project.code+' '+project.name+' creado exitosamente'
@@ -73,9 +94,12 @@ class AnalyticApi(http.Controller):
             if kw.get("status") == 'ended':
                 analytic_project.status = kw.get("status")
                 analytic_project.active = False
-
+                analytic_project.partner_id = partner_id
+                analytic_project.head_id = head.id
                 return 'El proyecto a sido archivado'
             else:                
                 analytic_project.status = kw.get("status")
                 analytic_project.active = True
+                analytic_project.partner_id = partner_id
+                analytic_project.head_id = head.id
                 return 'El proyecto a sido cambiado al estado: '+analytic_project.status

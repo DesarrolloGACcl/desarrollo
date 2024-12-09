@@ -51,35 +51,53 @@ class MoveApi(http.Controller):
 
         for invoice in invoices:
 
-            if not invoice.approver_id:
+            if invoice.l10n_latam_document_type_id:
 
-                id_aprobador = 'No tiene aprobador'
+                if not invoice.approver_id:
+                    id_aprobador = 'No tiene aprobador'
+                    nombre_aprobador = 'No tiene aprobador'
+                else:
+                    id_aprobador = invoice.approver_id.managment_system_id
+                    nombre_aprobador = invoice.approver_id.name +' '+invoice.approver_id.surname
 
-                nombre_aprobador = 'No tiene aprobador'
+                if not invoice.approve_date:
+                    fecha_aprobación = 'Aún no es aprobada'
+                else:
+                    fecha_aprobación = invoice.approve_date
 
-            else:
-                id_aprobador = invoice.approver_id.managment_system_id
+                if invoice.move_type == 'in_invoice' and invoice.l10n_latam_document_type_id.code == '71':
+                    tipo = 'H'
+                elif (invoice.move_type == 'in_invoice' or invoice.move_type == 'in_refund') and invoice.l10n_latam_document_type_id:
+                    tipo = 'C'
+                elif (invoice.move_type == 'out_invoice' or invoice.move_type == 'out_refund') and invoice.l10n_latam_document_type_id:
+                    tipo = 'V'
+                elif invoice.l10n_latam_document_type_id is not None and invoice.payment_id.payment_type == 'outbound':
+                    tipo = 'E'
+                elif invoice.l10n_latam_document_type_id is not None and invoice.payment_id.payment_type == 'inbound':
+                    tipo = 'I'
+                else:
+                    tipo = 'T'
 
-                nombre_aprobador = invoice.approver_id.name +' '+invoice.approver_id.surname
+                move_data = {
+                    'tipo': tipo,
+                    'fecha_factura': str(invoice.invoice_date),
+                    'fecha_contable': str(invoice.date),
+                    'documento': invoice.name,
+                    'empresa': invoice.partner_id.name,
+                    'rut': invoice.partner_id.vat, 
+                    'folio': invoice.l10n_latam_document_number,
+                    'tipo_documento': invoice.l10n_latam_document_type_id.name,
+                    'estado': invoice.state,
+                    'total': invoice.amount_total, 
+                    'monto_neto': invoice.amount_untaxed, 
+                    'impuesto': invoice.amount_tax,
+                    'id_aprobador': id_aprobador,
+                    'aprobador': nombre_aprobador,
+                    'fecha_aprobacion': fecha_aprobación,
+                    'odoo_invoice_id': invoice.id,
+                }
 
-
-            move_data = {
-                'fecha_factura': str(invoice.invoice_date),
-                'fecha_contable': str(invoice.date),
-                'documento': invoice.name,
-                'empresa': invoice.partner_id.name,
-                'rut': invoice.partner_id.vat, 
-                'folio': invoice.l10n_latam_document_number,
-                'tipo_documento': invoice.l10n_latam_document_type_id.name, 
-                'total': invoice.amount_total, 
-                'monto_neto': invoice.amount_untaxed, 
-                'impuesto': invoice.amount_tax,
-                'id_aprobador': id_aprobador,
-                'aprobador': nombre_aprobador,
-                'odoo_invoice_id': invoice.id,
-            }
-
-            invoice_data_list.append(move_data)
+                invoice_data_list.append(move_data)
         
         # Serialize the list to JSON
         _logger.warning('DATA ENVIADA: %s', invoice_data_list)

@@ -150,7 +150,7 @@ class MoveApi(http.Controller):
 
         invoice.approve_date = approve_date
 
-        return 'Factura: '+ invoice.name + ', aprobada por: ' + head.name + ' ' + head.surname + 'el ' + approve_date
+        return 'Factura: '+ invoice.name + ', aprobada por: ' + head.name + ' ' + head.surname + 'el ' + str(approve_date)
 
     @http.route('/api/invoice/files/<int:invoice_id>', type="http", auth='public')
     def send_xml_pdf_invoice(self, invoice_id):

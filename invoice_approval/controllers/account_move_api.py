@@ -21,7 +21,7 @@ class MoveApi(http.Controller):
             ('res_model', '=', 'account.move'),
             ('res_id', '=', factura.id),
             ('mimetype', '=', 'application/xml')
-        ], limit=1)
+        ], order='id asc', limit=1)
         
         if not adjunto_xml:
             raise ValueError("No se encontró el archivo XML.")

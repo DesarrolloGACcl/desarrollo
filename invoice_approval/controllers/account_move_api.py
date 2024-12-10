@@ -147,7 +147,7 @@ class MoveApi(http.Controller):
             return request.not_found()
 
         # Generar el PDF
-        pdf = request.env['ir.actions.report'].sudo()._render_qweb_pdf('account.account_invoices', [invoice_id])
+        pdf, _ = request.env['ir.actions.report'].sudo()._render_qweb_pdf('account.account_invoices', [invoice_id])
 
         # Obtener el XML
         xml_archivo, nombre_archivo = self.obtener_xml_dte(invoice_id)

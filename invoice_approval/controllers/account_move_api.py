@@ -8,9 +8,27 @@ from pytz import timezone, UTC
 from datetime import datetime, timedelta
 from odoo.exceptions import AccessError, MissingError, ValidationError
 import logging
+import base64
 _logger = logging.getLogger(__name__)
 
 class MoveApi(http.Controller):
+
+    def obtener_xml_dte(self, factura_id):
+        factura = request.env['account.move'].browse(factura_id)
+        
+        # Buscar el adjunto XML relacionado
+        adjunto_xml = request.env['ir.attachment'].search([
+            ('res_model', '=', 'account.move'),
+            ('res_id', '=', factura.id),
+            ('mimetype', '=', 'application/xml')
+        ], limit=1)
+        
+        if not adjunto_xml:
+            raise ValueError("No se encontró el archivo XML.")
+        
+        # Decodificar el archivo binario
+        xml_decodificado = base64.b64decode(adjunto_xml.datas)
+        return xml_decodificado, adjunto_xml.name
 
     @http.route('/api/invoice/<int:project_code>', type='http', auth='public', methods=['GET'])
     def send_move_info(self, project_code):
@@ -107,7 +125,7 @@ class MoveApi(http.Controller):
 
         return request.make_response(move_json, headers=[('Content-Type', 'application/json')])
 
-    @http.route('/api/invoice_approval', type='json', auth='public', methods=['POST'])
+    @http.route('api/approve/invoice/<int:id_odoo_invoice>/<int:id_approver>/<int:day>/<int:month>/<int:year>', type='json', auth='public', methods=['POST'])
     def approve_invoice(self, **kw):
 
         # expected_token = 'DLV86wKWGSjpsdhn'
@@ -119,4 +137,31 @@ class MoveApi(http.Controller):
         # if provided_token != expected_token:
         #     return Response(json.dumps({"error": "Unauthorized"}), status=401, content_type='application/json')
         return True
+
+    @http.route('/api/invoice/files/<int:invoice_id>', type="http", auth='public')
+    def send_xml_pdf_invoice(self, invoice_id):
+        
+        # Obtener la factura
+        invoice = request.env['account.move'].sudo().search([('id', '=', invoice_id)], limit=1)
+        if not invoice:
+            return request.not_found()
+
+        # Generar el PDF
+        pdf = request.env.ref('account.account_invoices').sudo()._render_qweb_pdf([invoice.id])[0]
+
+        # Obtener el XML
+        xml_archivo, nombre_archivo = self.obtener_xml_dte(invoice_id)
+
+        # Crear la respuesta
+        headers = [('Content-Type', 'application/zip'), ('Content-Disposition', 'attachment; filename="invoice_files.zip"')]
+        import io, zipfile
+        
+        zip_buffer = io.BytesIO()
+        with zipfile.ZipFile(zip_buffer, 'w') as zip_file:
+            zip_file.writestr(f'Invoice_{invoice.name}.pdf', pdf)
+            zip_file.writestr(f'Invoice_{invoice.name}.xml', xml_archivo)
+
+        zip_buffer.seek(0)
+        return request.make_response(zip_buffer.read(), headers=headers)
+
 

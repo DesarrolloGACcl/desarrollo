@@ -7,6 +7,7 @@
       <field name="arch" type="xml">
         <xpath expr="//field[@name='partner_shipping_id']" position="after">
           <field name="approver_id" string="Aprobador"/>
+          <field name="approve_date" string="Fecha aprobación"/>
         </xpath>
       </field>
     </record>

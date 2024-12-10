@@ -96,6 +96,38 @@ class MoveApi(http.Controller):
                 else:
                     tipo = 'T'
 
+                for aml in invoice.invoice_line_ids:
+
+                    if aml.analytic_distribution_area:
+                        distributions = aml.analytic_distribution_area
+                        
+                        formatted_area_analytic_info = ""
+                        area_codes = ""
+                        for account_id, percentage in distributions.items():
+                            # Fetch the analytic account name using the ID
+                            analytic_account = request.env['account.analytic.account'].sudo().browse(int(account_id))                    
+                            if analytic_account:
+                                formatted_area_analytic_info += f"{analytic_account.name}: {percentage}%"
+                                area_codes += f"{analytic_account.code}"
+                    else:
+                        formatted_area_analytic_info = 'No se especificó'
+                        area_codes = 'No se especificó'
+
+                    if aml.analytic_distribution_activity:
+                        distributions = aml.analytic_distribution_activity
+                        
+                        formatted_activity_analytic_info = ""
+                        activity_codes = ""
+                        for account_id, percentage in distributions.items():
+                            # Fetch the analytic account name using the ID
+                            analytic_account = request.env['account.analytic.account'].sudo().browse(int(account_id))                    
+                            if analytic_account:
+                                formatted_activity_analytic_info += f"{analytic_account.name}: {percentage}%"
+                                activity_codes += f"{analytic_account.code}"
+                    else:
+                        formatted_activity_analytic_info = 'No se especificó'
+                        activity_codes = 'No se especificó'
+
                 move_data = {
                     'tipo': tipo,
                     'fecha_factura': str(invoice.invoice_date),
@@ -109,6 +141,10 @@ class MoveApi(http.Controller):
                     'total': invoice.amount_total, 
                     'monto_neto': invoice.amount_untaxed, 
                     'impuesto': invoice.amount_tax,
+                    'codigo_area': area_codes,
+                    'area': formatted_area_analytic_info,
+                    'codigo_actividad': activity_codes,
+                    'actividad': formatted_activity_analytic_info,
                     'id_aprobador': id_aprobador,
                     'aprobador': nombre_aprobador,
                     'fecha_aprobacion': fecha_aprobación,
@@ -140,6 +176,9 @@ class MoveApi(http.Controller):
         if not invoice:
             return 'Factura no econtrada'
 
+        if invoice.is_approved == True:
+            return 'La factura ya fue aprobada con anterioridad por: ' + invoice.approver_id.name + ' ' + invoice.approver_id.surname
+
         head = request.env['res.head'].sudo().search([('managment_system_id', '=', id_approver)])
         if not head:
             return 'Aprobador no econtrado'
@@ -149,6 +188,8 @@ class MoveApi(http.Controller):
         approve_date = date(year, month, day)
 
         invoice.approve_date = approve_date
+
+        invoice.is_approved = True
 
         return 'Factura: '+ invoice.name + ', aprobada por: ' + head.name + ' ' + head.surname + ' el ' + str(approve_date)
 
@@ -164,18 +205,23 @@ class MoveApi(http.Controller):
         pdf, _ = request.env['ir.actions.report'].sudo()._render_qweb_pdf('account.account_invoices', [invoice_id])
 
         # Obtener el XML
-        xml_archivo, nombre_archivo = self.obtener_xml_dte(invoice_id)
-
+        # xml_archivo, nombre_archivo = self.obtener_xml_dte(invoice_id)
         # Crear la respuesta
-        headers = [('Content-Type', 'application/zip'), ('Content-Disposition', 'attachment; filename="invoice_files.zip"')]
-        import io, zipfile
-        
-        zip_buffer = io.BytesIO()
-        with zipfile.ZipFile(zip_buffer, 'w') as zip_file:
-            zip_file.writestr(f'Invoice_{invoice.name}.pdf', pdf)
-            zip_file.writestr(f'Invoice_{invoice.name}.xml', xml_archivo)
+        # headers = [('Content-Type', 'application/zip'), ('Content-Disposition', 'attachment; filename="invoice_files.zip"')]
+        # import io, zipfile
+        #zip_buffer = io.BytesIO()
+        #with zipfile.ZipFile(zip_buffer, 'w') as zip_file:
+        #    zip_file.writestr(f'Invoice_{invoice.name}.pdf', pdf)
+        #    zip_file.writestr(f'Invoice_{invoice.name}.xml', xml_archivo)
+        #zip_buffer.seek(0)
+        #return request.make_response(zip_buffer.read(), headers=headers)
 
-        zip_buffer.seek(0)
-        return request.make_response(zip_buffer.read(), headers=headers)
+        # Configurar los encabezados de la respuesta
+        headers = [
+            ('Content-Type', 'application/pdf'),
+            ('Content-Disposition', f'attachment; filename="Invoice_{invoice.name}.pdf"')
+        ]
 
+        # Retornar el archivo PDF
+        return request.make_response(pdf, headers=headers)
 

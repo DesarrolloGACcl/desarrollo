@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from datetime import datetime
+from datetime import datetime, date
 from odoo import http, _
 from odoo.http import request, Response
 import pytz, json
@@ -125,8 +125,8 @@ class MoveApi(http.Controller):
 
         return request.make_response(move_json, headers=[('Content-Type', 'application/json')])
 
-    @http.route('/api/approve/invoice/<int:id_odoo_invoice>/<int:id_approver>/<int:day>/<int:month>/<int:year>', type='json', auth='public', methods=['POST'])
-    def approve_invoice(self, **kw):
+    @http.route('/api/approve/invoice/<int:id_odoo_invoice>/<int:id_approver>/<int:day>/<int:month>/<int:year>', type='json', auth='public', methods=['GET'])
+    def approve_invoice(self, id_odoo_invoice, id_approver, day, month, year):
 
         # expected_token = 'DLV86wKWGSjpsdhn'
         # provided_token = request.httprequest.headers.get('Authorization')
@@ -136,7 +136,21 @@ class MoveApi(http.Controller):
 
         # if provided_token != expected_token:
         #     return Response(json.dumps({"error": "Unauthorized"}), status=401, content_type='application/json')
-        return True
+        invoice = request.env['account.move'].sudo().search([('id', '=', id_odoo_invoice)], limit=1)
+        if not invoice:
+            return 'Factura no econtrada'
+
+        head = request.env['res.head'].sudo().search([('managment_system_id', '=', id_approver)])
+        if not head:
+            return 'Aprobador no econtrado'
+        
+        invoice.approver_id = head.id
+
+        approve_date = date(year, month, day)
+
+        invoice.approve_date = approve_date
+
+        return 'Factura: '+ invoice.name + ', aprobada por: ' + head.name + ' ' + head.surname + 'el ' + approve_date
 
     @http.route('/api/invoice/files/<int:invoice_id>', type="http", auth='public')
     def send_xml_pdf_invoice(self, invoice_id):

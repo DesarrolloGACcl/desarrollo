@@ -125,7 +125,7 @@ class MoveApi(http.Controller):
 
         return request.make_response(move_json, headers=[('Content-Type', 'application/json')])
 
-    @http.route('/api/approve/invoice/<int:id_odoo_invoice>/<int:id_approver>/<int:day>/<int:month>/<int:year>', type='json', auth='public', methods=['GET'])
+    @http.route('/api/approve/invoice/<int:id_odoo_invoice>/<int:id_approver>/<int:day>/<int:month>/<int:year>', type='http', auth='public', methods=['GET'])
     def approve_invoice(self, id_odoo_invoice, id_approver, day, month, year):
 
         # expected_token = 'DLV86wKWGSjpsdhn'

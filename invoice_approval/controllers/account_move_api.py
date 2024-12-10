@@ -125,7 +125,7 @@ class MoveApi(http.Controller):
 
         return request.make_response(move_json, headers=[('Content-Type', 'application/json')])
 
-    @http.route('api/approve/invoice/<int:id_odoo_invoice>/<int:id_approver>/<int:day>/<int:month>/<int:year>', type='json', auth='public', methods=['POST'])
+    @http.route('/api/approve/invoice/<int:id_odoo_invoice>/<int:id_approver>/<int:day>/<int:month>/<int:year>', type='json', auth='public', methods=['POST'])
     def approve_invoice(self, **kw):
 
         # expected_token = 'DLV86wKWGSjpsdhn'
@@ -138,7 +138,7 @@ class MoveApi(http.Controller):
         #     return Response(json.dumps({"error": "Unauthorized"}), status=401, content_type='application/json')
         return True
 
-    @http.route('api/invoice/files/<int:invoice_id>', type="http", auth='public')
+    @http.route('/api/invoice/files/<int:invoice_id>', type="http", auth='public')
     def send_xml_pdf_invoice(self, invoice_id):
         
         # Obtener la factura

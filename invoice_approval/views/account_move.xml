@@ -7,8 +7,8 @@
       <field name="arch" type="xml">
         <xpath expr="//field[@name='partner_shipping_id']" position="after">
           <field name="is_approved" invisible="1"/>
-          <field name="approver_id" string="Aprobador" readonly="is_approved == True"/>
-          <field name="approve_date" string="Fecha aprobación" readonly="is_approved == True"/>
+          <field name="approver_id" string="Aprobador" attrs="{'readonly': [('is_approved','=',True)]}"/>
+          <field name="approve_date" string="Fecha aprobación" attrs="{'readonly': [('is_approved','=',True)]}"/>
         </xpath>
       </field>
     </record>

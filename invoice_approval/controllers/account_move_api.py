@@ -17,7 +17,7 @@ class MoveApi(http.Controller):
         factura = request.env['account.move'].browse(factura_id)
         
         # Buscar el adjunto XML relacionado
-        adjunto_xml = request.env['ir.attachment'].search([
+        adjunto_xml = request.env['ir.attachment'].sudo().search([
             ('res_model', '=', 'account.move'),
             ('res_id', '=', factura.id),
             ('mimetype', '=', 'application/xml')

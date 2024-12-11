@@ -79,9 +79,9 @@ class MoveApi(http.Controller):
                     nombre_aprobador = invoice.approver_id.name +' '+invoice.approver_id.surname
 
                 if not invoice.approve_date:
-                    fecha_aprobación = 'Aún no es aprobada'
+                    fecha_aprobacion = 'Aún no es aprobada'
                 else:
-                    fecha_aprobación = str(invoice.approve_date)
+                    fecha_aprobacion = str(invoice.approve_date)
 
                 if invoice.move_type == 'in_invoice' and invoice.l10n_latam_document_type_id.code == '71':
                     tipo = 'H'
@@ -147,7 +147,7 @@ class MoveApi(http.Controller):
                     'actividad': formatted_activity_analytic_info,
                     'id_aprobador': id_aprobador,
                     'aprobador': nombre_aprobador,
-                    'fecha_aprobacion': fecha_aprobación,
+                    'fecha_aprobacion': fecha_aprobacion,
                     'odoo_invoice_id': invoice.id,
                 }
 

@@ -159,7 +159,7 @@ class MoveApi(http.Controller):
         move_json = json.dumps(invoice_data_list)
         _logger.warning('JSON DATA ENVIADA: %s', move_json)
 
-        return request.make_response(invoice_data_list, headers=[('Content-Type', 'application/json')])
+        return request.make_response(move_json, headers=[('Content-Type', 'application/json')])
 
     @http.route('/api/approve/invoice/<int:id_odoo_invoice>/<int:id_approver>/<int:day>/<int:month>/<int:year>', type='http', auth='public', methods=['GET'])
     def approve_invoice(self, id_odoo_invoice, id_approver, day, month, year):

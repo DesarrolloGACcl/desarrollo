@@ -6,7 +6,7 @@ import logging
 _logger = logging.getLogger(__name__)
 
 class AccountMove(models.Model):
-    _inherit = 'account.move'
+    _inherit = 'sale.order'
 
     pre_invoice_id = fields.Integer(string="ID de la pre-factura")
     approver_id = fields.Many2one('res.head', string="Aprobador")

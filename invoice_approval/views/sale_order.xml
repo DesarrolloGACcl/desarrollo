@@ -1,6 +1,6 @@
 <odoo>
   <data>
-    <record id="sale_order_pre_invice" model="ir.ui.view">
+    <record id="sale_order_pre_invioce" model="ir.ui.view">
       <field name="name">sale.order.pre.invoice</field>
       <field name="inherit_id" ref="sale.view_order_form"/>
       <field name="model">sale.order</field>

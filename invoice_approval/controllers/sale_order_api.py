@@ -13,7 +13,7 @@ _logger = logging.getLogger(__name__)
 
 class MoveApi(http.Controller):
 
-    @http.route('/api/sale/<int:project_code>', type='http', auth='public', methods=['GET'])
+    @http.route('/api/pre_invoice/<int:project_code>', type='http', auth='public', methods=['GET'])
     def send_move_info(self, project_code):
 
         # expected_token = 'gTRk73b95h6VuFQq'
@@ -96,8 +96,8 @@ class MoveApi(http.Controller):
                     formatted_activity_analytic_info = 'No se especificó'
                     activity_codes = 'No se especificó'
 
-            move_data = {
-                'fecha_factura': str(order.date_order),
+            pre_invoice_data = {
+                'fecha_pre_factura': str(order.date_order),
                 'documento': order.name,
                 'empresa': order.partner_id.name,
                 'rut': order.partner_id.vat,
@@ -113,7 +113,7 @@ class MoveApi(http.Controller):
                 'odoo_order_id': order.id,
             }
 
-            sale_data_list.append(move_data)
+            sale_data_list.append(pre_invoice_data)
         
         # Serialize the list to JSON
         _logger.warning('DATA ENVIADA: %s', sale_data_list)
@@ -123,7 +123,7 @@ class MoveApi(http.Controller):
 
         return request.make_response(sale_json, headers=[('Content-Type', 'application/json')])
 
-    @http.route('/api/approve/sale/<int:id_odoo_sale>/<int:id_approver>/<int:day>/<int:month>/<int:year>', type='http', auth='public', methods=['GET'])
+    @http.route('/api/approve/pre_invoice/<int:id_odoo_sale>/<int:id_approver>/<int:day>/<int:month>/<int:year>', type='http', auth='public', methods=['GET'])
     def approve_sale(self, id_odoo_sale, id_approver, day, month, year):
 
         # expected_token = 'DLV86wKWGSjpsdhn'
@@ -155,7 +155,7 @@ class MoveApi(http.Controller):
 
         return 'Pre-factura: '+ sale.name + ', aprobada por: ' + head.name + ' ' + head.surname + ' el ' + str(approve_date)
 
-    @http.route('/api/sale/files/<int:sale_id>', type="http", auth='public')
+    @http.route('/api/pre_invoice/files/<int:sale_id>', type="http", auth='public')
     def send_xml_pdf_sale(self, sale_id):
         
         # Obtener la pre-factura

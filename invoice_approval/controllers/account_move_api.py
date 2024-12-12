@@ -60,9 +60,6 @@ class MoveApi(http.Controller):
         invoices = request.env['account.move'].sudo().browse(move_ids)
 
         _logger.warning('move_ids: %s', invoices)
-
-        if not invoices:
-            return request.make_response('Facturas no encontradas', status=404)
         
         # Constructing the json data structure
         invoice_data_list = []
@@ -152,6 +149,87 @@ class MoveApi(http.Controller):
                 }
 
                 invoice_data_list.append(move_data)
+
+        query = """
+            SELECT DISTINCT sale_order_line.order_id
+            FROM sale_order_line
+            WHERE sale_order_line.analytic_distribution ? %s
+        """
+        request.env.cr.execute(query, [str(analytic_project.id)])
+        order_ids = [res['order_id'] for res in request.env.cr.dictfetchall()]
+
+        orders = request.env['sale.order'].sudo().browse(order_ids)
+
+        if not invoices and not orders:
+            return request.make_response('Facturas y/o Pre-facturas no encontradas', status=404)
+
+        _logger.warning('orders_ids: %s', orders)
+
+        for order in orders:
+
+            if not order.approver_id:
+                id_aprobador = 'No tiene aprobador'
+                nombre_aprobador = 'No tiene aprobador'
+            else:
+                id_aprobador = order.approver_id.managment_system_id
+                nombre_aprobador = order.approver_id.name +' '+order.approver_id.surname
+
+            if not order.approve_date:
+                fecha_aprobacion = 'Aún no es aprobada'
+            else:
+                fecha_aprobacion = str(order.approve_date)
+
+            for line in order.order_line:
+
+                if line.analytic_distribution_area:
+                    distributions = line.analytic_distribution_area
+                    
+                    formatted_area_analytic_info = ""
+                    area_codes = ""
+                    for account_id, percentage in distributions.items():
+                        # Fetch the analytic account name using the ID
+                        analytic_account = request.env['account.analytic.account'].sudo().browse(int(account_id))                    
+                        if analytic_account:
+                            formatted_area_analytic_info += f"{analytic_account.name}: {percentage}%"
+                            area_codes += f"{analytic_account.code}"
+                else:
+                    formatted_area_analytic_info = 'No se especificó'
+                    area_codes = 'No se especificó'
+
+                if line.analytic_distribution_activity:
+                    distributions = line.analytic_distribution_activity
+                    
+                    formatted_activity_analytic_info = ""
+                    activity_codes = ""
+                    for account_id, percentage in distributions.items():
+                        # Fetch the analytic account name using the ID
+                        analytic_account = request.env['account.analytic.account'].sudo().browse(int(account_id))                    
+                        if analytic_account:
+                            formatted_activity_analytic_info += f"{analytic_account.name}: {percentage}%"
+                            activity_codes += f"{analytic_account.code}"
+                else:
+                    formatted_activity_analytic_info = 'No se especificó'
+                    activity_codes = 'No se especificó'
+
+            pre_invoice_data = {
+                'tipo': 'prefactura',
+                'fecha_pre_factura': str(order.date_order),
+                'documento': order.name,
+                'empresa': order.partner_id.name,
+                'rut': order.partner_id.vat,
+                'estado': order.state,
+                'total': order.amount_total, 
+                'codigo_area': area_codes,
+                'area': formatted_area_analytic_info,
+                'codigo_actividad': activity_codes,
+                'actividad': formatted_activity_analytic_info,
+                'id_aprobador': id_aprobador,
+                'aprobador': nombre_aprobador,
+                'fecha_aprobacion': fecha_aprobacion,
+                'odoo_order_id': order.id,
+            }
+
+            invoice_data_list.append(pre_invoice_data)
         
         # Serialize the list to JSON
         _logger.warning('DATA ENVIADA: %s', invoice_data_list)

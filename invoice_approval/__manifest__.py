@@ -22,7 +22,7 @@
         'security/ir.model.access.csv',
         'views/account_analytic_account.xml',
         'views/account_move.xml',
-        'views/sale_order.xml'
+        'views/sale_order.xml',
         'views/res_head.xml'
     ],
     'installable': True,

@@ -214,8 +214,7 @@ class MoveApi(http.Controller):
 
         # Configurar los encabezados de la respuesta
         headers = [
-            ('Content-Type', 'application/pdf'),
-            ('Content-Disposition', f'attachment; filename="Invoice_{invoice.name}.pdf"')
+            ('Content-Type', 'application/pdf')
         ]
 
         # Retornar el archivo PDF

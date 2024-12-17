@@ -26,7 +26,7 @@ class AccountAnalyticAccount(models.Model):
         for d in project_data['data']:
             _logger.warning('DATA PROYECTO: %s', d)
 
-            project_code = str(d['proyecto']['codigo_proyecto'])
+            project_code = str(d['proyecto'][0]['codigo_proyecto'])
 
             _logger.warning('CODIGO PROYECTO: %s', project_code)
 

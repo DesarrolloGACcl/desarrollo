@@ -34,6 +34,9 @@ class AccountAnalyticAccount(models.Model):
 
             if project_analytic_account:
                 _logger.warning('ENTRO IF')
-                project_budget = float(d['proyecto'][0]['presupuesto_sdg'])
+                if not d['proyecto'][0]['presupuesto_sdg']:
+                    project_budget = "0"
+                else:
+                    project_budget = float(d['proyecto'][0]['presupuesto_sdg'])
                 _logger.warning('PRESUPUESTO PROYECTO: %s', project_budget)
                 project_analytic_account.initial_budget = project_budget

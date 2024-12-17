@@ -20,6 +20,14 @@ class ResHead(models.Model):
     def name_get(self):
         result = []
         for record in self:
-            display_name = f"{record.name} {record.surname}" if record.surname else record.name
+            if not record.name:
+                name = 'Sin nombre'
+            else:
+                name = record.name
+            if not record.surname:
+                surname = ''
+            else:
+                surname = record.surname
+            display_name = f"{name} {surname}"
             result.append((record.id, display_name))
         return result

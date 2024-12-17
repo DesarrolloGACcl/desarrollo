@@ -45,6 +45,28 @@ class AccountMove(models.Model):
                     break
             order.remaining_budget = remaining_budget
 
+    @api.model_create_multi
+    def create(self, vals_list):
+        orders = super().create(vals_list)
+        
+        for order in orders:
+            for line in order.order_line:
+                if line.analytic_distribution:
+                    analytic_id = list(line.analytic_distribution.keys())[0]
+                    analytic = self.env['account.analytic.account'].browse(int(analytic_id))
+                    
+                    # Update remaining budget
+                    new_remaining = analytic.remaining_budget - order.amount_total
+                    if new_remaining < 0:
+                        raise ValidationError(_('No hay suficiente presupuesto disponible en el proyecto.'))
+                        
+                    analytic.remaining_budget = new_remaining
+                    # Force recompute of remaining budget on order
+                    order._compute_remaining_budget()
+                    break
+
+        return orders
+
     def write(self, vals):
         
         res = super().write(vals)

@@ -161,11 +161,11 @@ class SaleOrder(models.Model):
         return res
 
     
-    @api.onchange('analytic_account_id') 
+    @api.onchange('project_analytic_account_id') 
     def _onchange_analytic_account(self):
-        if self.analytic_account_id:
+        if self.project_analytic_account_id:
             for line in self.order_line:
-                line.analytic_distribution = {str(self.analytic_account_id.id): 100}
+                line.analytic_distribution = {str(self.project_analytic_account_id.id): 100}
 
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
@@ -175,14 +175,14 @@ class SaleOrderLine(models.Model):
         for vals in vals_list:
             if vals.get('order_id'):
                 order = self.env['sale.order'].browse(vals['order_id'])
-                if order.analytic_account_id:
-                    vals['analytic_distribution'] = {str(order.analytic_account_id.id): 100}
+                if order.project_analytic_account_id:
+                    vals['analytic_distribution'] = {str(order.project_analytic_account_id.id): 100}
         return super().create(vals_list)
 
     def write(self, vals):
         res = super().write(vals)
         if not vals.get('analytic_distribution'):
             for line in self:
-                if line.order_id.analytic_account_id:
-                    line.analytic_distribution = {str(line.order_id.analytic_account_id.id): 100}
+                if line.order_id.project_analytic_account_id:
+                    line.analytic_distribution = {str(line.order_id.project_analytic_account_id.id): 100}
         return res

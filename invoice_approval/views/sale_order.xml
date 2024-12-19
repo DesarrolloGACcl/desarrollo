@@ -29,10 +29,10 @@
           <page string="Presupuestos por área" name="area_budgets">
             <field name="area_budget_ids" readonly="1">
               <tree>
-                <field name="area_id" readonly="1"/>
-                <field name="name" readonly="1"/>
-                <field name="total_uf" readonly="1"/>
-                <field name="total_remaining" readonly="1"/>
+                <field name="area_id" readonly="1" width="25%"/>
+                <field name="name" string="Nombre" readonly="1" width="25%"/>
+                <field name="total_uf" readonly="1" width="25%"/>
+                <field name="total_remaining" readonly="1" width="25%"/>
               </tree>
             </field>
           </page>

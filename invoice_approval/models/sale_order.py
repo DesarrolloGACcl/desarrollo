@@ -42,7 +42,7 @@ class SaleOrder(models.Model):
 
             project_analytic_account = self.env['account.analytic.account'].search([('code', '=', project_code)], limit=1)
 
-            if project_analytic_account:
+            if project_analytic_account.id == self.project_analytic_account_id.id:
                 _logger.warning('ENTRO IF')
                 if not d['proyecto'][0]['presupuesto_sdg']:
                     project_budget = "0"
@@ -51,38 +51,38 @@ class SaleOrder(models.Model):
                 _logger.warning('PRESUPUESTO PROYECTO: %s', project_budget)
                 project_analytic_account.initial_budget = project_budget
             
-            for area in d['areas']:
-                area_id = area['area_id']
-                area_name = area['area_nombre']
-                area_icon = area['area_icono']
-                area_total = float(area['total_uf'])
+                for area in d['areas']:
+                    area_id = area['area_id']
+                    area_name = area['area_nombre']
+                    area_icon = area['area_icono']
+                    area_total = float(area['total_uf'])
 
-                total_remaining = 0
+                    total_remaining = 0
 
-                # Convert image URL to binary data
-                if area['area_icono']:
-                    try:
-                        image_response = requests.get(area['area_icono'])
-                        if image_response.status_code == 200:
-                            area_icon = image_response.content.encode('base64')
-                        else:
+                    # Convert image URL to binary data
+                    if area['area_icono']:
+                        try:
+                            image_response = requests.get(area['area_icono'])
+                            if image_response.status_code == 200:
+                                area_icon = image_response.content.encode('base64')
+                            else:
+                                area_icon = False
+                        except:
                             area_icon = False
-                    except:
+                    else:
                         area_icon = False
-                else:
-                    area_icon = False
 
-                # Create or update sale.area.budget record
-                area_budget_vals = {
-                    'name': area_name,
-                    'total_uf': area_total,
-                    'total_remaining': total_remaining,
-                    'area_id': area_id,
-                    'area_icon': area_icon,
-                    'sale_id': self.id
-                }
+                    # Create or update sale.area.budget record
+                    area_budget_vals = {
+                        'name': area_name,
+                        'total_uf': area_total,
+                        'total_remaining': total_remaining,
+                        'area_id': area_id,
+                        'area_icon': area_icon,
+                        'sale_id': self.id
+                    }
 
-                self.env['sale.area.budget'].create(area_budget_vals)
+                    self.env['sale.area.budget'].create(area_budget_vals)
 
     @api.depends('order_line.analytic_distribution')
     def _compute_initial_budget(self):

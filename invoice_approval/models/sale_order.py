@@ -54,10 +54,23 @@ class SaleOrder(models.Model):
             for area in d['areas']:
                 area_id = area['area_id']
                 area_name = area['area_nombre']
-                area_icon = area['area_icon']
+                area_icon = area['area_icono']
                 area_total = float(area['total_uf'])
 
                 total_remaining = 0
+
+                # Convert image URL to binary data
+                if area['area_icono']:
+                    try:
+                        image_response = requests.get(area['area_icono'])
+                        if image_response.status_code == 200:
+                            area_icon = image_response.content.encode('base64')
+                        else:
+                            area_icon = False
+                    except:
+                        area_icon = False
+                else:
+                    area_icon = False
 
                 # Create or update sale.area.budget record
                 area_budget_vals = {

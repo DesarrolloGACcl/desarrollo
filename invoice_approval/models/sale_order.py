@@ -1,13 +1,21 @@
-from odoo import api, models, fields, _
+from odoo import models, fields, api, _, http
+from odoo.http import request
+import requests
 from odoo.exceptions import UserError, ValidationError
 from pytz import timezone, UTC
 from datetime import datetime
 import logging
 _logger = logging.getLogger(__name__)
 
-class AccountMove(models.Model):
+class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
+    project_analytic_account_id = fields.Many2one(
+        'account.analytic.account',
+        string='Proyecto',
+        domain=[('plan_id', '=', 1)]
+    )
+    area_budget_ids = fields.One2many('sale.area.budget', 'sale_id', string='Presupuestos de área')
     pre_invoice_id = fields.Integer(string="ID de la pre-factura")
     approver_id = fields.Many2one('res.head', string="Aprobador")
     pre_invoice_id = fields.Integer(string="Id pre-factura en sistema gestión")
@@ -15,7 +23,53 @@ class AccountMove(models.Model):
     is_approved = fields.Boolean(string="¿Está aprobada?", default=False)
 
     initial_budget = fields.Float(string="Presupuesto inicial", compute="_compute_initial_budget")
-    remaining_budget = fields.Float(string="Presupuesto restante", compute="_compute_remaining_budget")
+    remaining_budget = fields.Float(string="Presupuesto cobrado", compute="_compute_remaining_budget")
+
+    def update_budgets(self):
+
+        url = "https://proyectos.gac.cl/endpoints/api.php/presupuestos?token=e4b8e12d1a2f4c8b9f3c0d2a8e7a6d4f"
+    
+        response = requests.request('GET', url)
+
+        project_data = response.json()
+        
+        for d in project_data['data']:
+            _logger.warning('DATA PROYECTO: %s', d)
+
+            project_code = str(d['proyecto'][0]['codigo_proyecto'])
+
+            _logger.warning('CODIGO PROYECTO: %s', project_code)
+
+            project_analytic_account = self.env['account.analytic.account'].search([('code', '=', project_code)], limit=1)
+
+            if project_analytic_account:
+                _logger.warning('ENTRO IF')
+                if not d['proyecto'][0]['presupuesto_sdg']:
+                    project_budget = "0"
+                else:
+                    project_budget = float(d['proyecto'][0]['presupuesto_sdg'])
+                _logger.warning('PRESUPUESTO PROYECTO: %s', project_budget)
+                project_analytic_account.initial_budget = project_budget
+            
+            for area in d['areas']:
+                area_id = area['area_id']
+                area_name = area['area_nombre']
+                area_icon = area['area_icon']
+                area_total = float(area['total_uf'])
+
+                total_remaining = 0
+
+                # Create or update sale.area.budget record
+                area_budget_vals = {
+                    'name': area_name,
+                    'total_uf': area_total,
+                    'total_remaining': total_remaining,
+                    'area_id': area_id,
+                    'area_icon': area_icon,
+                    'sale_id': self.id
+                }
+
+                self.env['sale.area.budget'].create(area_budget_vals)
 
     @api.depends('order_line.analytic_distribution')
     def _compute_initial_budget(self):
@@ -54,6 +108,8 @@ class AccountMove(models.Model):
                 if line.analytic_distribution:
                     analytic_id = list(line.analytic_distribution.keys())[0]
                     analytic = self.env['account.analytic.account'].browse(int(analytic_id))
+
+                    order.update_budgets()
                     
                     # Update remaining budget
                     new_remaining = analytic.remaining_budget - order.amount_total
@@ -78,6 +134,7 @@ class AccountMove(models.Model):
                     analytic_id = list(line.analytic_distribution.keys())[0]
                     analytic = self.env['account.analytic.account'].browse(int(analytic_id))
                     
+                    order.update_budgets()
                     # Update remaining budget
                     new_remaining = analytic.remaining_budget - order.amount_total
                     if new_remaining < 0:
@@ -88,4 +145,31 @@ class AccountMove(models.Model):
                     order._compute_remaining_budget()
                     break
 
+        return res
+
+    
+    @api.onchange('analytic_account_id') 
+    def _onchange_analytic_account(self):
+        if self.analytic_account_id:
+            for line in self.order_line:
+                line.analytic_distribution = {str(self.analytic_account_id.id): 100}
+
+class SaleOrderLine(models.Model):
+    _inherit = 'sale.order.line'
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if vals.get('order_id'):
+                order = self.env['sale.order'].browse(vals['order_id'])
+                if order.analytic_account_id:
+                    vals['analytic_distribution'] = {str(order.analytic_account_id.id): 100}
+        return super().create(vals_list)
+
+    def write(self, vals):
+        res = super().write(vals)
+        if not vals.get('analytic_distribution'):
+            for line in self:
+                if line.order_id.analytic_account_id:
+                    line.analytic_distribution = {str(line.order_id.analytic_account_id.id): 100}
         return res

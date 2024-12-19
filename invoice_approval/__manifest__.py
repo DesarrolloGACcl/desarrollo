@@ -24,7 +24,7 @@
         'views/account_move.xml',
         'views/sale_order.xml',
         'views/res_head.xml',
-        'data/cron.xml'
+        #'data/cron.xml'
     ],
     'installable': True,
     'application': True,

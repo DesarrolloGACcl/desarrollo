@@ -20,6 +20,7 @@
       <field name="arch" type="xml">
         <xpath expr="//field[@name='payment_state']" position="after">
           <field name="approve_date"/>
+          <field name="is_approved" invisible="1"/>
           <field name="approve_state" widget="badge" decoration-danger="not is_approved" decoration-success="is_approved"/>
         </xpath>
       </field>

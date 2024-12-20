@@ -12,5 +12,17 @@
         </xpath>
       </field>
     </record>
+
+    <record id="move_tree_custom_analytics" model="ir.ui.view">
+      <field name="name">move.tree.custom.analytics</field>
+      <field name="inherit_id" ref="account.view_out_invoice_tree"/>
+      <field name="model">account.move</field>
+      <field name="arch" type="xml">
+        <xpath expr="//field[@name='payment_state']" position="after">
+          <field name="approve_date"/>
+          <field name="approve_state" widget="badge" decoration-danger="not is_approved" decoration-success="is_approved"/>
+        </xpath>
+      </field>
+    </record>
   </data>
 </odoo>

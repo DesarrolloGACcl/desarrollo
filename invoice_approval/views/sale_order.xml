@@ -10,7 +10,7 @@
         </xpath>
         <xpath expr="//field[@name='payment_term_id']" position="after">
           <field name="is_approved" invisible="1"/>
-          <field name="pre_invoice_id" string="ID de la pre-factura" attrs="{'readonly': [('is_approved','=',True)]}"/>
+          <field name="pre_invoice_id" string="ID de la pre-factura" attrs="{'readonly': [('is_approved','=',True)]}" invisible="1"/>
           <field name="approver_id" string="Aprobador" attrs="{'readonly': [('is_approved','=',True)]}"/>
           <field name="approve_date" string="Fecha aprobación" attrs="{'readonly': [('is_approved','=',True)]}"/>
 

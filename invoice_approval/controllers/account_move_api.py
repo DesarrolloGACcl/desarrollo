@@ -187,6 +187,8 @@ class MoveApi(http.Controller):
 
         invoice.is_approved = True
 
+        invoice.action_post()
+
         return 'Factura: '+ invoice.name + ', aprobada por: ' + head.name + ' ' + head.surname + ' el ' + str(approve_date)
 
     @http.route('/api/invoice/files/<int:invoice_id>', type="http", auth='public')

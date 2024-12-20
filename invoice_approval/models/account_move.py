@@ -12,3 +12,10 @@ class AccountMove(models.Model):
     invoice_id = fields.Integer(string="Id factura en sistema gestión")
     approve_date = fields.Date(string="Fecha de aprobación")
     is_approved = fields.Boolean(string="¿Está aprobada?", default=False)
+
+    approve_state = fields.Char(string="Estado aprobación", compute="_compute_approve_state", readonly="True")
+
+    @api.depends('is_approved')
+    def _compute_estado_texto(self):
+        for record in self:
+            record.approve_state = "Aprobado" if record.is_approved else "No aprobado"

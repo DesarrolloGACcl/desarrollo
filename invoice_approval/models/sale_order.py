@@ -23,7 +23,7 @@ class SaleOrder(models.Model):
     is_approved = fields.Boolean(string="¿Está aprobada?", default=False)
 
     initial_budget = fields.Float(string="Presupuesto inicial", compute="_compute_initial_budget")
-    remaining_budget = fields.Float(string="Presupuesto cobrado", compute="_compute_remaining_budget")
+    remaining_budget = fields.Float(string="Presupuesto cobrado", readonly=True)
 
     def update_budgets(self):
 
@@ -84,33 +84,14 @@ class SaleOrder(models.Model):
 
                     self.env['sale.area.budget'].create(area_budget_vals)
 
-    @api.depends('order_line.analytic_distribution')
+    @api.depends('project_analytic_account_id')
     def _compute_initial_budget(self):
         for order in self:
             initial_budget = 0.0
-            # Get first analytic account from order lines
-            for line in order.order_line:
-                if line.analytic_distribution:
-                    # Get first analytic account id from distribution
-                    analytic_id = list(line.analytic_distribution.keys())[0]
-                    analytic = self.env['account.analytic.account'].browse(int(analytic_id))
-                    initial_budget = analytic.initial_budget
-                    break
+            if order.project_analytic_account_id:
+                initial_budget = order.project_analytic_account_id.initial_budget
             order.initial_budget = initial_budget
 
-    @api.depends('order_line.analytic_distribution') 
-    def _compute_remaining_budget(self):
-        for order in self:
-            remaining_budget = 0.0
-            # Get first analytic account from order lines
-            for line in order.order_line:
-                if line.analytic_distribution:
-                    # Get first analytic account id from distribution
-                    analytic_id = list(line.analytic_distribution.keys())[0]
-                    analytic = self.env['account.analytic.account'].browse(int(analytic_id))
-                    remaining_budget = analytic.remaining_budget
-                    break
-            order.remaining_budget = remaining_budget
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -131,7 +112,6 @@ class SaleOrder(models.Model):
                         
                     analytic.remaining_budget = new_remaining
                     # Force recompute of remaining budget on order
-                    order._compute_remaining_budget()
                     break
 
         return orders
@@ -155,7 +135,6 @@ class SaleOrder(models.Model):
                         
                     analytic.remaining_budget = new_remaining
                     # Force recompute of remaining budget on order
-                    order._compute_remaining_budget()
                     break
 
         return res

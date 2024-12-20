@@ -52,6 +52,7 @@ class SaleOrder(models.Model):
                 project_analytic_account.initial_budget = project_budget
             
                 for area in d['areas']:
+                    _logger.warning('AREA: %s', area)
                     area_id = area['area_id']
                     area_name = area['area_nombre']
                     area_icon = area['area_icono']

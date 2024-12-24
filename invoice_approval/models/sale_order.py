@@ -26,6 +26,8 @@ class SaleOrder(models.Model):
     remaining_budget = fields.Float(string="Presupuesto cobrado", readonly=True)
 
     def update_budgets(self):
+        if self.env.context.get('skip_budget_update'):
+            return
 
         url = "https://proyectos.gac.cl/endpoints/api.php/presupuestos?token=e4b8e12d1a2f4c8b9f3c0d2a8e7a6d4f"
     
@@ -99,21 +101,24 @@ class SaleOrder(models.Model):
         orders = super().create(vals_list)
         
         for order in orders:
-            for line in order.order_line:
-                if line.analytic_distribution:
-                    analytic_id = list(line.analytic_distribution.keys())[0]
-                    analytic = self.env['account.analytic.account'].browse(int(analytic_id))
+            if not self.env.context.get('skip_budget_update'):
+                with self.env.cr.savepoint():  # Evitar cambios parciales en caso de error
+                    order.with_context(skip_budget_update=True).update_budgets()
+                    for line in order.order_line:
+                        if line.analytic_distribution:
+                            analytic_id = list(line.analytic_distribution.keys())[0]
+                            analytic = self.env['account.analytic.account'].browse(int(analytic_id))
 
-                    order.update_budgets()
-                    
-                    # Update remaining budget
-                    new_remaining = analytic.remaining_budget - order.amount_total
-                    if new_remaining < 0:
-                        raise ValidationError(_('No hay suficiente presupuesto disponible en el proyecto.'))
-                        
-                    analytic.remaining_budget = new_remaining
-                    # Force recompute of remaining budget on order
-                    break
+                            order.update_budgets()
+                            
+                            # Update remaining budget
+                            new_remaining = analytic.remaining_budget - order.amount_total
+                            if new_remaining < 0:
+                                raise ValidationError(_('No hay suficiente presupuesto disponible en el proyecto.'))
+                                
+                            analytic.remaining_budget = new_remaining
+                            # Force recompute of remaining budget on order
+                            break
 
         return orders
 
@@ -123,20 +128,23 @@ class SaleOrder(models.Model):
 
         # Check if state changed to sale (confirmed)
         for order in self:
-            for line in order.order_line:
-                if line.analytic_distribution:
-                    analytic_id = list(line.analytic_distribution.keys())[0]
-                    analytic = self.env['account.analytic.account'].browse(int(analytic_id))
-                    
-                    order.update_budgets()
-                    # Update remaining budget
-                    new_remaining = analytic.remaining_budget - order.amount_total
-                    if new_remaining < 0:
-                        raise ValidationError(_('No hay suficiente presupuesto disponible en el proyecto.'))
-                        
-                    analytic.remaining_budget = new_remaining
-                    # Force recompute of remaining budget on order
-                    break
+            if not self.env.context.get('skip_budget_update'):
+                with self.env.cr.savepoint():
+                    order.with_context(skip_budget_update=True).update_budgets()
+                    for line in order.order_line:
+                        if line.analytic_distribution:
+                            analytic_id = list(line.analytic_distribution.keys())[0]
+                            analytic = self.env['account.analytic.account'].browse(int(analytic_id))
+                            
+                            order.update_budgets()
+                            # Update remaining budget
+                            new_remaining = analytic.remaining_budget - order.amount_total
+                            if new_remaining < 0:
+                                raise ValidationError(_('No hay suficiente presupuesto disponible en el proyecto.'))
+                                
+                            analytic.remaining_budget = new_remaining
+                            # Force recompute of remaining budget on order
+                            break
 
         return res
 

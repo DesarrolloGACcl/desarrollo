@@ -153,6 +153,29 @@ class MoveApi(http.Controller):
 
         sale.is_approved = True
 
+        sale.action_confirm()
+
+        # Unificar las líneas de venta
+        product_description = "Pre-factura: " + sale.name
+
+        # Crear factura
+        invoice_vals = {
+            'move_type': 'out_invoice',
+            'partner_id': sale.partner_id.id,
+            'invoice_origin': sale.name,
+            'sale_id': sale.id,
+            'invoice_line_ids': [(0, 0, {
+                'product_id': False,  # Sin producto específico
+                'name': product_description,
+                'quantity': 1,  # Solo una línea
+                'price_unit': sum(sale.order_line.mapped('price_total')),  # Suma de todos los totales de línea
+            })],
+        }
+        invoice = self.env['account.move'].create(invoice_vals)
+
+        # Publicar la factura
+        invoice.action_post()
+
         return 'Pre-factura: '+ sale.name + ', aprobada por: ' + head.name + ' ' + head.surname + ' el ' + str(approve_date)
 
     @http.route('/api/pre_invoice/files/<int:sale_id>', type="http", auth='public')

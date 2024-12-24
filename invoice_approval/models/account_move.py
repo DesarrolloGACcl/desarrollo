@@ -13,6 +13,8 @@ class AccountMove(models.Model):
     approve_date = fields.Date(string="Fecha de aprobación")
     is_approved = fields.Boolean(string="¿Está aprobada?", default=False)
 
+    sale_id = fields.Many2one('sale.order', string="Pre-factura origen")
+
     approve_state = fields.Char(string="Estado aprobación", compute="_compute_approve_state", readonly="True")
 
     @api.depends('is_approved')

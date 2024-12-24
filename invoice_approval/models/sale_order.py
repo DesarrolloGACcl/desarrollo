@@ -106,18 +106,9 @@ class SaleOrder(models.Model):
                     order.with_context(skip_budget_update=True).update_budgets()
                     for line in order.order_line:
                         if line.analytic_distribution:
-                            analytic_id = list(line.analytic_distribution.keys())[0]
-                            analytic = self.env['account.analytic.account'].browse(int(analytic_id))
 
                             order.update_budgets()
-                            
-                            # Update remaining budget
-                            new_remaining = analytic.remaining_budget - order.amount_total
-                            if new_remaining < 0:
-                                raise ValidationError(_('No hay suficiente presupuesto disponible en el proyecto.'))
-                                
-                            analytic.remaining_budget = new_remaining
-                            # Force recompute of remaining budget on order
+
                             break
 
         return orders
@@ -133,17 +124,8 @@ class SaleOrder(models.Model):
                     order.with_context(skip_budget_update=True).update_budgets()
                     for line in order.order_line:
                         if line.analytic_distribution:
-                            analytic_id = list(line.analytic_distribution.keys())[0]
-                            analytic = self.env['account.analytic.account'].browse(int(analytic_id))
                             
                             order.update_budgets()
-                            # Update remaining budget
-                            new_remaining = analytic.remaining_budget - order.amount_total
-                            if new_remaining < 0:
-                                raise ValidationError(_('No hay suficiente presupuesto disponible en el proyecto.'))
-                                
-                            analytic.remaining_budget = new_remaining
-                            # Force recompute of remaining budget on order
                             break
 
         return res

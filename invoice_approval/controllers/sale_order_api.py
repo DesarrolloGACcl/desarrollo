@@ -171,7 +171,7 @@ class MoveApi(http.Controller):
                 'price_unit': sum(sale.order_line.mapped('price_total')),  # Suma de todos los totales de línea
             })],
         }
-        invoice = self.env['account.move'].create(invoice_vals)
+        invoice = request.env['account.move'].create(invoice_vals)
 
         # Publicar la factura
         invoice.action_post()

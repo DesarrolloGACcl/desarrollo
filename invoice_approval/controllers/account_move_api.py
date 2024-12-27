@@ -222,8 +222,8 @@ class MoveApi(http.Controller):
         # Retornar el archivo PDF
         return request.make_response(pdf, headers=headers)
 
-    @http.route('/api/invoice/all', type='http', auth='public', methods=['GET'])
-    def send_move_info(self):
+    @http.route('/api/invoice/all/<int:year>', type='http', auth='public', methods=['GET'])
+    def send_move_info(self, year):
 
         # expected_token = 'gTRk73b95h6VuFQq'
         # provided_token = request.httprequest.headers.get('Authorization')
@@ -234,7 +234,7 @@ class MoveApi(http.Controller):
         # if provided_token != expected_token:
         #     return Response(json.dumps({"error": "Unauthorized"}), status=401, content_type='application/json')
 
-        invoices = request.env['account.move'].sudo().search([])
+        invoices = request.env['account.move'].sudo().search([('invoice_date', '>=', f'{year}-01-01'), ('invoice_date', '<=', f'{year}-12-31')])
 
         _logger.warning('move_ids: %s', invoices)
         

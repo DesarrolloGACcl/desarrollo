@@ -222,3 +222,115 @@ class MoveApi(http.Controller):
         # Retornar el archivo PDF
         return request.make_response(pdf, headers=headers)
 
+    @http.route('/api/invoice/all', type='http', auth='public', methods=['GET'])
+    def send_move_info(self, project_code):
+
+        # expected_token = 'gTRk73b95h6VuFQq'
+        # provided_token = request.httprequest.headers.get('Authorization')
+
+        # if not provided_token:
+        #     return Response(json.dumps({"error": "Falta token"}), status=401, content_type='application/json')
+
+        # if provided_token != expected_token:
+        #     return Response(json.dumps({"error": "Unauthorized"}), status=401, content_type='application/json')
+
+        invoices = request.env['account.move'].sudo().search([])
+
+        _logger.warning('move_ids: %s', invoices)
+        
+        # Constructing the json data structure
+        invoice_data_list = []
+
+        for invoice in invoices:
+
+            if invoice.l10n_latam_document_type_id:
+
+                if not invoice.approver_id:
+                    id_aprobador = 'No tiene aprobador'
+                    nombre_aprobador = 'No tiene aprobador'
+                else:
+                    id_aprobador = invoice.approver_id.managment_system_id
+                    nombre_aprobador = invoice.approver_id.name +' '+invoice.approver_id.surname
+
+                if not invoice.approve_date:
+                    fecha_aprobacion = 'Aún no es aprobada'
+                else:
+                    fecha_aprobacion = str(invoice.approve_date)
+
+                if invoice.move_type == 'in_invoice' and invoice.l10n_latam_document_type_id.code == '71':
+                    tipo = 'H'
+                elif (invoice.move_type == 'in_invoice' or invoice.move_type == 'in_refund') and invoice.l10n_latam_document_type_id:
+                    tipo = 'C'
+                elif (invoice.move_type == 'out_invoice' or invoice.move_type == 'out_refund') and invoice.l10n_latam_document_type_id:
+                    tipo = 'V'
+                elif invoice.l10n_latam_document_type_id is not None and invoice.payment_id.payment_type == 'outbound':
+                    tipo = 'E'
+                elif invoice.l10n_latam_document_type_id is not None and invoice.payment_id.payment_type == 'inbound':
+                    tipo = 'I'
+                else:
+                    tipo = 'T'
+
+                for aml in invoice.invoice_line_ids:
+
+                    if aml.analytic_distribution_area:
+                        distributions = aml.analytic_distribution_area
+                        
+                        formatted_area_analytic_info = ""
+                        area_codes = ""
+                        for account_id, percentage in distributions.items():
+                            # Fetch the analytic account name using the ID
+                            analytic_account = request.env['account.analytic.account'].sudo().browse(int(account_id))                    
+                            if analytic_account:
+                                formatted_area_analytic_info += f"{analytic_account.name}: {percentage}%"
+                                area_codes += f"{analytic_account.code}"
+                    else:
+                        formatted_area_analytic_info = 'No se especificó'
+                        area_codes = 'No se especificó'
+
+                    if aml.analytic_distribution_activity:
+                        distributions = aml.analytic_distribution_activity
+                        
+                        formatted_activity_analytic_info = ""
+                        activity_codes = ""
+                        for account_id, percentage in distributions.items():
+                            # Fetch the analytic account name using the ID
+                            analytic_account = request.env['account.analytic.account'].sudo().browse(int(account_id))                    
+                            if analytic_account:
+                                formatted_activity_analytic_info += f"{analytic_account.name}: {percentage}%"
+                                activity_codes += f"{analytic_account.code}"
+                    else:
+                        formatted_activity_analytic_info = 'No se especificó'
+                        activity_codes = 'No se especificó'
+
+                move_data = {
+                    'tipo': tipo,
+                    'fecha_factura': str(invoice.invoice_date),
+                    'fecha_contable': str(invoice.date),
+                    'documento': invoice.name,
+                    'empresa': invoice.partner_id.name,
+                    'rut': invoice.partner_id.vat, 
+                    'folio': invoice.l10n_latam_document_number,
+                    'tipo_documento': invoice.l10n_latam_document_type_id.name,
+                    'estado': invoice.state,
+                    'total': invoice.amount_total, 
+                    'monto_neto': invoice.amount_untaxed, 
+                    'impuesto': invoice.amount_tax,
+                    'codigo_area': area_codes,
+                    'area': formatted_area_analytic_info,
+                    'codigo_actividad': activity_codes,
+                    'actividad': formatted_activity_analytic_info,
+                    'id_aprobador': id_aprobador,
+                    'aprobador': nombre_aprobador,
+                    'fecha_aprobacion': fecha_aprobacion,
+                    'odoo_invoice_id': invoice.id,
+                }
+
+                invoice_data_list.append(move_data)        
+        # Serialize the list to JSON
+        _logger.warning('DATA ENVIADA: %s', invoice_data_list)
+
+        move_json = json.dumps(invoice_data_list)
+        _logger.warning('JSON DATA ENVIADA: %s', move_json)
+
+        return request.make_response(move_json, headers=[('Content-Type', 'application/json')])
+

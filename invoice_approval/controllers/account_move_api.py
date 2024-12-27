@@ -223,7 +223,7 @@ class MoveApi(http.Controller):
         return request.make_response(pdf, headers=headers)
 
     @http.route('/api/invoice/all', type='http', auth='public', methods=['GET'])
-    def send_move_info(self, project_code):
+    def send_move_info(self):
 
         # expected_token = 'gTRk73b95h6VuFQq'
         # provided_token = request.httprequest.headers.get('Authorization')

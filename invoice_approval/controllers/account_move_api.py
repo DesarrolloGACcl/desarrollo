@@ -272,6 +272,21 @@ class MoveApi(http.Controller):
 
                 for aml in invoice.invoice_line_ids:
 
+                    if aml.analytic_distribution:
+                        distributions = aml.analytic_distribution
+                        
+                        formatted_project_analytic_info = ""
+                        project_codes = ""
+                        for account_id, percentage in distributions.items():
+                            # Fetch the analytic account name using the ID
+                            analytic_account = request.env['account.analytic.account'].sudo().browse(int(account_id))                    
+                            if analytic_account:
+                                formatted_project_analytic_info += f"{analytic_account.name}: {percentage}%"
+                                project_codes += f"{analytic_account.code}"
+                    else:
+                        formatted_project_analytic_info = 'No se especificó'
+                        project_codes = 'No se especificó'
+
                     if aml.analytic_distribution_area:
                         distributions = aml.analytic_distribution_area
                         
@@ -315,6 +330,8 @@ class MoveApi(http.Controller):
                     'total': invoice.amount_total, 
                     'monto_neto': invoice.amount_untaxed, 
                     'impuesto': invoice.amount_tax,
+                    'codigo_proyecto': project_codes,
+                    'proyecto': formatted_project_analytic_info,
                     'codigo_area': area_codes,
                     'area': formatted_area_analytic_info,
                     'codigo_actividad': activity_codes,

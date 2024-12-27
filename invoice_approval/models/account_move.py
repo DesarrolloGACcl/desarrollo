@@ -8,10 +8,10 @@ _logger = logging.getLogger(__name__)
 class AccountMove(models.Model):
     _inherit = 'account.move'
 
-    approver_id = fields.Many2one('res.head', string="Aprobador")
+    approver_id = fields.Many2one('res.head', string="Aprobador", copy=False)
     invoice_id = fields.Integer(string="Id factura en sistema gestión")
-    approve_date = fields.Date(string="Fecha de aprobación")
-    is_approved = fields.Boolean(string="¿Está aprobada?", default=False)
+    approve_date = fields.Date(string="Fecha de aprobación", copy=False)
+    is_approved = fields.Boolean(string="¿Está aprobada?", default=False, copy=False)
 
     sale_id = fields.Many2one('sale.order', string="Pre-factura origen")
 

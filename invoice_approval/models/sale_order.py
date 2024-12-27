@@ -17,10 +17,9 @@ class SaleOrder(models.Model):
     )
     area_budget_ids = fields.One2many('sale.area.budget', 'sale_id', string='Presupuestos de área')
     pre_invoice_id = fields.Integer(string="ID de la pre-factura")
-    approver_id = fields.Many2one('res.head', string="Aprobador")
-    pre_invoice_id = fields.Integer(string="Id pre-factura en sistema gestión")
-    approve_date = fields.Date(string="Fecha de aprobación")
-    is_approved = fields.Boolean(string="¿Está aprobada?", default=False)
+    approver_id = fields.Many2one('res.head', string="Aprobador", copy=False)
+    approve_date = fields.Date(string="Fecha de aprobación" , copy=False)
+    is_approved = fields.Boolean(string="¿Está aprobada?", default=False, copy=False)
 
     initial_budget = fields.Float(string="Presupuesto inicial", compute="_compute_initial_budget")
     remaining_budget = fields.Float(string="Presupuesto cobrado", readonly=True)

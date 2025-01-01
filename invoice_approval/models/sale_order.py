@@ -59,7 +59,23 @@ class SaleOrder(models.Model):
                     area_icon = area['area_icono']
                     area_total = float(area['total_uf'])
 
+
+                    area_code = area['cod_area']
                     total_remaining = 0
+                    
+                    # Search for sale orders of the same partner
+                    partner_sales = self.env['sale.order'].search([
+                        ('partner_id', '=', self.partner_id.id)
+                    ])
+                    
+                    # Search for sale order lines with matching area code in analytic distribution
+                    for sale in partner_sales:
+                        for line in sale.order_line:
+                            if line.analytic_distribution_area:
+                                for account_id, percentage in line.analytic_distribution_area.items():
+                                    analytic_account = self.env['account.analytic.account'].browse(int(account_id))
+                                    if analytic_account.code == area_code:
+                                        total_remaining += line.price_total
 
                     # Convert image URL to binary data
                     if area['area_icono']:
@@ -109,7 +125,40 @@ class SaleOrder(models.Model):
                             order.update_budgets()
 
                             break
+            areas_dict = {}
+            for line in order.order_line:
+                if line.analytic_distribution_area:
+                    area_name = line.analytic_distribution_area.name
+                    area_budget = order.area_budget_ids.filtered(lambda x: x.name == area_name)
+                    if area_budget:
+                        if area_name not in areas_dict:
+                            areas_dict[area_name] = {
+                                'area': area_name,
+                                'presupuesto_area': area_budget.total_uf,
+                                'gasto': line.price_total,
+                                'presupuesto_actualizado': area_budget.total_uf - line.price_total
+                            }
+                        else:
+                            areas_dict[area_name]['gasto'] += line.price_total
+                            areas_dict[area_name]['presupuesto_actualizado'] = areas_dict[area_name]['presupuesto_area'] - areas_dict[area_name]['gasto']
 
+            json_data = {
+                "codigo_proyecto": order.project_analytic_account_id.code,
+                "nombre_proyecto": order.project_analytic_account_id.name,
+                "presupuesto_inicial": order.initial_budget,
+                "presupuesto_actualizado": order.initial_budget - sum(line.price_total for line in order.order_line),
+                "areas": list(areas_dict.values())
+            }
+            
+            try:
+                requests.put(
+                    'https://proyectos.gac.cl/endpoints/api.php/act_presupuestos',
+                    params={'token': 'e4b8e12d1a2f4c8b9f3c0d2a8e7a6d4f'},
+                    json=json_data
+                )
+            except Exception as e:
+                _logger.error("Error sending budget update to external API: %s", str(e))
+            
         return orders
 
     def write(self, vals):
@@ -125,7 +174,43 @@ class SaleOrder(models.Model):
                         if line.analytic_distribution:
                             
                             order.update_budgets()
+
+
                             break
+
+            areas_dict = {}
+            for line in order.order_line:
+                if line.analytic_distribution_area:
+                    area_name = line.analytic_distribution_area.name
+                    area_budget = order.area_budget_ids.filtered(lambda x: x.name == area_name)
+                    if area_budget:
+                        if area_name not in areas_dict:
+                            areas_dict[area_name] = {
+                                'area': area_name,
+                                'presupuesto_area': area_budget.total_uf,
+                                'gasto': line.price_total,
+                                'presupuesto_actualizado': area_budget.total_uf - line.price_total
+                            }
+                        else:
+                            areas_dict[area_name]['gasto'] += line.price_total
+                            areas_dict[area_name]['presupuesto_actualizado'] = areas_dict[area_name]['presupuesto_area'] - areas_dict[area_name]['gasto']
+
+            json_data = {
+                "codigo_proyecto": order.project_analytic_account_id.code,
+                "nombre_proyecto": order.project_analytic_account_id.name,
+                "presupuesto_inicial": order.initial_budget,
+                "presupuesto_actualizado": order.initial_budget - sum(line.price_total for line in order.order_line),
+                "areas": list(areas_dict.values())
+            }
+            
+            try:
+                requests.put(
+                    'https://proyectos.gac.cl/endpoints/api.php/act_presupuestos',
+                    params={'token': 'e4b8e12d1a2f4c8b9f3c0d2a8e7a6d4f'},
+                    json=json_data
+                )
+            except Exception as e:
+                _logger.error("Error sending budget update to external API: %s", str(e))
 
         return res
 

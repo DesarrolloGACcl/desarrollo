@@ -164,11 +164,14 @@ class MoveApi(http.Controller):
             'partner_id': sale.partner_id.id,
             'invoice_origin': sale.name,
             'sale_id': sale.id,
+            'approver_id': head.id,
+            'approve_date': approve_date,
+            'is_approved': True,
             'invoice_line_ids': [(0, 0, {
                 'product_id': False,  # Sin producto específico
                 'name': product_description,
                 'quantity': 1,  # Solo una línea
-                'price_unit': sum(sale.order_line.mapped('price_total')),  # Suma de todos los totales de línea
+                'price_unit': sum(sale.order_line.mapped('price_subtotal')),  # Suma de todos los totales de línea
             })],
         }
         invoice = request.env['account.move'].sudo().create(invoice_vals)
@@ -200,4 +203,108 @@ class MoveApi(http.Controller):
 
         # Retornar el archivo PDF
         return request.make_response(pdf, headers=headers)
+
+    @http.route('/api/pre_invoice/all/<int:year>', type='http', auth='public', methods=['GET'])
+    def send_move_info(self, year):
+
+        # expected_token = 'gTRk73b95h6VuFQq'
+        # provided_token = request.httprequest.headers.get('Authorization')
+
+        # if not provided_token:
+        #     return Response(json.dumps({"error": "Falta token"}), status=401, content_type='application/json')
+
+        # if provided_token != expected_token:
+        #     return Response(json.dumps({"error": "Unauthorized"}), status=401, content_type='application/json')
+
+        orders = request.env['sale.order'].sudo().search([('date_order', '>=', f'{year}-01-01'), ('date_order', '<=', f'{year}-12-31')])
+
+        _logger.warning('sale_ids: %s', orders)
+
+        if not orders:
+            return request.make_response('Pre-Facturas no encontradas', status=404)
+        
+        # Constructing the json data structure
+        sale_data_list = []
+
+        for order in orders:
+
+            if not order.approver_id:
+                id_aprobador = 'No tiene aprobador'
+                nombre_aprobador = 'No tiene aprobador'
+            else:
+                id_aprobador = order.approver_id.managment_system_id
+                nombre_aprobador = order.approver_id.name +' '+order.approver_id.surname
+
+            if not order.approve_date:
+                fecha_aprobacion = 'Aún no es aprobada'
+            else:
+                fecha_aprobacion = str(order.approve_date)
+
+            order_lines = []
+            for line in order.order_line:
+                if line.analytic_distribution_area:
+                    distributions = line.analytic_distribution_area
+                    formatted_area_analytic_info = ""
+                    area_codes = ""
+                    for account_id, percentage in distributions.items():
+                        analytic_account = request.env['account.analytic.account'].sudo().browse(int(account_id))                    
+                        if analytic_account:
+                            formatted_area_analytic_info += f"{analytic_account.name}: {percentage}%"
+                            area_codes += f"{analytic_account.code}"
+                else:
+                    formatted_area_analytic_info = 'No se especificó'
+                    area_codes = 'No se especificó'
+
+                if line.analytic_distribution_activity:
+                    distributions = line.analytic_distribution_activity
+                    formatted_activity_analytic_info = ""
+                    activity_codes = ""
+                    for account_id, percentage in distributions.items():
+                        analytic_account = request.env['account.analytic.account'].sudo().browse(int(account_id))                    
+                        if analytic_account:
+                            formatted_activity_analytic_info += f"{analytic_account.name}: {percentage}%"
+                            activity_codes += f"{analytic_account.code}"
+                else:
+                    formatted_activity_analytic_info = 'No se especificó'
+                    activity_codes = 'No se especificó'
+
+                line_data = {
+                    'product': line.product_id.name,
+                    'quantity': line.product_uom_qty,
+                    'price_unit': line.price_unit,
+                    'price_subtotal': line.price_subtotal,
+                    'area_analytic': formatted_area_analytic_info,
+                    'area_codes': area_codes,
+                    'activity_analytic': formatted_activity_analytic_info,
+                    'activity_codes': activity_codes
+                }
+                order_lines.append(line_data)
+
+            pre_invoice_data = {
+                'fecha_pre_factura': str(order.date_order),
+                'documento': order.name,
+                'empresa': order.partner_id.name,
+                'rut': order.partner_id.vat,
+                'estado': order.state,
+                'total': order.amount_total,
+                'codigo_proyecto':order.project_analytic_account_id.code,
+                'proyecto': order.project_analytic_account_id.name,
+                'id_aprobador': id_aprobador,
+                'aprobador': nombre_aprobador,
+                'fecha_aprobacion': fecha_aprobacion,
+                'odoo_order_id': order.id,
+                'order_lines': order_lines
+            }
+
+
+            sale_data_list.append(pre_invoice_data)
+        
+        # Serialize the list to JSON
+        _logger.warning('DATA ENVIADA: %s', sale_data_list)
+
+        sale_json = json.dumps(sale_data_list)
+        _logger.warning('JSON DATA ENVIADA: %s', sale_json)
+
+        return request.make_response(sale_json, headers=[('Content-Type', 'application/json')])
+
 

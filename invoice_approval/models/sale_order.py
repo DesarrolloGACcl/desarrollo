@@ -59,7 +59,6 @@ class SaleOrder(models.Model):
                     area_icon = area['area_icono']
                     area_total = float(area['total_uf'])
 
-
                     area_code = area['cod_area']
                     total_remaining = 0
                     
@@ -100,7 +99,18 @@ class SaleOrder(models.Model):
                         'sale_id': self.id
                     }
 
-                    self.env['sale.area.budget'].create(area_budget_vals)
+                    # Check if area budget already exists for this sale order and area
+                    existing_area_budget = self.env['sale.area.budget'].search([
+                        ('sale_id', '=', self.id),
+                        ('area_id', '=', area_id)
+                    ], limit=1)
+
+                    if existing_area_budget:
+                        # Update existing record
+                        existing_area_budget.write(area_budget_vals)
+                    else:
+                        # Create new record
+                        self.env['sale.area.budget'].create(area_budget_vals)
 
     @api.depends('project_analytic_account_id')
     def _compute_initial_budget(self):
@@ -128,7 +138,9 @@ class SaleOrder(models.Model):
             areas_dict = {}
             for line in order.order_line:
                 if line.analytic_distribution_area:
-                    area_name = line.analytic_distribution_area.name
+                    for account_id, percentage in line.analytic_distribution_area.items():
+                        analytic_account = self.env['account.analytic.account'].browse(int(account_id))
+                    area_name = analytic_account.name
                     area_budget = order.area_budget_ids.filtered(lambda x: x.name == area_name)
                     if area_budget:
                         if area_name not in areas_dict:
@@ -181,7 +193,9 @@ class SaleOrder(models.Model):
             areas_dict = {}
             for line in order.order_line:
                 if line.analytic_distribution_area:
-                    area_name = line.analytic_distribution_area.name
+                    for account_id, percentage in line.analytic_distribution_area.items():
+                        analytic_account = self.env['account.analytic.account'].browse(int(account_id))
+                    area_name = analytic_account.name
                     area_budget = order.area_budget_ids.filtered(lambda x: x.name == area_name)
                     if area_budget:
                         if area_name not in areas_dict:

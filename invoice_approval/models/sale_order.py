@@ -136,40 +136,44 @@ class SaleOrder(models.Model):
 
                             break
             areas_dict = {}
-            for line in order.order_line:
-                if line.analytic_distribution_area:
-                    for account_id, percentage in line.analytic_distribution_area.items():
-                        analytic_account = self.env['account.analytic.account'].browse(int(account_id))
-                    area_name = analytic_account.name
-                    area_budget = order.area_budget_ids.filtered(lambda x: x.name == area_name)
-                    if area_budget:
-                        if area_name not in areas_dict:
-                            areas_dict[area_name] = {
-                                'area': area_name,
-                                'presupuesto_area': area_budget.total_uf,
-                                'gasto': line.price_total,
-                                'presupuesto_actualizado': area_budget.total_uf - line.price_total
-                            }
-                        else:
-                            areas_dict[area_name]['gasto'] += line.price_total
-                            areas_dict[area_name]['presupuesto_actualizado'] = areas_dict[area_name]['presupuesto_area'] - areas_dict[area_name]['gasto']
+            # Check if any order line hasn't been sent yet
+            has_unsent_lines = any(not line.line_was_sent for line in order.order_line)
+            if has_unsent_lines:    
+                for line in order.order_line:
+                    if not line.line_was_sent: 
+                        if line.analytic_distribution_area:
+                            for account_id, percentage in line.analytic_distribution_area.items():
+                                analytic_account = self.env['account.analytic.account'].browse(int(account_id))
+                            area_name = analytic_account.name
+                            area_budget = order.area_budget_ids.filtered(lambda x: x.name == area_name)
+                            if area_budget:
+                                if area_name not in areas_dict:
+                                    areas_dict[area_name] = {
+                                        'area': area_name,
+                                        'presupuesto_area': area_budget.total_uf,
+                                        'gasto': line.price_total,
+                                        'presupuesto_actualizado': area_budget.total_uf - line.price_total
+                                    }
+                                else:
+                                    areas_dict[area_name]['gasto'] += line.price_total
+                                    areas_dict[area_name]['presupuesto_actualizado'] = areas_dict[area_name]['presupuesto_area'] - areas_dict[area_name]['gasto']
 
-            json_data = {
-                "codigo_proyecto": order.project_analytic_account_id.code,
-                "nombre_proyecto": order.project_analytic_account_id.name,
-                "presupuesto_inicial": order.initial_budget,
-                "presupuesto_actualizado": order.initial_budget - sum(line.price_total for line in order.order_line),
-                "areas": list(areas_dict.values())
-            }
-            
-            try:
-                requests.put(
-                    'https://proyectos.gac.cl/endpoints/api.php/act_presupuestos',
-                    params={'token': 'e4b8e12d1a2f4c8b9f3c0d2a8e7a6d4f'},
-                    json=json_data
-                )
-            except Exception as e:
-                _logger.error("Error sending budget update to external API: %s", str(e))
+                json_data = {
+                    "codigo_proyecto": order.project_analytic_account_id.code,
+                    "nombre_proyecto": order.project_analytic_account_id.name,
+                    "presupuesto_inicial": order.initial_budget,
+                    "presupuesto_actualizado": order.initial_budget - sum(line.price_total for line in order.order_line),
+                    "areas": list(areas_dict.values())
+                }
+                
+                try:
+                    requests.put(
+                        'https://proyectos.gac.cl/endpoints/api.php/act_presupuestos',
+                        params={'token': 'e4b8e12d1a2f4c8b9f3c0d2a8e7a6d4f'},
+                        json=json_data
+                    )
+                except Exception as e:
+                    _logger.error("Error sending budget update to external API: %s", str(e))
             
         return orders
 
@@ -191,40 +195,44 @@ class SaleOrder(models.Model):
                             break
 
             areas_dict = {}
-            for line in order.order_line:
-                if line.analytic_distribution_area:
-                    for account_id, percentage in line.analytic_distribution_area.items():
-                        analytic_account = self.env['account.analytic.account'].browse(int(account_id))
-                    area_name = analytic_account.name
-                    area_budget = order.area_budget_ids.filtered(lambda x: x.name == area_name)
-                    if area_budget:
-                        if area_name not in areas_dict:
-                            areas_dict[area_name] = {
-                                'area': area_name,
-                                'presupuesto_area': area_budget.total_uf,
-                                'gasto': line.price_total,
-                                'presupuesto_actualizado': area_budget.total_uf - line.price_total
-                            }
-                        else:
-                            areas_dict[area_name]['gasto'] += line.price_total
-                            areas_dict[area_name]['presupuesto_actualizado'] = areas_dict[area_name]['presupuesto_area'] - areas_dict[area_name]['gasto']
+            # Check if any order line hasn't been sent yet
+            has_unsent_lines = any(not line.line_was_sent for line in order.order_line)
+            if has_unsent_lines:    
+                for line in order.order_line:
+                    if not line.line_was_sent: 
+                        if line.analytic_distribution_area:
+                            for account_id, percentage in line.analytic_distribution_area.items():
+                                analytic_account = self.env['account.analytic.account'].browse(int(account_id))
+                            area_name = analytic_account.name
+                            area_budget = order.area_budget_ids.filtered(lambda x: x.name == area_name)
+                            if area_budget:
+                                if area_name not in areas_dict:
+                                    areas_dict[area_name] = {
+                                        'area': area_name,
+                                        'presupuesto_area': area_budget.total_uf,
+                                        'gasto': line.price_total,
+                                        'presupuesto_actualizado': area_budget.total_uf - line.price_total
+                                    }
+                                else:
+                                    areas_dict[area_name]['gasto'] += line.price_total
+                                    areas_dict[area_name]['presupuesto_actualizado'] = areas_dict[area_name]['presupuesto_area'] - areas_dict[area_name]['gasto']
 
-            json_data = {
-                "codigo_proyecto": order.project_analytic_account_id.code,
-                "nombre_proyecto": order.project_analytic_account_id.name,
-                "presupuesto_inicial": order.initial_budget,
-                "presupuesto_actualizado": order.initial_budget - sum(line.price_total for line in order.order_line),
-                "areas": list(areas_dict.values())
-            }
-            
-            try:
-                requests.put(
-                    'https://proyectos.gac.cl/endpoints/api.php/act_presupuestos',
-                    params={'token': 'e4b8e12d1a2f4c8b9f3c0d2a8e7a6d4f'},
-                    json=json_data
-                )
-            except Exception as e:
-                _logger.error("Error sending budget update to external API: %s", str(e))
+                json_data = {
+                    "codigo_proyecto": order.project_analytic_account_id.code,
+                    "nombre_proyecto": order.project_analytic_account_id.name,
+                    "presupuesto_inicial": order.initial_budget,
+                    "presupuesto_actualizado": order.initial_budget - sum(line.price_total for line in order.order_line),
+                    "areas": list(areas_dict.values())
+                }
+                
+                try:
+                    requests.put(
+                        'https://proyectos.gac.cl/endpoints/api.php/act_presupuestos',
+                        params={'token': 'e4b8e12d1a2f4c8b9f3c0d2a8e7a6d4f'},
+                        json=json_data
+                    )
+                except Exception as e:
+                    _logger.error("Error sending budget update to external API: %s", str(e))
 
         return res
 
@@ -237,6 +245,8 @@ class SaleOrder(models.Model):
 
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
+
+    line_was_sent = fields.Boolean(string="Línea fue enviada al endpoint", default=False)
 
     @api.model_create_multi
     def create(self, vals_list):

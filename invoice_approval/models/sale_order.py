@@ -24,6 +24,13 @@ class SaleOrder(models.Model):
     initial_budget = fields.Float(string="Presupuesto inicial", compute="_compute_initial_budget")
     remaining_budget = fields.Float(string="Presupuesto cobrado", readonly=True)
 
+    approve_state = fields.Char(string="Estado aprobación", compute="_compute_approve_state", readonly="True")
+
+    @api.depends('is_approved')
+    def _compute_approve_state(self):
+        for record in self:
+            record.approve_state = "Aprobado" if record.is_approved else "No aprobado"
+
     def update_budgets(self):
         if self.env.context.get('skip_budget_update'):
             return

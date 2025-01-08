@@ -39,5 +39,19 @@
         </xpath>
       </field>
     </record>
+
+    <record id="sale_tree_approve" model="ir.ui.view">
+      <field name="name">sale.tree.approve</field>
+      <field name="inherit_id" ref="sale.view_quotation_tree"/>
+      <field name="model">sale.order</field>
+      <field name="arch" type="xml">
+        <xpath expr="//field[@name='state']" position="after">
+          <field name="approve_date"/>
+          <field name="is_approved" invisible="1"/>
+          <field name="approver_id"/>
+          <field name="approve_state" widget="badge" decoration-danger="not is_approved" decoration-success="is_approved"/>
+        </xpath>
+      </field>
+    </record>
   </data>
 </odoo>

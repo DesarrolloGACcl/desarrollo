@@ -159,6 +159,22 @@ class MoveApi(http.Controller):
         product_description = "Pre-factura: " + sale.name
 
         # Crear factura
+        # Verificar si la moneda es UF y hacer la conversión si es necesario
+        price_subtotal = sum(sale.order_line.mapped('price_subtotal'))
+        if sale.pricelist_id.currency_id.name == 'UF':
+            # Obtener la última tasa de conversión UF a CLP
+            uf_currency = request.env['res.currency'].sudo().search([('name', '=', 'UF')], limit=1)
+            clp_currency = request.env['res.currency'].sudo().search([('name', '=', 'CLP')], limit=1)
+            rate = request.env['res.currency.rate'].sudo().search([
+                ('currency_id', '=', uf_currency.id),
+                ('company_id', '=', sale.company_id.id)
+            ], order='name desc', limit=1)
+            
+            if rate:
+                price_subtotal = price_subtotal * rate.rate
+            else:
+                return 'No se encontró tasa de conversión UF a CLP'
+
         invoice_vals = {
             'move_type': 'out_invoice',
             'partner_id': sale.partner_id.id,
@@ -171,7 +187,7 @@ class MoveApi(http.Controller):
                 'product_id': False,  # Sin producto específico
                 'name': product_description,
                 'quantity': 1,  # Solo una línea
-                'price_unit': sum(sale.order_line.mapped('price_subtotal')),  # Suma de todos los totales de línea
+                'price_unit': price_subtotal,  # Precio convertido si era UF
             })],
         }
         invoice = request.env['account.move'].sudo().create(invoice_vals)

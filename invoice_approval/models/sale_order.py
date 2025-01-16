@@ -247,6 +247,7 @@ class SaleOrder(models.Model):
     @api.onchange('project_analytic_account_id') 
     def _onchange_analytic_account(self):
         if self.project_analytic_account_id:
+            self.update_budgets()
             for line in self.order_line:
                 line.analytic_distribution = {str(self.project_analytic_account_id.id): 100}
 
@@ -271,3 +272,8 @@ class SaleOrderLine(models.Model):
                 if line.order_id.project_analytic_account_id:
                     line.analytic_distribution = {str(line.order_id.project_analytic_account_id.id): 100}
         return res
+
+    @api.onchange('product_id') 
+    def _onchange_product_id(self):
+        if self.order_id.project_analytic_account_id:
+            self.analytic_distribution = {str(self.order_id.project_analytic_account_id.id): 100}

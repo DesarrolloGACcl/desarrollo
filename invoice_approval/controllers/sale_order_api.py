@@ -200,7 +200,7 @@ class MoveApi(http.Controller):
                 'name': product_description,
                 'quantity': 1,
                 'price_unit': tax_subtotal,
-                'tax_ids': [(0, 0, tax_lines[0].tax_id.ids)]
+                'tax_ids': [(6, 0, tax_lines[0].tax_id.ids)]
             })
 
         # Caso 2: Solo líneas sin impuestos 
@@ -248,7 +248,8 @@ class MoveApi(http.Controller):
         invoice = request.env['account.move'].sudo().create(invoice_vals)
            
         # Vincular la factura con la orden
-        invoice.write({'invoice_line_ids': [(1, line.id, {'sale_line_ids': [(6, 0, sale.order_line.ids)]}) for line in invoice.invoice_line_ids]})
+        for inv_line in invoice.invoice_line_ids:
+            inv_line.sale_line_ids = sale.order_line
 
         # Publicar la factura
         invoice.action_post()

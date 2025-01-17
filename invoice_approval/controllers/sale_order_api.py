@@ -159,21 +159,74 @@ class MoveApi(http.Controller):
         product_description = "Pre-factura: " + sale.name
 
         # Crear factura
+
+        # Determinar el tipo de documento y agrupar líneas según impuestos
+        tax_lines = sale.order_line.filtered(lambda line: line.tax_id)
+        no_tax_lines = sale.order_line.filtered(lambda line: not line.tax_id)
+        
+        # Calcular subtotales
+        tax_subtotal = sum(tax_lines.mapped('price_subtotal')) if tax_lines else 0
+        no_tax_subtotal = sum(no_tax_lines.mapped('price_subtotal')) if no_tax_lines else 0
+
         # Verificar si la moneda es UF y hacer la conversión si es necesario
-        price_subtotal = sum(sale.order_line.mapped('price_subtotal'))
         if sale.pricelist_id.currency_id.name == 'UF':
             # Obtener la última tasa de conversión UF a CLP
             uf_currency = request.env['res.currency'].sudo().search([('name', '=', 'UF')], limit=1)
-            clp_currency = request.env['res.currency'].sudo().search([('name', '=', 'CLP')], limit=1)
             rate = request.env['res.currency.rate'].sudo().search([
                 ('currency_id', '=', uf_currency.id),
                 ('company_id', '=', sale.company_id.id)
             ], order='name desc', limit=1)
             
             if rate:
-                price_subtotal = price_subtotal * rate.rate
+                tax_subtotal = tax_subtotal * rate.rate
+                no_tax_subtotal = no_tax_subtotal * rate.rate
             else:
                 return 'No se encontró tasa de conversión UF a CLP'
+
+        lines = []
+        product_description = "Pre-factura: " + sale.name
+
+        # Caso 1: Solo líneas con impuestos
+        if tax_lines and not no_tax_lines:
+            doc_type = request.env['l10n_latam.document.type'].sudo().search([('code', '=', '33')], limit=1)
+            lines.append({
+                'product_id': False,
+                'name': product_description,
+                'quantity': 1,
+                'price_unit': tax_subtotal,
+                'tax_ids': [(6, 0, tax_lines[0].tax_id.ids)]
+            })
+
+        # Caso 2: Solo líneas sin impuestos 
+        elif no_tax_lines and not tax_lines:
+            doc_type = request.env['l10n_latam.document.type'].sudo().search([('code', '=', '34')], limit=1)
+            lines.append({
+                'product_id': False,
+                'name': product_description,
+                'quantity': 1,
+                'price_unit': no_tax_subtotal,
+                'tax_ids': [(6, 0, [])]
+            })
+
+        # Caso 3: Líneas mixtas (con y sin impuestos)
+        else:
+            doc_type = request.env['l10n_latam.document.type'].sudo().search([('code', '=', '33')], limit=1)
+            if tax_subtotal > 0:
+                lines.append({
+                    'product_id': False,
+                    'name': product_description + ' (Con IVA)',
+                    'quantity': 1,
+                    'price_unit': tax_subtotal,
+                    'tax_ids': [(6, 0, tax_lines[0].tax_id.ids)]
+                })
+            if no_tax_subtotal > 0:
+                lines.append({
+                    'product_id': False,
+                    'name': product_description + ' (Exento)',
+                    'quantity': 1,
+                    'price_unit': no_tax_subtotal,
+                    'tax_ids': [(6, 0, [])]
+                })
 
         invoice_vals = {
             'move_type': 'out_invoice',
@@ -183,13 +236,8 @@ class MoveApi(http.Controller):
             'approver_id': head.id,
             'approve_date': approve_date,
             'is_approved': True,
-            'invoice_line_ids': [(0, 0, {
-                'product_id': False,  # Sin producto específico
-                'name': product_description,
-                'quantity': 1,  # Solo una línea
-                'price_unit': price_subtotal,  # Precio convertido si era UF
-                'tax_ids': [(6, 0, sale.order_line.mapped('tax_id').ids)] if any(line.tax_id for line in sale.order_line) else False,
-            })],
+            'l10n_latam_document_type_id': doc_type.id,
+            'invoice_line_ids': [(0, 0, line) for line in lines],
         }
         invoice = request.env['account.move'].sudo().create(invoice_vals)
            

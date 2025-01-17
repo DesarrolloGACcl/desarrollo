@@ -190,7 +190,7 @@ class MoveApi(http.Controller):
         lines = []
         product_description = "Pre-factura: " + sale.name
 
-        _logger.warning("tax_subtotal %s", tax_lines[0].tax_id.ids)
+        _logger.warning("tax_subtotal %s", tax_lines[0].tax_id.id)
 
         # Caso 1: Solo líneas con impuestos
         if tax_lines and not no_tax_lines:
@@ -200,7 +200,7 @@ class MoveApi(http.Controller):
                 'name': product_description,
                 'quantity': 1,
                 'price_unit': tax_subtotal,
-                'tax_ids': [(6, 0, tax_lines[0].tax_id.ids)]
+                'tax_ids': [(6, 0, tax_lines[0].tax_id.id)]
             })
 
         # Caso 2: Solo líneas sin impuestos 
@@ -223,7 +223,7 @@ class MoveApi(http.Controller):
                     'name': product_description + ' (Con IVA)',
                     'quantity': 1,
                     'price_unit': tax_subtotal,
-                    'tax_ids': [(6, 0, tax_lines[0].tax_id.ids)]
+                    'tax_ids': [(6, 0, tax_lines[0].tax_id.id)]
                 })
             if no_tax_subtotal > 0:
                 lines.append({

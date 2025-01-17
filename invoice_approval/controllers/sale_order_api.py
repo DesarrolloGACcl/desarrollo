@@ -188,6 +188,7 @@ class MoveApi(http.Controller):
                 'name': product_description,
                 'quantity': 1,  # Solo una línea
                 'price_unit': price_subtotal,  # Precio convertido si era UF
+                'tax_ids': [(6, 0, sale.order_line.mapped('tax_ids').ids)] if any(line.tax_ids for line in sale.order_line) else False,
             })],
         }
         invoice = request.env['account.move'].sudo().create(invoice_vals)

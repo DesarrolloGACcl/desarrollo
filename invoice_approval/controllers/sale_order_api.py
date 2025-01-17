@@ -248,8 +248,9 @@ class MoveApi(http.Controller):
         invoice = request.env['account.move'].sudo().create(invoice_vals)
            
         # Vincular la factura con la orden
-        for inv_line in invoice.invoice_line_ids:
-            inv_line.sale_line_ids = sale.order_line
+        #for inv_line in invoice.invoice_line_ids:
+        
+        #    inv_line.sale_line_ids = sale.order_line
 
         # Publicar la factura
         invoice.action_post()

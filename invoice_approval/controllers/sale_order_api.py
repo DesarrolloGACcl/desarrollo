@@ -163,10 +163,14 @@ class MoveApi(http.Controller):
         # Determinar el tipo de documento y agrupar líneas según impuestos
         tax_lines = sale.order_line.filtered(lambda line: line.tax_id)
         no_tax_lines = sale.order_line.filtered(lambda line: not line.tax_id)
+
+        _logger.warning("tax_lines %s", tax_lines)
         
         # Calcular subtotales
         tax_subtotal = sum(tax_lines.mapped('price_subtotal')) if tax_lines else 0
         no_tax_subtotal = sum(no_tax_lines.mapped('price_subtotal')) if no_tax_lines else 0
+
+        _logger.warning("tax_subtotal %s", tax_subtotal)
 
         # Verificar si la moneda es UF y hacer la conversión si es necesario
         if sale.pricelist_id.currency_id.name == 'UF':
@@ -185,6 +189,8 @@ class MoveApi(http.Controller):
 
         lines = []
         product_description = "Pre-factura: " + sale.name
+
+        _logger.warning("tax_subtotal %s", tax_lines[0].tax_id.ids)
 
         # Caso 1: Solo líneas con impuestos
         if tax_lines and not no_tax_lines:

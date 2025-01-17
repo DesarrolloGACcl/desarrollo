@@ -190,7 +190,7 @@ class MoveApi(http.Controller):
         lines = []
         product_description = "Pre-factura: " + sale.name
 
-        _logger.warning("tax_subtotal %s", tax_lines[0].tax_id.ids)
+        _logger.warning("tax_id.ids %s", tax_lines[0].tax_id.ids)
 
         # Caso 1: Solo líneas con impuestos
         if tax_lines and not no_tax_lines:
@@ -202,6 +202,9 @@ class MoveApi(http.Controller):
                 'price_unit': tax_subtotal,
                 'tax_ids': [(6, 0, tax_lines[0].tax_id.ids)]
             })
+        
+            _logger.warning("lines %s", lines)
+
 
         # Caso 2: Solo líneas sin impuestos 
         elif no_tax_lines and not tax_lines:
@@ -248,9 +251,8 @@ class MoveApi(http.Controller):
         invoice = request.env['account.move'].sudo().create(invoice_vals)
            
         # Vincular la factura con la orden
-        #for inv_line in invoice.invoice_line_ids:
-        
-        #    inv_line.sale_line_ids = sale.order_line
+        for inv_line in invoice.invoice_line_ids:
+            inv_line.sale_line_ids = sale.order_line
 
         # Publicar la factura
         invoice.action_post()

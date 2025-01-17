@@ -200,7 +200,7 @@ class MoveApi(http.Controller):
                 'name': product_description,
                 'quantity': 1,
                 'price_unit': tax_subtotal,
-                'tax_ids': [(6, 0, tax_lines[0].tax_id.id)]
+                'tax_ids': tax_lines[0].tax_id.id
             })
 
         # Caso 2: Solo líneas sin impuestos 
@@ -223,7 +223,7 @@ class MoveApi(http.Controller):
                     'name': product_description + ' (Con IVA)',
                     'quantity': 1,
                     'price_unit': tax_subtotal,
-                    'tax_ids': [(6, 0, tax_lines[0].tax_id.id)]
+                    'tax_ids': [(6, 0, tax_lines[0].tax_id.ids)]
                 })
             if no_tax_subtotal > 0:
                 lines.append({

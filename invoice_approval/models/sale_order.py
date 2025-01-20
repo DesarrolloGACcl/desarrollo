@@ -32,14 +32,15 @@ class SaleOrder(models.Model):
     @api.depends('uf_date')
     def _compute_clp_uf_date(self):
         for record in self:
-            uf_currency = request.env['res.currency'].sudo().search([('name', '=', 'UF')], limit=1)
-            rate = request.env['res.currency.rate'].sudo().search([
-                ('currency_id', '=', uf_currency.id),
-                ('company_id', '=', record.company_id.id),
-                ('date', '=', record.uf_date)
-            ], limit=1)
-            if rate:
-                record.clp_value = rate.inverse_company_rate
+            if record.uf_date:
+                uf_currency = request.env['res.currency'].sudo().search([('name', '=', 'UF')], limit=1)
+                rate = request.env['res.currency.rate'].sudo().search([
+                    ('currency_id', '=', uf_currency.id),
+                    ('company_id', '=', record.company_id.id),
+                    ('date', '=', record.uf_date)
+                ], limit=1)
+                if rate:
+                    record.clp_value = rate.inverse_company_rate
 
     @api.depends('is_approved')
     def _compute_approve_state(self):

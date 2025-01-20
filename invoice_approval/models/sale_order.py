@@ -42,9 +42,9 @@ class SaleOrder(models.Model):
                 if rate:
                     record.clp_value = rate.inverse_company_rate
                 else:
-                    record.clp_value = 0,0
+                    record.clp_value = 0.0
             else:
-                record.clp_value = 0,0
+                record.clp_value = 0.0
 
     @api.depends('is_approved')
     def _compute_approve_state(self):

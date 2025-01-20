@@ -178,8 +178,9 @@ class MoveApi(http.Controller):
             uf_currency = request.env['res.currency'].sudo().search([('name', '=', 'UF')], limit=1)
             rate = request.env['res.currency.rate'].sudo().search([
                 ('currency_id', '=', uf_currency.id),
-                ('company_id', '=', sale.company_id.id)
-            ], order='name desc', limit=1)
+                ('company_id', '=', sale.company_id.id),
+                ('date', '=', sale.uf_date)
+            ], limit=1)
             
             if rate:
                 tax_subtotal = tax_subtotal * rate.inverse_company_rate

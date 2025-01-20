@@ -8,6 +8,10 @@
         <xpath expr="//field[@name='partner_id']" position="before">
           <field name="project_analytic_account_id" string="Proyecto" attrs="{'readonly': [('is_approved','=',True)]}"/>
         </xpath>
+        <xpath expr="//field[@name='pricelist_id']" position="after">
+          <field name="uf_date" attrs="{'readonly': [('is_approved','=',True)]}"/>
+          <field name="clp_value"/>
+        </xpath>
         <xpath expr="//field[@name='payment_term_id']" position="after">
           <field name="is_approved" invisible="1"/>
           <field name="pre_invoice_id" string="ID de la pre-factura" attrs="{'readonly': [('is_approved','=',True)]}" invisible="1"/>

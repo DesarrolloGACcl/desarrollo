@@ -22,7 +22,7 @@ class SaleOrder(models.Model):
     is_approved = fields.Boolean(string="¿Está aprobada?", default=False, copy=False)
 
     initial_budget = fields.Float(string="Presupuesto inicial", compute="_compute_initial_budget")
-    remaining_budget = fields.Float(string="Presupuesto cobrado", readonly=True)
+    remaining_budget = fields.Float(string="Presupuesto cobrado", readonly=True, compute="_compute_total_remaining")
 
     uf_date = fields.Date(string="Fecha UF", copy=False)
     clp_value = fields.Float(string="Valor CLP", copy=False, readonly=True, compute="_compute_clp_uf_date", digits=(16,12))
@@ -262,14 +262,20 @@ class SaleOrder(models.Model):
                     _logger.error("Error sending budget update to external API: %s", str(e))
             
         return res
+        
+    @api.depends('partner_id')
+    def _compute_total_remaining(self):
+        # Search for sale orders of the same partner
+        partner_sales = self.env['sale.order'].search([
+            ('partner_id', '=', self.partner_id.id)
+        ])
+        
+        # Search for sale order lines with matching area code in analytic distribution
+        total = 0
+        for sale in partner_sales:
+            total += sale.amount_total
+        self.remaining_budget = total
 
-    @api.onchange('area_budget_ids') 
-    def _onchange_area_budget_ids(self):
-        total_remaining = 0
-        for area_budget in self.area_budget_ids:
-            total_remaining += area_budget.total_remaining
-        self.remaining_budget = total_remaining
-    
     @api.onchange('project_analytic_account_id') 
     def _onchange_analytic_account(self):
         if self.project_analytic_account_id:

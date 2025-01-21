@@ -61,6 +61,7 @@ class SaleOrder(models.Model):
 
         project_data = response.json()
         
+        
         for d in project_data['data']:
             _logger.warning('DATA PROYECTO: %s', d)
 
@@ -69,7 +70,7 @@ class SaleOrder(models.Model):
             _logger.warning('CODIGO PROYECTO: %s', project_code)
 
             project_analytic_account = self.env['account.analytic.account'].search([('code', '=', project_code)], limit=1)
-
+            
             if project_analytic_account.id == self.project_analytic_account_id.id:
                 _logger.warning('ENTRO IF')
                 if not d['proyecto'][0]['presupuesto_sdg']:
@@ -78,7 +79,7 @@ class SaleOrder(models.Model):
                     project_budget = float(d['proyecto'][0]['presupuesto_sdg'])
                 _logger.warning('PRESUPUESTO PROYECTO: %s', project_budget)
                 project_analytic_account.initial_budget = project_budget
-            
+                total_remaining_sum = 0.0
                 for area in d['areas']:
                     _logger.warning('AREA: %s', area)
                     area_id = area['area_id']
@@ -116,6 +117,8 @@ class SaleOrder(models.Model):
                     else:
                         area_icon = False
 
+                    total_remaining_sum = total_remaining_sum + total_remaining
+
                     # Create or update sale.area.budget record
                     area_budget_vals = {
                         'name': area_name,
@@ -138,6 +141,7 @@ class SaleOrder(models.Model):
                     else:
                         # Create new record
                         self.env['sale.area.budget'].create(area_budget_vals)
+                self.remaining_budget = total_remaining_sum
 
     @api.depends('project_analytic_account_id')
     def _compute_initial_budget(self):

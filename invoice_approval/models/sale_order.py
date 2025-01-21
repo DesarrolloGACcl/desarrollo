@@ -263,18 +263,23 @@ class SaleOrder(models.Model):
             
         return res
         
-    @api.depends('partner_id')
+    @api.depends('partner_id', 'project_analytic_account_id')
     def _compute_total_remaining(self):
-        # Search for sale orders of the same partner
-        partner_sales = self.env['sale.order'].search([
-            ('partner_id', '=', self.partner_id.id)
-        ])
-        
-        # Search for sale order lines with matching area code in analytic distribution
-        total = 0
-        for sale in partner_sales:
-            total += sale.amount_total
-        self.remaining_budget = total
+
+        if self.partner_id and self.project_analytic_account_id:
+            # Search for sale orders of the same partner
+            partner_sales = self.env['sale.order'].search([
+                ('partner_id', '=', self.partner_id.id),
+                ('project_analytic_account_id', '=', self.project_analytic_account_id.id)
+            ])
+            
+            # Search for sale order lines with matching area code in analytic distribution
+            total = 0
+            for sale in partner_sales:
+                total += sale.amount_total
+            self.remaining_budget = total
+        else:
+            self.remaining_budget = 0.0
 
     @api.onchange('project_analytic_account_id') 
     def _onchange_analytic_account(self):

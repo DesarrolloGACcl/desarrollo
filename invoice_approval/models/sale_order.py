@@ -29,10 +29,10 @@ class SaleOrder(models.Model):
 
     approve_state = fields.Char(string="Estado aprobación", compute="_compute_approve_state", readonly="True")
 
-    @api.depends('uf_date')
+    @api.depends('uf_date', 'pricelist_id')
     def _compute_clp_uf_date(self):
         for record in self:
-            if record.uf_date:
+            if record.uf_date and record.pricelist_id.currency_id.name == 'UF':
                 uf_currency = request.env['res.currency'].sudo().search([('name', '=', 'UF')], limit=1)
                 rate = request.env['res.currency.rate'].sudo().search([
                     ('currency_id', '=', uf_currency.id),
@@ -61,7 +61,6 @@ class SaleOrder(models.Model):
 
         project_data = response.json()
         
-        total_remaining_sum = 0.0
         for d in project_data['data']:
             _logger.warning('DATA PROYECTO: %s', d)
 
@@ -117,8 +116,6 @@ class SaleOrder(models.Model):
                     else:
                         area_icon = False
 
-                    total_remaining_sum = total_remaining_sum + total_remaining
-
                     # Create or update sale.area.budget record
                     area_budget_vals = {
                         'name': area_name,
@@ -141,7 +138,6 @@ class SaleOrder(models.Model):
                     else:
                         # Create new record
                         self.env['sale.area.budget'].create(area_budget_vals)
-        self.remaining_budget = total_remaining_sum
 
     @api.depends('project_analytic_account_id')
     def _compute_initial_budget(self):
@@ -205,7 +201,11 @@ class SaleOrder(models.Model):
                     )
                 except Exception as e:
                     _logger.error("Error sending budget update to external API: %s", str(e))
-            
+            total_remaining = 0
+            for area_budget in self.area_budget_ids:
+                total_remaining += area_budget.total_remaining
+            self.remaining_budget = total_remaining
+
         return orders
 
     def write(self, vals):
@@ -264,7 +264,10 @@ class SaleOrder(models.Model):
                     )
                 except Exception as e:
                     _logger.error("Error sending budget update to external API: %s", str(e))
-
+            total_remaining = 0
+            for area_budget in self.area_budget_ids:
+                total_remaining += area_budget.total_remaining
+            self.remaining_budget = total_remaining
         return res
 
     

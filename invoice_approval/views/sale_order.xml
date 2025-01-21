@@ -8,7 +8,7 @@
         <xpath expr="//field[@name='partner_id']" position="before">
           <field name="project_analytic_account_id" string="Proyecto" attrs="{'readonly': [('is_approved','=',True)]}"/>
         </xpath>
-        <xpath expr="//field[@name='pricelist_id']" position="after">
+        <xpath expr="//field[@name='payment_term_id']" position="before">
           <field name="uf_date" string="Fecha UF" attrs="{'readonly': [('is_approved','=',True)]}"/>
           <field name="clp_value" string="Valor CLP"/>
         </xpath>

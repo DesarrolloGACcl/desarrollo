@@ -37,7 +37,7 @@ class SaleOrder(models.Model):
                 rate = request.env['res.currency.rate'].sudo().search([
                     ('currency_id', '=', uf_currency.id),
                     ('company_id', '=', record.company_id.id),
-                    ('date', '=', record.uf_date.strftime('%Y-%m-%d'))
+                    ('name', '=', record.uf_date)
                 ], limit=1)
                 if rate:
                     record.clp_value = rate.inverse_company_rate

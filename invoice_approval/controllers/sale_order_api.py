@@ -174,17 +174,9 @@ class MoveApi(http.Controller):
 
         # Verificar si la moneda es UF y hacer la conversión si es necesario
         if sale.pricelist_id.currency_id.name == 'UF':
-            # Obtener la última tasa de conversión UF a CLP
-            uf_currency = request.env['res.currency'].sudo().search([('name', '=', 'UF')], limit=1)
-            rate = request.env['res.currency.rate'].sudo().search([
-                ('currency_id', '=', uf_currency.id),
-                ('company_id', '=', sale.company_id.id),
-                ('date', '=', sale.uf_date)
-            ], limit=1)
-            
-            if rate:
-                tax_subtotal = tax_subtotal * rate.inverse_company_rate
-                no_tax_subtotal = no_tax_subtotal * rate.inverse_company_rate
+            if sale.clp_value:
+                tax_subtotal = tax_subtotal * sale.clp_value
+                no_tax_subtotal = no_tax_subtotal * sale.clp_value
             else:
                 return 'No se encontró tasa de conversión UF a CLP'
 

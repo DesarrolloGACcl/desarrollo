@@ -201,10 +201,6 @@ class SaleOrder(models.Model):
                     )
                 except Exception as e:
                     _logger.error("Error sending budget update to external API: %s", str(e))
-            total_remaining = 0
-            for area_budget in self.area_budget_ids:
-                total_remaining += area_budget.total_remaining
-            self.remaining_budget = total_remaining
 
         return orders
 
@@ -264,12 +260,15 @@ class SaleOrder(models.Model):
                     )
                 except Exception as e:
                     _logger.error("Error sending budget update to external API: %s", str(e))
-            total_remaining = 0
-            for area_budget in self.area_budget_ids:
-                total_remaining += area_budget.total_remaining
-            self.remaining_budget = total_remaining
+            
         return res
 
+    @api.onchange('area_budget_ids') 
+    def _onchange_area_budget_ids(self):
+        total_remaining = 0
+        for area_budget in self.area_budget_ids:
+            total_remaining += area_budget.total_remaining
+        self.remaining_budget = total_remaining
     
     @api.onchange('project_analytic_account_id') 
     def _onchange_analytic_account(self):

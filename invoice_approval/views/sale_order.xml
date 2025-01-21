@@ -19,7 +19,7 @@
           <field name="approve_date" string="Fecha aprobación" attrs="{'readonly': [('is_approved','=',True)]}"/>
 
           <field name="initial_budget" string="Presupuesto inicial"/>
-          <field name="remaining_budget" string="Presupuesto restante"/>
+          <field name="remaining_budget" string="Presupuesto cobrado"/>
         </xpath>
       </field>
     </record>

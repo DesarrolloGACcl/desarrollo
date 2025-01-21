@@ -37,7 +37,7 @@ class SaleOrder(models.Model):
                 rate = request.env['res.currency.rate'].sudo().search([
                     ('currency_id', '=', uf_currency.id),
                     ('company_id', '=', record.company_id.id),
-                    ('date', '=', record.uf_date)
+                    ('date', '=', record.uf_date.strftime('%Y-%m-%d'))
                 ], limit=1)
                 if rate:
                     record.clp_value = rate.inverse_company_rate
@@ -61,7 +61,7 @@ class SaleOrder(models.Model):
 
         project_data = response.json()
         
-        
+        total_remaining_sum = 0.0
         for d in project_data['data']:
             _logger.warning('DATA PROYECTO: %s', d)
 
@@ -79,7 +79,7 @@ class SaleOrder(models.Model):
                     project_budget = float(d['proyecto'][0]['presupuesto_sdg'])
                 _logger.warning('PRESUPUESTO PROYECTO: %s', project_budget)
                 project_analytic_account.initial_budget = project_budget
-                total_remaining_sum = 0.0
+                
                 for area in d['areas']:
                     _logger.warning('AREA: %s', area)
                     area_id = area['area_id']
@@ -141,7 +141,7 @@ class SaleOrder(models.Model):
                     else:
                         # Create new record
                         self.env['sale.area.budget'].create(area_budget_vals)
-                self.remaining_budget = total_remaining_sum
+        self.remaining_budget = total_remaining_sum
 
     @api.depends('project_analytic_account_id')
     def _compute_initial_budget(self):

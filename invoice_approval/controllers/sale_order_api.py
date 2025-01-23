@@ -206,8 +206,7 @@ class MoveApi(http.Controller):
                 'product_id': False,
                 'name': product_description,
                 'quantity': 1,
-                'price_unit': no_tax_subtotal,
-                'tax_ids': [(6, 0, [])]
+                'price_unit': no_tax_subtotal
             })
 
         # Caso 3: Líneas mixtas (con y sin impuestos)
@@ -226,8 +225,7 @@ class MoveApi(http.Controller):
                     'product_id': False,
                     'name': product_description + ' (Exento)',
                     'quantity': 1,
-                    'price_unit': no_tax_subtotal,
-                    'tax_ids': [(6, 0, [])]
+                    'price_unit': no_tax_subtotal
                 })
 
         invoice_vals = {

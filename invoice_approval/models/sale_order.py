@@ -62,25 +62,20 @@ class SaleOrder(models.Model):
         project_data = response.json()
         
         for d in project_data['data']:
-            _logger.warning('DATA PROYECTO: %s', d)
 
             project_code = str(d['proyecto'][0]['codigo_proyecto'])
 
-            _logger.warning('CODIGO PROYECTO: %s', project_code)
 
             project_analytic_account = self.env['account.analytic.account'].search([('code', '=', project_code)], limit=1)
             
             if project_analytic_account.id == self.project_analytic_account_id.id:
-                _logger.warning('ENTRO IF')
                 if not d['proyecto'][0]['presupuesto_sdg']:
                     project_budget = "0"
                 else:
                     project_budget = float(d['proyecto'][0]['presupuesto_sdg'])
-                _logger.warning('PRESUPUESTO PROYECTO: %s', project_budget)
                 project_analytic_account.initial_budget = project_budget
                 
                 for area in d['areas']:
-                    _logger.warning('AREA: %s', area)
                     area_id = area['area_id']
                     area_name = area['area_nombre']
                     area_icon = area['area_icono']

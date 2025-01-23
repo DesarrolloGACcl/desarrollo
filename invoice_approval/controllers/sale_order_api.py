@@ -165,12 +165,14 @@ class MoveApi(http.Controller):
         no_tax_lines = sale.order_line.filtered(lambda line: not line.tax_id)
 
         _logger.warning("tax_lines %s", no_tax_lines)
+        _logger.warning("tax_lines %s", tax_lines)
         
         # Calcular subtotales
         tax_subtotal = sum(tax_lines.mapped('price_subtotal')) if tax_lines else 0
         no_tax_subtotal = sum(no_tax_lines.mapped('price_subtotal')) if no_tax_lines else 0
 
         _logger.warning("tax_subtotal %s", no_tax_subtotal)
+        _logger.warning("tax_subtotal %s", tax_subtotal)
 
         # Verificar si la moneda es UF y hacer la conversión si es necesario
         if sale.pricelist_id.currency_id.name == 'UF':
@@ -193,10 +195,7 @@ class MoveApi(http.Controller):
                 'quantity': 1,
                 'price_unit': tax_subtotal,
                 'tax_ids': [(6, 0, tax_lines[0].tax_id.ids)]
-            })
-        
-            
-
+            })       
 
         # Caso 2: Solo líneas sin impuestos 
         elif no_tax_lines and not tax_lines:
@@ -205,7 +204,8 @@ class MoveApi(http.Controller):
                 'product_id': False,
                 'name': product_description,
                 'quantity': 1,
-                'price_unit': no_tax_subtotal
+                'price_unit': no_tax_subtotal,
+                'tax_ids': None
             })
 
         # Caso 3: Líneas mixtas (con y sin impuestos)
@@ -224,7 +224,8 @@ class MoveApi(http.Controller):
                     'product_id': False,
                     'name': product_description + ' (Exento)',
                     'quantity': 1,
-                    'price_unit': no_tax_subtotal
+                    'price_unit': no_tax_subtotal,
+                    'tax_ids': None
                 })
 
         _logger.warning("lines %s", lines)

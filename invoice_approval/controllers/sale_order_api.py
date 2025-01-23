@@ -183,7 +183,6 @@ class MoveApi(http.Controller):
         lines = []
         product_description = "Pre-factura: " + sale.name
 
-        _logger.warning("tax_id.ids %s", tax_lines[0].tax_id.ids)
 
         # Caso 1: Solo líneas con impuestos
         if tax_lines and not no_tax_lines:

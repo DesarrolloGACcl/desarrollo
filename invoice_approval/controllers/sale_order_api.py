@@ -176,7 +176,13 @@ class MoveApi(http.Controller):
 
         # Verificar si la moneda es UF y hacer la conversión si es necesario
         if sale.pricelist_id.currency_id.name == 'UF':
-            if sale.clp_value:
+            uf_currency = request.env['res.currency'].sudo().search([('name', '=', 'UF')], limit=1)
+            rate = request.env['res.currency.rate'].sudo().search([
+                ('currency_id', '=', uf_currency.id),
+                ('company_id', '=', sale.company_id.id),
+                ('name', '=', sale.uf_date)
+            ], limit=1)
+            if rate:
                 tax_subtotal = tax_subtotal * sale.clp_value
                 no_tax_subtotal = no_tax_subtotal * sale.clp_value
             else:
@@ -245,6 +251,24 @@ class MoveApi(http.Controller):
            
         # Vincular la factura con la orden
         invoice.write({'invoice_line_ids': [(1, line.id, {'sale_line_ids': [(6, 0, sale.order_line.ids)]}) for line in invoice.invoice_line_ids]})
+
+        # Create reference for client order
+        request.env['l10n_cl.account.invoice.reference'].sudo().create({
+            'move_id': invoice.id,
+            'origin_doc_number': sale.client_oc_ref,
+            'l10n_latam_document_type_id': request.env['l10n_latam.document.type'].sudo().search([('code', '=', '801')], limit=1).id,
+            'reason': 'Orden de compra',
+            'date': sale.client_order_date
+        })
+
+        # Create reference for HES
+        request.env['l10n_cl.account.invoice.reference'].sudo().create({
+            'move_id': invoice.id,
+            'origin_doc_number': sale.client_hes_ref,
+            'l10n_latam_document_type_id': request.env['l10n_latam.document.type'].sudo().search([('code', '=', 'HES')], limit=1).id,
+            'reason': 'HES',
+            'date': sale.client_hes_date
+        })
 
         # Publicar la factura
         invoice.action_post()

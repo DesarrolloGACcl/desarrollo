@@ -25,9 +25,12 @@ class SaleOrder(models.Model):
     remaining_budget = fields.Float(string="Presupuesto cobrado", readonly=True, compute="_compute_total_remaining")
 
     uf_date = fields.Date(string="Fecha UF", copy=False)
-    clp_value = fields.Float(string="Valor CLP", copy=False, readonly=True, compute="_compute_clp_uf_date", digits=(16,12))
+    clp_value = fields.Float(string="Valor CLP", copy=False, readonly=True, compute="_compute_clp_uf_date", digits=(16,2))
 
     approve_state = fields.Char(string="Estado aprobación", compute="_compute_approve_state", readonly="True")
+
+    client_hes_ref = fields.Char(string="Referencia HES cliente", copy=False)
+    client_hes_date = fields.Date(string="Fecha HES cliente", copy=False)
 
     @api.depends('uf_date', 'pricelist_id')
     def _compute_clp_uf_date(self):

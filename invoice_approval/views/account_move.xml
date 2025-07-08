@@ -6,7 +6,23 @@
       <field name="model">account.move</field>
       <field name="arch" type="xml">
         <xpath expr="//field[@name='partner_shipping_id']" position="after">
-          <field name="approver_id" string="Aprobador"/>
+          <field name="is_approved" invisible="1"/>
+          <field name="approver_id" string="Aprobador" attrs="{'readonly': [('is_approved','=',True)]}"/>
+          <field name="approve_date" string="Fecha aprobación" attrs="{'readonly': [('is_approved','=',True)]}"/>
+        </xpath>
+      </field>
+    </record>
+
+    <record id="move_tree_custom_analytics" model="ir.ui.view">
+      <field name="name">move.tree.custom.analytics</field>
+      <field name="inherit_id" ref="account.view_invoice_tree"/>
+      <field name="model">account.move</field>
+      <field name="arch" type="xml">
+        <xpath expr="//field[@name='state']" position="after">
+          <field name="approve_date"/>
+          <field name="is_approved" invisible="1"/>
+          <field name="approver_id"/>
+          <field name="approve_state" widget="badge" decoration-danger="not is_approved" decoration-success="is_approved"/>
         </xpath>
       </field>
     </record>

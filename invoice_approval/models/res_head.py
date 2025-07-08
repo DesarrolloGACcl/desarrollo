@@ -16,3 +16,18 @@ class ResHead(models.Model):
     managment_system_id = fields.Integer(string='ID en sistema de gestión')
     position = fields.Char(string="Cargo")
     email = fields.Char(string="e-mail")
+
+    def name_get(self):
+        result = []
+        for record in self:
+            if not record.name:
+                name = 'Sin nombre'
+            else:
+                name = record.name
+            if not record.surname:
+                surname = ''
+            else:
+                surname = record.surname
+            display_name = f"{name} {surname}"
+            result.append((record.id, display_name))
+        return result

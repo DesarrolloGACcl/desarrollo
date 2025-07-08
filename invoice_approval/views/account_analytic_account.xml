@@ -6,7 +6,9 @@
             <field name="model">account.analytic.account</field>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='plan_id']" position="after">
-                    <field name="head_id"/>
+                    <field name="head_id" attrs="{'readonly': [('plan_id','=', 1)]}"/>
+                    <field name="initial_budget" attrs="{'readonly': [('plan_id','=',1)]}"/>
+                    <field name="remaining_budget" attrs="{'readonly': [('plan_id','=',1)]}"/>
                 </xpath>
             </field>
         </record>

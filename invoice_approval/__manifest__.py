@@ -13,7 +13,7 @@
     "website": "",
     "category": "Product",
     "license": "Other proprietary",
-    'version': '0.1',
+    'version': '2.0',
 
     'depends': ['base', 'account', 'account_accountant', 'addval_custom_analytics'],
 
@@ -22,7 +22,9 @@
         'security/ir.model.access.csv',
         'views/account_analytic_account.xml',
         'views/account_move.xml',
-        'views/res_head.xml'
+        'views/sale_order.xml',
+        'views/res_head.xml',
+        #'data/cron.xml'
     ],
     'installable': True,
     'application': True,

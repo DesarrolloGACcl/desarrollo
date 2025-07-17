@@ -352,3 +352,6 @@ class MoveApi(http.Controller):
 
         return request.make_response(move_json, headers=[('Content-Type', 'application/json')])
 
+    @http.route('/api/test', type='http', auth='public', methods=['GET'], csrf=False)
+    def test_route(self):
+        return request.make_response(json.dumps({"status": "ok"}), headers=[('Content-Type', 'application/json')])

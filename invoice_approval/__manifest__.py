@@ -13,7 +13,7 @@
     "website": "",
     "category": "Product",
     "license": "Other proprietary",
-    'version': '2.0',
+    'version': '2.1',
 
     'depends': ['base', 'account', 'account_accountant', 'addval_custom_analytics'],
 

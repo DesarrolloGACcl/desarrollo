@@ -13,7 +13,7 @@ _logger = logging.getLogger(__name__)
 
 class MoveApi(http.Controller):
 
-    @http.route('/api/pre_invoice/<int:project_code>', type='http', auth='public', methods=['GET'])
+    @http.route('/api/pre_invoice/<int:project_code>', type='http', auth='public', methods=['GET'], csrf=False)
     def send_move_info(self, project_code):
 
         # expected_token = 'gTRk73b95h6VuFQq'
@@ -123,7 +123,7 @@ class MoveApi(http.Controller):
 
         return request.make_response(sale_json, headers=[('Content-Type', 'application/json')])
 
-    @http.route('/api/approve/pre_invoice/<int:id_odoo_sale>/<int:id_approver>/<int:day>/<int:month>/<int:year>', type='http', auth='public', methods=['GET'])
+    @http.route('/api/approve/pre_invoice/<int:id_odoo_sale>/<int:id_approver>/<int:day>/<int:month>/<int:year>', type='http', auth='public', methods=['GET'], csrf=False)
     def approve_sale(self, id_odoo_sale, id_approver, day, month, year):
 
         # expected_token = 'DLV86wKWGSjpsdhn'
@@ -275,7 +275,7 @@ class MoveApi(http.Controller):
 
         return 'Pre-factura: '+ sale.name + ', aprobada por: ' + head.name + ' ' + head.surname + ' el ' + str(approve_date)
 
-    @http.route('/api/pre_invoice/files/<int:sale_id>', type="http", auth='public')
+    @http.route('/api/pre_invoice/files/<int:sale_id>', type="http", auth='public', csrf=False)
     def send_xml_pdf_sale(self, sale_id):
         
         # Obtener la pre-factura
@@ -295,7 +295,7 @@ class MoveApi(http.Controller):
         # Retornar el archivo PDF
         return request.make_response(pdf, headers=headers)
 
-    @http.route('/api/pre_invoice/all/<int:year>', type='http', auth='public', methods=['GET'])
+    @http.route('/api/pre_invoice/all/<int:year>', type='http', auth='public', methods=['GET'], csrf=False)
     def send_move_info(self, year):
 
         # expected_token = 'gTRk73b95h6VuFQq'

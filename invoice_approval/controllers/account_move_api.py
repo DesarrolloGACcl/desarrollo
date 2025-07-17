@@ -30,7 +30,7 @@ class MoveApi(http.Controller):
         xml_decodificado = base64.b64decode(adjunto_xml.datas)
         return xml_decodificado, adjunto_xml.name
 
-    @http.route('/api/invoice/<int:project_code>', type='http', auth='public', methods=['GET'])
+    @http.route('/api/invoice/<int:project_code>', type='http', auth='public', methods=['GET'], csrf=False)
     def send_move_info(self, project_code):
 
         # expected_token = 'gTRk73b95h6VuFQq'
@@ -157,7 +157,7 @@ class MoveApi(http.Controller):
 
         return request.make_response(move_json, headers=[('Content-Type', 'application/json')])
 
-    @http.route('/api/approve/invoice/<int:id_odoo_invoice>/<int:id_approver>/<int:day>/<int:month>/<int:year>', type='http', auth='public', methods=['GET'])
+    @http.route('/api/approve/invoice/<int:id_odoo_invoice>/<int:id_approver>/<int:day>/<int:month>/<int:year>', type='http', auth='public', methods=['GET'], csrf=False)
     def approve_invoice(self, id_odoo_invoice, id_approver, day, month, year):
 
         # expected_token = 'DLV86wKWGSjpsdhn'
@@ -192,7 +192,7 @@ class MoveApi(http.Controller):
 
         return 'Factura: '+ invoice.name + ', aprobada por: ' + head.name + ' ' + head.surname + ' el ' + str(approve_date)
 
-    @http.route('/api/invoice/files/<int:invoice_id>', type="http", auth='public')
+    @http.route('/api/invoice/files/<int:invoice_id>', type="http", auth='public', csrf=False)
     def send_xml_pdf_invoice(self, invoice_id):
         
         # Obtener la factura
@@ -223,7 +223,7 @@ class MoveApi(http.Controller):
         # Retornar el archivo PDF
         return request.make_response(pdf, headers=headers)
 
-    @http.route('/api/invoice/all/<int:year>', type='http', auth='public', methods=['GET'])
+    @http.route('/api/invoice/all/<int:year>', type='http', auth='public', methods=['GET'], csrf=False)
     def send_move_info(self, year):
 
         # expected_token = 'gTRk73b95h6VuFQq'

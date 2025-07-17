@@ -31,7 +31,7 @@ class MoveApi(http.Controller):
         return xml_decodificado, adjunto_xml.name
 
     @http.route('/api/invoice/<int:project_code>', type='http', auth='public', methods=['GET'], csrf=False)
-    def send_move_info(self, project_code):
+    def send_move_info_by_project(self, project_code):
 
         # expected_token = 'gTRk73b95h6VuFQq'
         # provided_token = request.httprequest.headers.get('Authorization')
@@ -45,7 +45,7 @@ class MoveApi(http.Controller):
         project_analytic_plan = request.env['account.analytic.plan'].sudo().search([('id', '=', 1)])
 
                                                                         
-        analytic_project = request.env['account.analytic.account'].sudo().search([('code', '=', project_code),
+        analytic_project = request.env['account.analytic.account'].sudo().search([('code', '=', str(project_code)),
                                                                                     ('plan_id', '=', project_analytic_plan.id)], limit =1)
             
 

@@ -14,7 +14,7 @@ _logger = logging.getLogger(__name__)
 class MoveApi(http.Controller):
 
     @http.route('/api/pre_invoice/<int:project_code>', type='http', auth='public', methods=['GET'], csrf=False)
-    def send_move_info(self, project_code):
+    def send_pre_invoice_info_by_project(self, project_code):
 
         # expected_token = 'gTRk73b95h6VuFQq'
         # provided_token = request.httprequest.headers.get('Authorization')
@@ -296,7 +296,7 @@ class MoveApi(http.Controller):
         return request.make_response(pdf, headers=headers)
 
     @http.route('/api/pre_invoice/all/<int:year>', type='http', auth='public', methods=['GET'], csrf=False)
-    def send_move_info(self, year):
+    def send_pre_invoice_info(self, year):
 
         # expected_token = 'gTRk73b95h6VuFQq'
         # provided_token = request.httprequest.headers.get('Authorization')

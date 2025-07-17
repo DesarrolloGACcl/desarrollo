@@ -73,7 +73,7 @@ class MoveApi(http.Controller):
                     nombre_aprobador = 'No tiene aprobador'
                 else:
                     id_aprobador = invoice.approver_id.managment_system_id
-                    nombre_aprobador = invoice.approver_id.name +' '+invoice.approver_id.surname
+                    nombre_aprobador = (invoice.approver_id.name or '') + ' ' + (invoice.approver_id.surname or '')
 
                 if not invoice.approve_date:
                     fecha_aprobacion = 'Aún no es aprobada'
@@ -251,7 +251,7 @@ class MoveApi(http.Controller):
                     nombre_aprobador = 'No tiene aprobador'
                 else:
                     id_aprobador = invoice.approver_id.managment_system_id
-                    nombre_aprobador = invoice.approver_id.name +' '+invoice.approver_id.surname
+                    nombre_aprobador = (invoice.approver_id.name or '') + ' ' + (invoice.approver_id.surname or '')
 
                 if not invoice.approve_date:
                     fecha_aprobacion = 'Aún no es aprobada'

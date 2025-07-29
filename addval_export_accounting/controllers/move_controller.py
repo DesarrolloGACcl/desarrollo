@@ -168,7 +168,8 @@ class MoveApi(http.Controller):
                 'saldo':aml.balance,
                 'odoo_aml_id': aml.id,
                 'from_rindegastos': False,
-                'pre_invoice_id': False
+                'pre_invoice_id': False,
+                'odoo_invoice_id': aml.move_id.id
             }
             
             aml_data_list.append(aml_data)
